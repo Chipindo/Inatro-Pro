@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+    <title>Histórico de Exames - Carta Mestre</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --bg-color: #F8FAFC; --card-bg: #FFFFFF; --text-main: #1E293B; --text-muted: #64748B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; color: #1E293B; display: flex; justify-content: center; min-height: 100dvh; margin: 0; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        
+        .top-navbar { background-color: #0F172A; padding: 20px 24px; color: white; display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 10; border-radius: 0 0 16px 16px;}
+        .btn-back { color: white; text-decoration: none; font-size: 1.2rem; }
+        .top-navbar h1 { font-size: 1.1rem; font-weight: 600; margin: 0; flex: 1; }
+        
+        .content-section { padding: 24px; flex: 1; }
+
+        .history-section { background: #FFFFFF; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #E2E8F0; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; }
+        .history-header h3 { font-size: 1.1rem; color: #1E293B; font-weight: 700; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #F1F5F9; }
+        .history-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .history-info { display: flex; align-items: center; gap: 16px; }
+        .history-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; }
+        .hist-pesados { background: #2563EB; }
+        .hist-mecanica { background: #EA580C; }
+        .history-details h4 { font-size: 0.95rem; color: #1E293B; margin-bottom: 4px; font-weight: 600;}
+        .history-details p { font-size: 0.8rem; color: #64748B; }
+        .history-score { text-align: right; }
+        .history-score span { font-size: 1.2rem; font-weight: 800; }
+        .score-pass { color: #10B981; }
+        .score-fail { color: #EF4444; }
+        .history-empty { text-align: center; padding: 30px 15px; color: #94A3B8; font-size: 0.9rem; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="top-navbar">
+        <!-- Substitui index.html pelo nome do teu dashboard caso tenhas outro nome de ficheiro -->
+        <a href="javascript:history.back()" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+        <h1>O Meu Progresso Completo</h1>
+    </div>
+
+    <div class="content-section">
+        <div class="history-section" id="historyBox">
+            <div class="history-header">
+                <h3>Últimos Exames Realizados</h3>
+                <i class="fas fa-chart-line" style="color:#94A3B8;"></i>
+            </div>
+            <div id="historicoContainer">
+                <div class="history-empty"><i class="fas fa-spinner fa-spin"></i> A carregar todo o histórico...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let usuarioData = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) { window.location.href = 'index.html'; return; }
+        
+        try {
+            usuarioData = JSON.parse(userDataJson);
+            carregarHistoricoCompleto();
+        } catch (e) {
+            window.location.href = 'index.html';
+        }
+    });
+
+    async function carregarHistoricoCompleto() {
+        if(!usuarioData) return;
+        
+        try {
+            // Puxa até 20 exames para dar um histórico mais preenchido nesta página detalhada
+            const { data, error } = await _supabase
+                .from('Historico_Exames')
+                .select('*')
+                .eq('user_id', usuarioData.id)
+                .order('created_at', { ascending: false })
+                .limit(20);
+
+            const container = document.getElementById('historicoContainer');
+            
+            if (error || !data || data.length === 0) {
+                container.innerHTML = '<div class="history-empty">Ainda não realizou nenhum exame simulado. Continue a praticar!</div>';
+                return;
+            }
+
+            container.innerHTML = ''; 
+
+            data.forEach(exame => {
+                // Formatação da Data (Dia/Mês/Ano)
+                const dateObj = new Date(exame.created_at);
+                const dataFormatada = `${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()}`;
+                
+                const isPesados = exame.modulo === 'pesados';
+                const passClass = exame.percentagem >= 72 ? 'score-pass' : 'score-fail';
+                
+                container.innerHTML += `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <div class="history-icon ${isPesados ? 'hist-pesados' : 'hist-mecanica'}">
+                                <i class="fas ${isPesados ? 'fa-truck' : 'fa-cogs'}"></i>
+                            </div>
+                            <div class="history-details">
+                                <h4>Exame de ${isPesados ? 'Pesados' : 'Mecânica'}</h4>
+                                <p>${dataFormatada} • ${exame.acertos} certos, ${exame.erros} errados</p>
+                            </div>
+                        </div>
+                        <div class="history-score">
+                            <span class="${passClass}">${exame.percentagem}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+        } catch(e) {
+            console.log("Erro ao puxar histórico completo:", e);
+            document.getElementById('historicoContainer').innerHTML = '<div class="history-empty">Erro de conexão ao carregar o histórico.</div>';
+        }
+    }
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

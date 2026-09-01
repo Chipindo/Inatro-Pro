@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Carta Mestre</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* RESET E ESTILOS GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --primary: #003366;
+    --accent: #ff9100;
+    --bg: #F4F7FB;
+    --card: #ffffff;
+    --text-dark: #1E293B;
+    --text-muted: #475569;
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-dark);
+    padding-bottom: 100px; /* Espaço para navbar se necessário */
+}
+
+/* CONTAINER PRINCIPAL */
+.ok {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: block;
+}
+
+/* TIPOGRAFIA DOS TÍTULOS */
+h3 {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    margin: 40px 0 25px 0;
+}
+
+h3 span {
+    color: var(--primary); /* Cor unificada para tom profissional */
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.4;
+    display: block;
+}
+
+h3:not(:has(span)) {
+    color: var(--primary); /* Alterado de var(--accent) para var(--primary) para manter a mesma cor */
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* GRID DOS SINAIS - SISTEMA RESPONSIVO */
+.content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* CARTÕES DOS SINAIS (Antigos .box, .box1, .box2, etc) */
+.box {
+    background: var(--card);
+    padding: 15px 10px;
+    border-radius: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+
+figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: 80px; /* Altura fixa para manter tudo alinhado */
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+/* Imagens soltas (ex: Sinais Luminosos) */
+.ok > img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto 40px auto;
+}
+
+figcaption {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1.4;
+    width: 100%;
+}
+
+figcaption b {
+    display: block;
+    margin-top: 6px;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+/* NAVBAR */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 5px calc(12px + env(safe-area-inset-bottom));
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,.06);
+    z-index: 999;
+}
+
+.nav-item {
+    flex: 1;
+    text-align: center;
+    font-size: .72rem;
+    color: #64748B;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+.nav-item i {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 1.2rem;
+}
+
+.nav-item, .nav-item:focus, .nav-item:active, .nav-item:hover {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+</style>
+</head>
+<body>
+
+<section class="ok">
+
+    <h3><span id="q1" style="text-transform: uppercase;">QUADRO I<br />SINAIS DOS AGENTES REGULADORES DE TRÂNSITO</span></h3>
+    <h3>SINAIS PARA FAZER PARAR O TRÂNSITO</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/agente1.jpg" /><figcaption>Paragem do tráfego que venha de frente</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/agente2.jpg" /><figcaption>Paragem do tráfego que venha da retaguarda</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/agente3.jpg" /><figcaption>Paragem do tráfego que venha da frente e da retaguarda</figcaption></figure></div>
+    </div>
+
+    <h3>SINAIS PARA FAZER AVANÇAR O TRÂNSITO</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/agente4.jpg" /><figcaption>De frente</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/agente5.jpg" /><figcaption>Da esquerda</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/agente6.jpg" /><figcaption>Da direita</figcaption></figure></div>
+    </div>
+
+    <h3><span id="q2" style="text-transform: uppercase;">QUADRO II<br />SINAIS TEMPORÁRIOS</span></h3>
+    <h3><span id="q2.1">SINAIS TEMPORÁRIOS DE PERIGO</span></h3>
+    
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a1.png" /><figcaption>Trabalhos na estrada<br />A1</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a2.png" /><figcaption>Entroncamento com estrada com prioridade em T<br />A2</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a3.png" /><figcaption>Entroncamento lateral à direita<br />A3</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a4.png" /><figcaption>Entroncamentos sucessivos primeiro à direita<br />A4</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a5.png" /><figcaption>Entroncamento agudo para esquerda<br />A5</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a6.png" /><figcaption>Entroncamento agudo da esquerda<br />A6</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a7.png" /><figcaption>Fim da fila à direita<br />A7</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a8.png" /><figcaption>Sinalização luminosa<br />A8</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a9.png" /><figcaption>Paragem obrigatória<br />A9</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a10.png" /><figcaption>Curva à direita<br />A10</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a11.png" /><figcaption>Curva à esquerda e contracurva<br />A11</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a12.png" /><figcaption>Trânsito nos dois sentidos<br />A12</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a13.png" /><figcaption>Aproximação de uma estrada com prioridade<br />A13</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a14.png" /><figcaption>Controle de tráfego adiante<br />A14</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a15.png" /><figcaption>Paragem obrigatória<br />A15</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a16.png" /><figcaption>Paragem obrigatória<br />A16</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a17.png" /><figcaption>Controlo policial por pirilampos<br />A17</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a18.png" /><figcaption>Visibilidade reduzida<br />A18</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a19.png" /><figcaption>Congestionamento de tráfego<br />A19</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a20.png" /><figcaption>Pavimento escorregadio<br />A20</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a21.png" /><figcaption>Início de estrada alcatroada<br />A21</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a22.png" /><figcaption>Fim de estrada alcatroada<br />A22</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a23.png" /><figcaption>Queda de pedras à direita<br />A23</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a24.png" /><figcaption>Queda de pedras à esquerda<br />A24</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a25.png" /><figcaption>Cruzamento<br />A25</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a26.png" /><figcaption>Intersecção com sentido giratório<br />A26</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a27.png" /><figcaption>Curva à direita<br />A27</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a28.png" /><figcaption>Curva à esquerda<br />A28</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a29.png" /><figcaption>Curva à direita e contracurva<br />A29</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a30.png" /><figcaption>Curvas sucessivas primeira à direita<br />A30</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a31.png" /><figcaption>Curvas sucessivas primeira à esquerda<br />A31</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a32.png" /><figcaption>Entroncamento oblíquo à esquerda<br />A32</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a33.png" /><figcaption>Entroncamento em forma de Y ou bifurcação<br />A33</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a34.png" /><figcaption>Início de via dupla à direita<br />A34</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a35.png" /><figcaption>Início de via dupla à esquerda<br />A35</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a36.png" /><figcaption>Entroncamento agudo da direita<br />A36</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a37.png" /><figcaption>Subida de inclinação acentuada<br />A37</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a38.png" /><figcaption>Descida de inclinação acentuada<br />A38</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a39.png" /><figcaption>Lomba ou depressão<br />A39</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a40.png" /><figcaption>Depressão<br />A40</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a41.png" /><figcaption>Cruzamento com trânsito nos dois sentidos<br />A41</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a42.png" /><figcaption>Fim da fila à esquerda<br />A42</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a43.png" /><figcaption>Curva fechada à esquerda<br />A43</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a44.png" /><figcaption>Outros perigos<br />A44</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a45.png" /><figcaption>Travessia de peões<br />A45</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a46.png" /><figcaption>Passagem de peões<br />A46</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a47.png" /><figcaption>Um veículo de cada vez<br />A47</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a48.png" /><figcaption>Passagem de nível<br />A48</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a49.png" /><figcaption>Restrição de altura<br />A49</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a50.png" /><figcaption>Animais<br />A50</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a51.png" /><figcaption>Ponte estreita<br />A51</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a52.png" /><figcaption>Passagem estreita<br />A52</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a53.png" /><figcaption>Veículos de obras<br />A53</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a54.png" /><figcaption>Acidente<br />A54</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a55.png" /><figcaption>Lomba<br />A55</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a56.png" /><figcaption>Cavalos e cavaleiros<br />A56</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a57.png" /><figcaption>Projeção de gravilhas<br />A57</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a58.png" /><figcaption>Berma baixa à esquerda<br />A58</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a59.png" /><figcaption>Berma baixa à direita<br />A59</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a60.png" /><figcaption>Terreno falso à esquerda<br />A60</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a61.png" /><figcaption>Máquinas<br />A61</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a62.png" /><figcaption>Sinalização luminosa em manutenção<br />A62</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a63.png" /><figcaption>Sinalização luminosa em manutenção<br />A63</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption><br /></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a64.png" /><figcaption>Raquetas e bandeirola de sinalização<br />A64</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a65.png" /><figcaption>Baias direccionais<br />A65</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a66.png" /><figcaption>Baliza de posição<br />A66</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a67.png" /><figcaption>Baliza de alinhamento<br />A67</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a68.png" /><figcaption>Balizas de posição<br />A68</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a69.png" /><figcaption>Cones<br />A69</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a70-1.png" /><figcaption>Pórticos<br />A70</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a71.png" /><figcaption>Conjunto de lanternas sequenciais sem fios<br />A71</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a72.png" /><figcaption>Conjunto de lanternas sequenciais com fios<br />A72</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a73.png" /><figcaption>Perfil móvel de plástico ou de betão<br />A73</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a74.png" /><figcaption>Robot<br />A74</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a75.png" /><figcaption>Atrelado de balizamento<br />A75</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a76.png" /><figcaption>Seta luminosa<br />A76</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'1.png" /><figcaption>Baia direccional para a esquerda<br />A'1</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'2.png" /><figcaption>Baia direccional para a direita<br />A'2</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'3.png" /><figcaption>Baia direccional à esquerda<br />A'3</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'4.png" /><figcaption>Baia direccional à direita<br />A'4</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'5.png" /><figcaption>Baia direccional divergente<br />A'5</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'6.png" /><figcaption>Baia direccional convergente<br />A'6</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'7.png" /><figcaption>Baia indicadora de direcção à esquerda<br />A'7</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'8.png" /><figcaption>Baia indicadora de direcção à direita<br />A'8</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'9.png" /><figcaption>Baia indicadora de separador físico<br />A'9</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'10.png" /><figcaption>Baia limitadora de altura<br />A'10</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/a'11.png" /><figcaption>Barricada<br />A'11</figcaption></figure></div>
+    </div>
+
+    <h3><span id="q2.2">SINAIS REGULAMENTARES DOS OPERADORES NOS LOCAIS EM OBRAS</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op2.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op2.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op2.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op1.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op3.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op3.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op2.png" /></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/op2.png" /></figure></div>
+    </div>
+
+    <h3><span id="q2.3">SINAIS TEMPORÁRIOS DE PROIBIÇÃO</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b1.png" /><figcaption>Proibição de exceder a velocidade máxima de ... Km/h<br />B1</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b2.png" /><figcaption>Trânsito proibido a veículos de peso total superior a ... toneladas<br />B2</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b3.png" /><figcaption>Trânsito proibido a veículos de largura superior a ... metros<br />B3</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b4.png" /><figcaption>Trânsito proibido a veículos com dimensões anormais<br />B4</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b5.png" /><figcaption>Proibição de inversão de sentido de marcha<br />B5</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b6.png" /><figcaption>Proibição de ultrapassar<br />B6</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b7.png" /><figcaption>Proibição de ultrapassar para automóveis pesados<br />B7</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b8.png" /><figcaption>Trânsito proibido a peões<br />B8</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b9.png" /><figcaption>Trânsito proibido a automóveis e motociclos com carro<br />B9</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b10.png" /><figcaption>Trânsito proibido a veículos de mercadorias de peso total superior a<br />B10</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b11.png" /><figcaption>Trânsito proibido a veículos de altura superior a ... metros<br />B11</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b12.png" /><figcaption>Trânsito proibido a veículos de comprimento superior a ...<br />B12</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b13.png" /><figcaption>Trânsito proibido a veículos que transportam substâncias perigosas<br />B13</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b14.png" /><figcaption>Trânsito proibido a motociclos simples<br />B14</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b15.png" /><figcaption>Paragem proibida<br />B15</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b16.png" /><figcaption>Estacionamento proibido<br />B16</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b17.png" /><figcaption>Proibição de voltar à esquerda<br />B17</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b18.png" /><figcaption>Proibição de voltar à direita<br />B18</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b19.png" /><figcaption>Proibição de mudar de direcção para a esquerda<br />B19</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b20.png" /><figcaption>Proibição de mudar de direcção para a direita<br />B20</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b21.png" /><figcaption>Trânsito proibido a velocípedes<br />B21</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b22.png" /><figcaption>Trânsito proibido a veículos de peso por eixo superior a<br />B22</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b23.png" /><figcaption>Trânsito proibido a veículos com reboque<br />B23</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b24.png" /><figcaption>Trânsito proibido a autocarros médios<br />B24</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b25.png" /><figcaption>Trânsito proibido a veículos de distribuição<br />B25</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b26.png" /><figcaption>Trânsito proibido para riquexó<br />B26</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/b27.png" /><figcaption>Trânsito proibido a veículos não autorizados<br />B27</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption><br /></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q2.4">SINAIS TEMPORÁRIOS DE OBRIGAÇÃO</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c1.png" /><figcaption>Obrigação de transitar a uma velocidade mínima de ... km/h<br />C1</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c2.png" /><figcaption>Obrigação de transitar a veículos automóveis e motociclos com carro<br />C2</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c3.png" /><figcaption>Obrigação de contornar a placa ou obstáculo à esquerda<br />C3</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c4.png" /><figcaption>Obrigação de contornar a placa ou obstáculo à direita<br />C4</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c5.png" /><figcaption>Sentido obrigatório para a esquerda no entroncamento<br />C5</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c6.png" /><figcaption>Sentido obrigatório para a esquerda no cruzamento<br />C6</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c7.png" /><figcaption>Sentido obrigatório para a direita no cruzamento<br />C7</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c8.png" /><figcaption>Via obrigatória para tractores agrícolas<br />C8</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c9.png" /><figcaption>Via obrigatória para veículos de dimensões anormais<br />C9</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c10.png" /><figcaption>Via obrigatória para veículos de construção<br />C10</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c11.png" /><figcaption>Pista obrigatória para velocípedes e peões<br />C11</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c12.png" /><figcaption>Pista obrigatória para peões<br />C12</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c13.png" /><figcaption>Pista obrigatória para velocípedes<br />C13</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c14.png" /><figcaption>Pista obrigatória para veículos de tracção animal<br />C14</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c15.png" /><figcaption>Via obrigatória para táxis<br />C15</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c16.png" /><figcaption>Via obrigatória para veículos de mercadorias<br />C16</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c17.png" /><figcaption>Sentido obrigatório giratório<br />C17</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c18.png" /><figcaption>Via obrigatória para autocarros e autocarros médios<br />C18</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c19.png" /><figcaption>Via obrigatória para autocarros de excursão<br />C19</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c20.png" /><figcaption>Obrigação de acender as luzes<br />C20</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c21.png" /><figcaption>Via obrigatória para veículos de mercadorias<br />C21</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c22.png" /><figcaption>Via obrigatória para autocarros<br />C22</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/c23.png" /><figcaption>Via obrigatória para mini-autocarros<br />C23</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption><br /></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q2.5">SINAIS TEMPORÁRIOS DE INFORMAÇÃO</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti1.png" /><figcaption>Via temporariamente interrompida</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti2.png" /><figcaption>Indicação de duas direções</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti3.png" /><figcaption>Pré-sinalização do itinerário (Intersecção de nível)</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti4.png" /><figcaption>Indicação de aproximação de saída de auto-estrada à 300 m</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti5.png" /><figcaption>Indicação de acesso a auto-estrada</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti6.png" /><figcaption>Área reservada para táxis</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti7.png" /><figcaption>Pista reservada para velocípedes do lado esquerdo</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti8.png" /><figcaption>Área reservada para veículos de deficientes</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti9.png" /><figcaption>Parque de estacionamento limitado</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti10.png" /><figcaption>Parque de estacionamento para autocarros</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti11.png" /><figcaption>Área reservada para qualquer tipo de autocarro</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti12.png" /><figcaption>Parque de estacionamento</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti13.png" /><figcaption>Parque de estacionamento para veículos do corpo diplomático</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti14.png" /><figcaption>Área reservada para veículos de obras</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti15.png" /><figcaption>Área reservada para motociclos</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti16.png" /><figcaption>Via rápida</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti17.png" /><figcaption>Via rápida temporariamente interrompida</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti18.png" /><figcaption>Parque de estacionamento para automóveis ligeiros</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti19.png" /><figcaption>Parque de estacionamento para automóveis pesados de mercadoria de peso total superior a...toneladas</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti20.png" /><figcaption>Parque de estacionamento para veículos que transportam substancias perigosas</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti21.png" /><figcaption>Área reservada para veículos de dimensões anormais</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti22.png" /><figcaption>Área reservada para veículos de emergência</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti23.png" /><figcaption>Área reservada para autocarros de excursão</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti24.png" /><figcaption>Parque de estacionamento para veículos da polícia</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti25.png" /><figcaption>Parque de estacionamento para veículos de alta tonelagem</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti26.png" /><figcaption>Estrada sem saída</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti27.png" /><figcaption>Saída com uma faixa de rodagem</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti28.png" /><figcaption>Direcções a seguir</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti29.png" /><figcaption>Paragem - obras em curso</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/sti30.png" /><figcaption>Indicação de direcção</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q2.6">SINAIS COMBINADOS TEMPORÁRIOS</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc1.png" /><figcaption>Transito proibido a veículos de altura superior a ... m a ... km</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc2.png" /><figcaption>Trabalhados na estrada a ... m</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc3.png" /><figcaption>Desvio e aumento de trânsito a esquerda a ... km</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc4.png" /><figcaption>Transito proibido a veículos de mercadorias na fila a direita a ... km</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc5.png" /><figcaption>Obrigação de transitar a uma velocidade minima de ... km a fila à direita</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc6.png" /><figcaption>Fim da auto-estrada a ... km</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc7.png" /><figcaption>Lomba ou depressão a ... m</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc8.png" /><figcaption>Obrigação de contornar a placa ou obstáculo a esquerda</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc9.png" /><figcaption>Posto de controlo da polícia</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc10.png" /><figcaption>Proibição de exceder a velocidade de ... km/h de dia e de noite</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc11.png" /><figcaption>Proibição de exceder a velocidade de ... km/h</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc12.png" /><figcaption>Visibilidade reduzida</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc13.png" /><figcaption>Obrigação de acender as luzes</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc14.png" /><figcaption>Desvio e diminuição de via de trânsito a esquerda</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc15.png" /><figcaption>Via obrigatória a ... km para veículos de peso total de ... t</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc16.png" /><figcaption>Sentido obrigatório a direita para motociclos simples</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc17.png" /><figcaption>Proibição de voltar a direita para autocarros médios</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc18.png" /><figcaption>Estacionamento proibido a motociclos simples</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc19.png" /><figcaption>Área reservada para veículos de obras de ... as ...</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc20.png" /><figcaption>Proibição de inversão do sentido de marcha de noite</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc21.png" /><figcaption>Proibição de exceder a velocidade de ... km/h de dia</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc22.png" /><figcaption>Transito proibido a veículos com reboque</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/stc23.png" /><figcaption>Sentido proibido a veículos de tracção animal</figcaption></figure></div>
+    </div>
+
+    <h3><span id="q2.7" style="text-transform: uppercase;">SINAIS DE INFORMAÇÃO VARIÁVEL</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv1.png" /><figcaption>Proibição de exceder a velocidade de ... km/h</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv2.png" /><figcaption>Proibição de voltar a direita</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv3.png" /><figcaption>Proibição de ultrapassar</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv4.png" /><figcaption>Acidente</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv5.png" /><figcaption>Outros perigos</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv6.png" /><figcaption>Proibição de ultrapassar a automóveis pesados</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv7.png" /><figcaption>Fim da fila de trânsito a esquerda</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv8.png" /><figcaption>Via obrigatória para Autocarros médios das ... as ...</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/siv9.png" /><figcaption>Outros perigos e proibição de exceder a velocidade de ... km/h</figcaption></figure></div>
+    </div>
+
+    <h3><span id="q3" style="text-transform: uppercase;">QUADRO III<br />SINAIS LUMINOSOS</span></h3>
+    <img alt="Sinais Luminosos" src="https://codest.co.mz/images/sinais/sinais-luminosos.png" />
+
+    <h3><span id="q4" style="text-transform: uppercase;">QUADRO IV<br />SINAIS DE PERIGO</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d1.png" /><figcaption>Sinalização luminosa<br />D1</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d2.png" /><figcaption>Paragem obrigatória no cruzamento ou entroncamento<br />D2</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d3.png" /><figcaption>Estrada com prioridade<br />D3</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d4.png" /><figcaption>Passagem de peões<br />D4</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d5.png" /><figcaption>Travessia de peões<br />D5</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d6.png" /><figcaption>Crianças<br />D6</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d7.png" /><figcaption>Indicação da proximidade de um local frequentemente utilizado por ciclistas.<br />D7</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d8.png" /><figcaption>Animais<br />D8</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d9.png" /><figcaption>Início de estrada alcatroada<br />D9</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d10.png" /><figcaption>Fim de estrada alcatroada<br />D10</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d11.png" /><figcaption>Vento lateral<br />D11</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d12.png" /><figcaption>Túnel<br />D12</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d13.png" /><figcaption>Subida de inclinação acentuada<br />D13</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d14.png" /><figcaption>Descida de inclinação acentuada<br />D14</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d15.png" /><figcaption>Ponte estreita<br />D15</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d16.png" /><figcaption>Ponte móvel<br /><b>D16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d17.png" /><figcaption>Passagem estreita<br />D17</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d18.png" /><figcaption>Passagem estreita à direita<br />D18</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d19.png" /><figcaption>Passagem estreita à esquerda<br />D19</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d20.png" /><figcaption>Lomba ou depressão<br />D20</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d21.png" /><figcaption>Lomba<br />D21</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d22.png" /><figcaption>Pavimento escorregadio<br />D22</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d23.png" /><figcaption>Queda de pedras à direita<br />D23</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d24.png" /><figcaption>Queda de pedras à esquerda<br />D24</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d25.png" /><figcaption>Outros perigos<br />D25</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d26.png" /><figcaption>Cruzamento<br />D26</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d27.png" /><figcaption>Cruzamento com estrada sem prioridade<br />D27</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d28.png" /><figcaption>Cruzamento com estrada com prioridade<br />D28</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d29.png" /><figcaption>Entroncamento com estrada com prioridade em T<br />D29</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d30.png" /><figcaption>Entroncamento oblíquo à direita<br />D30</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d31.png" /><figcaption>Entroncamento oblíquo à esquerda<br />D31</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d32.png" /><figcaption>Entroncamento lateral à esquerda<br />D32</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d33.png" /><figcaption>Entroncamento lateral à direita<br />D33</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d34.png" /><figcaption>Entroncamentos sucessivos contrários à direita e à esquerda<br />D34</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d35.png" /><figcaption>Entroncamentos sucessivos contrários à esquerda e à direita<br />D35</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d36.png" /><figcaption>Entroncamento agudo para à direita<br />D36</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d37.png" /><figcaption>Entroncamento agudo para à esquerda<br />D37</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d38.png" /><figcaption>Entroncamento agudo da direita<br />D38</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d39.png" /><figcaption>Entroncamento agudo da esquerda<br />D39</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d40.png" /><figcaption>Entroncamento em forma de Y ou Bifurcação<br />D40</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d41.png" /><figcaption>Início de uma via dupla à direita.<br />D41</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d42.png" /><figcaption>Início de via dupla à esquerda<br />D42</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d43.png" /><figcaption>Fim de via dupla à direita<br />D43</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d44.png" /><figcaption>Fim de via dupla à esquerda<br />D44</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d45.png" /><figcaption>Intersecção com sentido giratório<br />D45</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d46.png" /><figcaption>Curva à direita<br />D46</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d47.png" /><figcaption>Curva à esquerda<br />D47</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d48.png" /><figcaption>Curva acentuada à direita<br />D48</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d49.png" /><figcaption>Curva acentuada à esquerda<br />D49</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d50.png" /><figcaption>Trânsito nos dois sentidos<br />D50</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d51.png" /><figcaption>Curva fechada à direita<br />D51</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d52.png" /><figcaption>Curva fechada à esquerda<br />D52</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d53.png" /><figcaption>Curva à direita e contracurva<br />D53</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d54.png" /><figcaption>Curva à esquerda e contracurva<br />D54</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d55.png" /><figcaption>Curvas sucessivas primeira à direita<br />D55</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d56.png" /><figcaption>Curvas sucessivas primeira à esquerda<br />D56</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d57.png" /><figcaption>Fim da fila à esquerda<br />D57</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d58.png" /><figcaption>Fim da fila à direita<br />D58</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d59.png" /><figcaption>Depressão<br />D59</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d60.png" /><figcaption>Tractor agrícola<br />D60</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d61.png" /><figcaption>Pista de aviação<br />D61</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d62.png" /><figcaption>Visibilidade reduzida<br />D62</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d63.png" /><figcaption>Congestionamento de tráfego<br />D63</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d64.png" /><figcaption>Cruzamento com trânsito nos dois sentidos<br />D64</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d65.png" /><figcaption>Restrição de altura<br />D65</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d66.png" /><figcaption>Um veículo de cada vez<br />D66</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d67.png" /><figcaption>Cancela<br />D67</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d68.png" /><figcaption>Passagem de nível<br />D68</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d69.png" /><figcaption>Cancela motorizada à direita<br />D69</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d70.png" /><figcaption>Cancela motorizada à esquerda<br />D70</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d71.png" /><figcaption>Cancela motorizada ao centro<br />D71</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d72.png" /><figcaption>Animais selvagens<br />D72</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d73.png" /><figcaption>Projecção de gravilhas<br />D73</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d74.png" /><figcaption>Veículos de tracção manual<br />D74</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d75.png" /><figcaption>Aproximação de passagem de nível<br />D75</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d76.png" /><figcaption>Aproximação de passagem de nível<br />D76</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d77.png" /><figcaption>Aproximação de passagem de nível<br />D77</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d78.png" /><figcaption>Local de passagem de nível sem guarda<br />D78</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d79.png" /><figcaption>Local de passagem de nível sem guarda com duas ou mais vias<br />D79</figcaption></figure></div>
+    </div>
+
+    <h3>SINAIS COMPLEMENTARES DE PERIGO</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'1.png" /><figcaption>Baia indicadora de direcção à esquerda<br />D'1</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'2.png" /><figcaption>Baia indicadora de direcção à direita<br />D'2</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'3.png" /><figcaption>Baia direccional para a direita<br />D'3</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'4.png" /><figcaption>Baia direccional para a direita<br />D'4</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'5.png" /><figcaption>Baia direccional para a esquerda<br />D'5</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'6.png" /><figcaption>Baia direccional para a esquerda<br />D'6</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'7.png" /><figcaption>Baia direccional para balizamento de ponto de convergência<br />D'7</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/d'8.png" /><figcaption>Baia direccional para balizamento de ponto de divergência<br />D'8</figcaption></figure></div>
+    </div>
+
+    <h3><span id="q5" style="text-transform: uppercase;">QUADRO V<br />Sinais de Prescrição Absoluta</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e1.png" /><figcaption>Trânsito proibido<br /><b>E1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e2.png" /><figcaption>Sentido proibido<br /><b>E2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e3.png" /><figcaption>Trânsito proibido a automóveis ligeiros<br /><b>E3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e4.png" /><figcaption>Trânsito proibido a todos os veículos automóveis<br /><b>E4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e5.png" /><figcaption>Trânsito proibido a veículos automóveis e motociclos com carro<br /><b>E5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e6.png" /><figcaption>Trânsito proibido a motociclos simples<br /><b>E6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e7.png" /><figcaption>Trânsito proibido a automóveis de mercadorias<br /><b>E7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e8.png" /><figcaption>Proibição de ultrapassar<br /><b>E8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e9.png" /><figcaption>Fim de proibição de ultrapassar<br /><b>E9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e10.png" /><figcaption>Proibição de ultrapassar a automóveis pesados<br /><b>E10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e11.png" /><figcaption>Fim da proibição de ultrapassar a automóveis pesados<br /><b>E11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e12.png" /><figcaption>Proibição de exceder a velocidade de … km/h<br /><b>E12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e13.png" /><figcaption>Fim da proibição de exceder a velocidade de ... km/h<br /><b>E13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e14.png" /><figcaption>Proibição de ultrapassar para motociclos simples<br /><b>E14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e15.png" /><figcaption>Fim da proibição de ultrapassar para motociclos simples<br /><b>E15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e16.png" /><figcaption>Trânsito proibido a velocípedes<br /><b>E16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e17.png" /><figcaption>Trânsito proibido a peões<br /><b>E17</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e18.png" /><figcaption>Trânsito proibido a velocípedes e peões<br /><b>E18</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e19.png" /><figcaption>Trânsito proibido a veículos de peso por eixo superior a … toneladas<br /><b>E19</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e20.png" /><figcaption>Trânsito proibido a veículos de peso total superior a ... toneladas<br /><b>E20</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e21.png" /><figcaption>Trânsito proibido a veículos de comprimento superior a … metros<br /><b>E21</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e22.png" /><figcaption>Trânsito proibido a veículos de largura superior a ... metros<br /><b>E22</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e23.png" /><figcaption>Trânsito proibido a veículos de altura superior a ... metros<br /><b>E23</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e24.png" /><figcaption>Proibição de sinais sonoros<br /><b>E24</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e25.png" /><figcaption>Fim de proibição de sinais sonoros<br /><b>E25</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e26.png" /><figcaption>Proibição de voltar à esquerda<br /><b>E26</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e27.png" /><figcaption>Proibição de voltar à direita<br /><b>E27</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e28.png" /><figcaption>Proibição de inversão do sentido de marcha<br /><b>E28</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e29.png" /><figcaption>Proibição de mudar de direcção para a esquerda<br /><b>E29</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e30.png" /><figcaption>Proibição de mudança de direcção para a direita<br /><b>E30</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e31.png" /><figcaption>Trânsito proibido a tractores agrícolas<br /><b>E31</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e32.png" /><figcaption>Trânsito proibido a veículos de mercadorias de peso total superior a … toneladas<br /><b>E32</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e33.png" /><figcaption>Trânsito proibido a veículos de tracção animal<br /><b>E33</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e34.png" /><figcaption>Trânsito proibido a veículos de tracção manual<br /><b>E34</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e35.png" /><figcaption>Trânsito proibido a táxis<br /><b>E35</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e36.png" /><figcaption>Trânsito proibido a veículos que transportam substâncias perigosas<br /><b>E36</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e37.png" /><figcaption>Trânsito proibido a veículos de peso por eixo múltiplo superior a ... toneladas<br /><b>E37</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e38.png" /><figcaption>Trânsito proibido a veículos com reboque<br /><b>E38</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e39.png" /><figcaption>Trânsito proibido a autocarros médios<br /><b>E39</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e40.png" /><figcaption>Trânsito proibido a autocarros<br /><b>E40</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e41.png" /><figcaption>Trânsito proibido a veículos de construção<br /><b>E41</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e42.png" /><figcaption>Portagem<br /><b>E42</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e43.png" /><figcaption>Paragem obrigatória na Alfândega<br /><b>E43</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e44.png" /><figcaption>Posto de controlo<br /><b>E44</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e45.png" /><figcaption>Trânsito proibido a veículos de dimensões anormais<br /><b>E45</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e46.png" /><figcaption>Trânsito proibido a carros de mão<br /><b>E46</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e47.png" /><figcaption>Trânsito proibido a peões, animais e veículos não automóveis<br /><b>E47</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e48.png" /><figcaption>Trânsito proibido a veículos de mercadorias e reboques<br /><b>E48</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e49.png" /><figcaption>Trânsito proibido ao conjunto de veículos de mercadorias de peso total superior a … toneladas<br /><b>E49</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e50.png" /><figcaption>Estacionamento proibido<br /><b>E50</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e51.png" /><figcaption>Paragem e estacionamento proibidos<br /><b>E51</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e52.png" /><figcaption>Paragem proibida<br /><b>E52</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e53.png" /><figcaption>Estacionamento proibido<br /><b>E53</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e54.png" /><figcaption>Estacionamento condicionado<br /><b>E54</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e55.png" /><figcaption>Estacionamento condicionado<br /><b>E55</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e56.png" /><figcaption>Estacionamento limitado<br /><b>E56</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e57.png" /><figcaption>Estacionamento limitado<br /><b>E57</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e58.png" /><figcaption>Estacionamento limitado<br /><b>E58</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e59.png" /><figcaption>Fim de paragem e estacionamento proibido<br /><b>E59</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e60.png" /><figcaption>Trânsito proibido a veículos de distribuição<br /><b>E60</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e61.png" /><figcaption>Trânsito proibido a autocarros de excursão<br /><b>E61</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e62.png" /><figcaption>Trânsito proibido a mini-autocarros<br /><b>E62</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e63.png" /><figcaption>Trânsito proibido a cavalos e cavaleiros<br /><b>E63</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e64.png" /><figcaption>Proibição a vendedores<br /><b>E64</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e65.png" /><figcaption>Proibição de pedir boleia<br /><b>E65</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/e66.png" /><figcaption>Trânsito proibido a veículos não autorizados<br /><b>E66</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q6" style="text-transform: uppercase;">QUADRO VI<br />Sinais de Obrigação</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f1.png" /><figcaption>Obrigação de circular a velocidade mínima de…..km/h<br /><b>F1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f2.png" /><figcaption>Via obrigatória para veículos de peso total de…..toneladas<br /><b>F2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f3.png" /><figcaption>Obrigação de contornar a placa ou o obstáculo à esquerda<br /><b>F3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f4.png" /><figcaption>Obrigação de contornar a placa ou obstáculo à direita<br /><b>F4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f5.png" /><figcaption>Sentido obrigatório para a esquerda<br /><b>F5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f6.png" /><figcaption>Sentido obrigatório para a direita<br /><b>F6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f7.png" /><figcaption>Sentido obrigatório para a frente<br /><b>F7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f8.png" /><figcaption>Sentido obrigatório para a esquerda<br /><b>F8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f9.png" /><figcaption>Sentido obrigatório para a direita<br /><b>F9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f10.png" /><figcaption>Sentidos obrigatórios possíveis<br /><b>F10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f11.png" /><figcaption>Pista obrigatória para peões<br /><b>F11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f12.png" /><figcaption>Pista obrigatória para velocípedes<br /><b>F12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f13.png" /><figcaption>Pista obrigatória para velocípedes e peões<br /><b>F13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f14.png" /><figcaption>Via obrigatória para veículos que transportam substâncias perigosas<br /><b>F14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f15.png" /><figcaption>Pista obrigatória para cavaleiros<br /><b>F15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f16.png" /><figcaption>Fim da pista obrigatória para cavaleiros<br /><b>F16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f17.png" /><figcaption>Sentido obrigatório giratório<br /><b>F17</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f18.png" /><figcaption>Pista obrigatória para veículos de tracção animal<br /><b>F18</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f19.png" /><figcaption>Via obrigatória para veículos de mercadorias de peso total não superior a … toneladas<br /><b>F19</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f20.png" /><figcaption>Fim da via obrigatória para veículos de mercadorias de peso total não superior a… toneladas<br /><b>F20</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f21.png" /><figcaption>Via obrigatória para tractores agrícolas<br /><b>F21</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f22.png" /><figcaption>Fim da via obrigatória para tractores agrícolas<br /><b>F22</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f23.png" /><figcaption>Via obrigatória para veículos de mercadorias<br /><b>F23</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f24.png" /><figcaption>Fim da via obrigatória para veículos de mercadorias<br /><b>F24</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f25.png" /><figcaption>Via obrigatória para automóveis pesados<br /><b>F25</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f26.png" /><figcaption>Fim da via obrigatória para automóveis pesados<br /><b>F26</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f27.png" /><figcaption>Via obrigatória para automóveis ligeiros de passageiros<br /><b>F27</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f28.png" /><figcaption>Fim da via obrigatória para automóveis ligeiros de passageiros<br /><b>F28</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f29.png" /><figcaption>Via obrigatória para táxis<br /><b>F29</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f30.png" /><figcaption>Fim da via obrigatória para táxis<br /><b>F30</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f31.png" /><figcaption>Pista obrigatória para veículos de tracção manual<br /><b>F31</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f32.png" /><figcaption>Fim da pista obrigatória para veículos de tracção manual<br /><b>F32</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f33.png" /><figcaption>Via obrigatória para autocarros e autocarros médios<br /><b>F33</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f34.png" /><figcaption>Fim da via obrigatória para autocarros e autocarros médios<br /><b>F34</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f35.png" /><figcaption>Via obrigatória para motociclos simples<br /><b>F35</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f36.png" /><figcaption>Fim da via obrigatória para motociclos simples<br /><b>F36</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f37.png" /><figcaption>Via obrigatória para veículos de dimensões anormais<br /><b>F37</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f38.png" /><figcaption>Fim da via obrigatória para veículos de dimensões anormais<br /><b>F38</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f39.png" /><figcaption>Via obrigatória para autocarros médios<br /><b>F39</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f40.png" /><figcaption>Fim da via obrigatória para autocarros médios<br /><b>F40</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f41.png" /><figcaption>Via obrigatória para autocarros<br /><b>F41</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f42.png" /><figcaption>Fim da via obrigatória para autocarros<br /><b>F42</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f43.png" /><figcaption>Pista obrigatória para animais<br /><b>F43</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f44.png" /><figcaption>Fim da pista obrigatória para animais<br /><b>F44</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f45.png" /><figcaption>Via obrigatória para mini-autocarros<br /><b>F45</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f46.png" /><figcaption>Via obrigatória para táxis<br /><b>F46</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f47.png" /><figcaption>Via para Portagem<br /><b>F47</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f48.png" /><figcaption>Via obrigatória para veículos de tracção animal<br /><b>F48</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f49.png" /><figcaption>Via obrigatória para autocarros de excursão<br /><b>F49</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f50.png" /><figcaption>Pistas obrigatórias para peões e velocípedes<br /><b>F50</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f51.png" /><figcaption>Pistas obrigatórias para velocípedes e peões<br /><b>F51</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f52.png" /><figcaption>Via obrigatória para veículos de obras<br /><b>F52</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f53.png" /><figcaption>Via obrigatória para autocarros e mini – autocarros<br /><b>F53</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f54.png" /><figcaption>Pista obrigatória para riquixós<br /><b>F54</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/f55.png" /><figcaption>Obrigação de acender as luzes<br /><b>F55</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q7" style="text-transform: uppercase;">QUADRO VII<br />Sinais de Indicação</span></h3>
+    <h3>Sinais de informação</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g1.png" /><figcaption>Área reservada para autocarros<br /><b>G1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g2.png" /><figcaption>Parque de estacionamento para autocarros<br /><b>G2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g3.png" /><figcaption>Faixa reservada para autocarros do lado esquerdo<br /><b>G3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g4.png" /><figcaption>Início da faixa reservada para autocarros do lado esquerdo<br /><b>G4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g5.png" /><figcaption>Pista reservada para velocípedes do lado esquerdo<br /><b>G5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g6.png" /><figcaption>Parque de estacionamento para velocípedes<br /><b>G6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g7.png" /><figcaption>Parque de estacionamento<br /><b>G7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g8.png" /><figcaption>Parque de estacionamento limitado<br /><b>G8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g9.png" /><figcaption>Área reservada para motociclos<br /><b>G9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g10.png" /><figcaption>Parque de estacionamento para motociclos<br /><b>G10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g11.png" /><figcaption>Área reservada para automóveis ligeiros<br /><b>G11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g12.png" /><figcaption>Parque de estacionamento para automóveis ligeiros<br /><b>G12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g13.png" /><figcaption>Área reservada para táxis<br /><b>G13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g14.png" /><figcaption>Parque de estacionamento para táxis<br /><b>G14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g15.png" /><figcaption>Área reservada para mini-autocarros<br /><b>G15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g16.png" /><figcaption>Parque de estacionamento para mini-autocarros<br /><b>G16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g17.png" /><figcaption>Área reservada para autocarros médios<br /><b>G17</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g18.png" /><figcaption>Parque de estacionamento para autocarros médios<br /><b>G18</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g19.png" /><figcaption>Área reservada para veículos de distribuição<br /><b>G19</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g20.png" /><figcaption>Parque de estacionamento para veículos de distribuição<br /><b>G20</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g21.png" /><figcaption>Área reservada para automóveis pesados de mercadoria<br /><b>G21</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g22.png" /><figcaption>Parque de estacionamento para automóveis pesados de mercadoria<br /><b>G22</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g23.png" /><figcaption>Área reservada para automóveis de mercadorias de peso total superior a ... toneladas<br /><b>G23</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g24.png" /><figcaption>Parque de estacionamento para automóveis pesados de mercadoria de peso superior a ... toneladas<br /><b>G24</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g25.png" /><figcaption>Área reservada para veículos de obras<br /><b>G25</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g26.png" /><figcaption>Área reservada para autocarros e autocarros médios<br /><b>G26</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g27.png" /><figcaption>Parque de estacionamento para autocarros e autocarros médios<br /><b>G27</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g28.png" /><figcaption>Faixa reservada para autocarros e autocarros médios do lado esquerdo<br /><b>G28</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g29.png" /><figcaption>Início da faixa reservada para autocarros e autocarros médios do lado esquerdo<br /><b>G29</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g30.png" /><figcaption>Área reservada para qualquer tipo de autocarro<br /><b>G30</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g31.png" /><figcaption>Parque de estacionamento para qualquer tipo de autocarro<br /><b>G31</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g32.png" /><figcaption>Faixa reservada para qualquer tipo de autocarro do lado esquerdo<br /><b>G32</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g33.png" /><figcaption>Início da faixa reservada para qualquer tipo de autocarro do lado esquerdo<br /><b>G33</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g34.png" /><figcaption>Faixa reservada para veículos de maior tonelagem do lado esquerdo<br /><b>G34</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g35.png" /><figcaption>Início da faixa reservada para veículos de maior tonelagem do lado esquerdo<br /><b>G35</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g36.png" /><figcaption>Área reservada para trens<br /><b>G36</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g37.png" /><figcaption>Faixa reservada para trens do lado esquerdo<br /><b>G37</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g38.png" /><figcaption>Início da faixa reservada para trens do lado esquerdo<br /><b>G38</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g39.png" /><figcaption>Paragem para trens<br /><b>G39</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g40.png" /><figcaption>Área reservada para autocarros e trens<br /><b>G40</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g41.png" /><figcaption>Faixa reservada para autocarros e trens do lado esquerdo<br /><b>G41</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g42.png" /><figcaption>Início da faixa reservada para autocarros e trens do lado esquerdo<br /><b>G42</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g43.png" /><figcaption>Área reservada para autocarros, trens e mini-autocarros<br /><b>G43</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g44.png" /><figcaption>Faixa reservada para autocarro, trens e mini-autocarro do lado esquerdo<br /><b>G44</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g45.png" /><figcaption>Início da faixa reservada para autocarros, trens e mini-autocarros do lado esquerdo<br /><b>G45</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g46.png" /><figcaption>Faixa reservada para autocarros do lado direito<br /><b>G46</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g47.png" /><figcaption>Faixa reservada para autocarros e mini-autocarros do lado direito<br /><b>G47</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g48.png" /><figcaption>Faixa reservada para autocarros e trens do lado direito<br /><b>G48</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g49.png" /><figcaption>Faixa reservada para autocarros, trens e mini-autocarros do lado direito<br /><b>G49</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g50.png" /><figcaption>Faixa reservada para veículos de alta tonelagem do lado direito<br /><b>G50</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g51.png" /><figcaption>Parque de estacionamento para veículos de obras<br /><b>G51</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g52.png" /><figcaption>Área reservada para veículos que transportam substâncias perigosas<br /><b>G52</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g53.png" /><figcaption>Parque de estacionamento para veículos que transportam substâncias perigosas<br /><b>G53</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g54.png" /><figcaption>Área reservada para veículos de dimensões anormais<br /><b>G54</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g55.png" /><figcaption>Parque de estacionamento para veículos de dimensões anormais<br /><b>G55</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g56.png" /><figcaption>Área reservada para riquexós<br /><b>G56</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g57.png" /><figcaption>Parque de estacionamento para riquexós<br /><b>G57</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g58.png" /><figcaption>Área reservada para autocarros de excursão<br /><b>G58</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g59.png" /><figcaption>Parque de estacionamento para autocarros de excursão<br /><b>G59</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g60.png" /><figcaption>Área reservada para veículos de alta tonelagem<br /><b>G60</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g61.png" /><figcaption>Parque de estacionamento para veículos de alta tonelagem<br /><b>G61</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g62.png" /><figcaption>Área reservada para veículos de emergência<br /><b>G62</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g63.png" /><figcaption>Parque de estacionamento para veículos de emergência<br /><b>G63</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g64.png" /><figcaption>Área reservada para veículos da polícia<br /><b>G64</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g65.png" /><figcaption>Parque de estacionamento para veículos da polícia<br /><b>G65</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g66.png" /><figcaption>Área reservada para veículos de deficientes<br /><b>G66</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g67.png" /><figcaption>Parque de estacionamento para veículos de deficientes<br /><b>G67</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g68.png" /><figcaption>Área reservada para veículos do corpo diplomático<br /><b>G68</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g69.png" /><figcaption>Parque de estacionamento para veículos do corpo diplomático<br /><b>G69</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g70.png" /><figcaption>Paragem de autocarros em dias pares<br /><b>G70</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g71.png" /><figcaption>Paragem para autocarros médios e mini - autocarros em dias ímpares<br /><b>G71</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g72.png" /><figcaption>Faixa reservada para veículos autorizados para o transporte de passageiros do lado esquerdo<br /><b>G72</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g73.png" /><figcaption>Faixa reservada para veículos autorizados para o transporte de passageiros do lado direito<br /><b>G73</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g74.png" /><figcaption>Auto – estrada<br /><b>G74</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g75.png" /><figcaption>Via rápida<br /><b>G75</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g76.png" /><figcaption>Pré-sinalização de via sem saída à direita<br /><b>G76</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g77.png" /><figcaption>Pré-sinalização de via sem saída à esquerda<br /><b>G77</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g78.png" /><figcaption>Estrada sem saída<br /><b>G78</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g79.png" /><figcaption>Passagem de peões<br /><b>G79</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g80.png" /><figcaption>Passagem por qualquer dos lados<br /><b>G80</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g81.png" /><figcaption>Indicação de aproximação de saída de auto-estrada à 300 m<br /><b>G81</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g82.png" /><figcaption>Indicação de aproximação de saída da auto-estrada à 200 m<br /><b>G82</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g83.png" /><figcaption>Indicação de aproximação de saída da auto-estrada à 100 m<br /><b>G83</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g84.png" /><figcaption>Via de sentido único para a direita<br /><b>G84</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g85.png" /><figcaption>Via de sentido único para a esquerda<br /><b>G85</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g86.png" /><figcaption>Via de sentido único<br /><b>G86</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g87.png" /><figcaption>Fim da auto-estrada<br /><b>G87</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/g88.png" /><figcaption>Passagem desnivelada para peões com rampa<br /><b>G88</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q8" style="text-transform: uppercase;">QUADRO VIII<br />Sinais de Simples Indicação</span></h3>
+    <h3>SINAIS DE PRÉ-SINALIZAÇÃO E DE DIRECÇÃO</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h1.png" /><figcaption>Pré-aviso gráfico<br />(Intersecção de nível)<br /><b>H1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h2.png" /><figcaption>Direcção de via de acesso<br /><b>H2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h3.png" /><figcaption>Pré-sinalização do itinerário<br />(Intersecção de nível)<br /><b>H3</b></figcaption></figure></div>
+    </div>
+
+    <h3>SINAIS DE DIRECÇÃO</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h4.png" /><figcaption>Pré-advertência da direcção de saída<br /><b>H4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h5.png" /><figcaption>Advertência da direcção de saída<br /><b>H5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h6.png" /><figcaption>Complemento da direcção de saída<br /><b>H6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h7.png" /><figcaption>Direcção de saída<br /><b>H7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h8.png" /><figcaption>Saída com uma faixa de rodagem<br /><b>H8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h9.png" /><figcaption>Confirmação de estrada<br /><b>H9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h10.png" /><figcaption>Advertência da direcção terminal<br /><b>H10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h11.png" /><figcaption>Direcção terminal<br /><b>H11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h12.png" /><figcaption>Sequência de saídas<br /><b>H12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h13.png" /><figcaption>Advertência de saída do centro da Cidade<br /><b>H13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h14.png" /><figcaption>Direcção de saída do centro da Cidade<br /><b>H14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h15.png" /><figcaption>Direcção de acesso no cruzamento<br /><b>H15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h16.png" /><figcaption>Direcção de acesso<br /><b>H16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h17.png" /><figcaption>Advertência de acesso no cruzamento<br /><b>H17</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h18.png" /><figcaption>Direcção de acesso<br /><b>H18</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h19.png" /><figcaption>Pré-advertência de direcção<br /><b>H19</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h20.png" /><figcaption>Advertência de direcção<br /><b>H20</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h21.png" /><figcaption>Direcção de acesso<br /><b>H21</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h22.png" /><figcaption>Direcção de acesso<br /><b>H22</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h23.png" /><figcaption>Advertência suplementar de direcção<br /><b>H23</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h24.png" /><figcaption>Praia<br /><b>H24</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h25.png" /><figcaption>Telefone/ Área de repouso/ informação turística<br /><b>H25</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h26.png" /><figcaption>Parque de crocodilos<br /><b>H26</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h27.png" /><figcaption>Polícia/ Posto de abastecimento de combustível/Take - away/Acomodação e informação turística<br /><b>H27</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h28.png" /><figcaption>Cascata<br /><b>H28</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h29.png" /><figcaption>Parque de campismo/ Sanitários/ local para fogueira<br /><b>H29</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h30.png" /><figcaption>Saídas<br /><b>H30</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h31.png" /><figcaption>Área de repouso<br /><b>H31</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h32.png" /><figcaption>Área de repouso<br /><b>H32</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h33.png" /><figcaption>Parque<br /><b>H33</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h34.png" /><figcaption>Posto de abastecimento de combustível com oficina/ polícia/ hospital/ parque para reboques de campismo<br /><b>H34</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h35.png" /><figcaption>Área de repouso com posto de abastecimento<br /><b>H35</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h36.png" /><figcaption>Quiosque/ Parque de autocarros<br /><b>H36</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h37.png" /><figcaption>Telefone de emergência<br /><b>H37</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h38.png" /><figcaption>Telefone de emergência<br /><b>H38</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h39.png" /><figcaption>Telefone de emergência<br /><b>H39</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h40.png" /><figcaption>Telefone de emergência<br /><b>H40</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h41.png" /><figcaption>Parque de estacionamento<br /><b>H41</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h42.png" /><figcaption>Informação turística<br /><b>H42</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h43.png" /><figcaption>Artesanato<br /><b>H43</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h44.png" /><figcaption>Polícia/Hospital com emergência médica/Bombeiros/Telefone celular de emergência/ Telefone fixo de<br /><b>H44</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h45-h.png" /><figcaption>Indicação de três direcções<br /><b>H45</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h46.png" /><figcaption>Indicação de duas direcções<br /><b>H46</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h47.png" /><figcaption>Indicação da existência de porto<br /><b>H47</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h48.png" /><figcaption>Indicação de três direcções<br /><b>H48</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h49.png" /><figcaption>Distâncias por percorrer<br /><b>H49</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h50.png" /><figcaption>Indicação de direcções<br /><b>H50</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h51.png" /><figcaption>Indicação de duas direcções<br /><b>H51</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h52.png" /><figcaption>Indicação de três direcções<br /><b>H52</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h53.png" /><figcaption>Indicação de Aproximação de portagem<br /><b>H53</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h54.png" /><figcaption>Indicação de três direcções<br /><b>H54</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h55.png" /><figcaption>Indicação de desvio para veículos pesados de mercadorias<br /><b>H55</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h56.png" /><figcaption>Bairro Luís Cabral a....... m a Norte<br /><b>H56</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h57.png" /><figcaption>Bairro Luís Cabral a Norte<br /><b>H57</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h58.png" /><figcaption>Indicação de três direcções<br /><b>H58</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h59.png" /><figcaption>Indicação de vias de acesso<br /><b>H59</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h60.png" /><figcaption>Indicação de várias direcções<br /><b>H60</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h61.png" /><figcaption>Indicação de vias de acesso<br /><b>H61</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h62.png" /><figcaption>Indicação de vias de acesso<br /><b>H62</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h63.png" /><figcaption>Indicação de vias de acesso<br /><b>H63</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h64.png" /><figcaption>Indicação de vias de acesso<br /><b>H64</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/h65.png" /><figcaption>Indicação de vias de acesso<br /><b>H65</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q9" style="text-transform: uppercase;">QUADRO IX<br />Sinais de Identificação de Localidades e Estradas</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/i1.png" /><figcaption>Início de localidade<br /><b>I1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/i2.png" /><figcaption>Fim de localidade<br /><b>I2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/i3.png" /><figcaption>Demarcação quilométrica da via<br /><b>I3</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q10" style="text-transform: uppercase;">QUADRO X<br />Sinais de Interesse turísticos</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j1.png" /><figcaption>Interesse turístico geral<br /><b>J1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j2.png" /><figcaption>Campo/Clube de golfe<br /><b>J2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j3.png" /><figcaption>Águas termais<br /><b>J3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j4.png" /><figcaption>Águas interiores<br /><b>J4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j5.png" /><figcaption>Indicação da existência de uma praia<br /><b>J5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j6.png" /><figcaption>Montanhas<br /><b>J6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j7.png" /><figcaption>Paisagem<br /><b>J7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j8.png" /><figcaption>Reserva natural<br /><b>J8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j9.png" /><figcaption>Património nacional<br /><b>J9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j10.png" /><figcaption>Jardim botânico<br /><b>J10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j11.png" /><figcaption>Jardim (flores)<br /><b>J11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j12.png" /><figcaption>Cascata<br /><b>J12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j13.png" /><figcaption>Lago ou barragem<br /><b>J13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j14.png" /><figcaption>Cavernas<br /><b>J14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j15.png" /><figcaption>Miradouro<br /><b>J15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j16.png" /><figcaption>Floresta natural<br /><b>J16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j17.png" /><figcaption>Reserva florestal<br /><b>J17</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j18.png" /><figcaption>Pousada de Juventude<br /><b>J18</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j19.png" /><figcaption>Autódromo<br /><b>J19</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j20.png" /><figcaption>Hipódromo<br /><b>J20</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j21.png" /><figcaption>Centro hípico<br /><b>J21</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j22.png" /><figcaption>Pesca desportiva<br /><b>J22</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j23.png" /><figcaption>Campo de cricket<br /><b>J23</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j24.png" /><figcaption>Piscina<br /><b>J24</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j25.png" /><figcaption>Pista de atletismo<br /><b>J25</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j26.png" /><figcaption>Vida selvagem<br /><b>J26</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j27.png" /><figcaption>Área de conservação<br /><b>J27</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/J28.png" /><figcaption>Reserva de caça<br /><b>J28</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j29.png" /><figcaption>Parque de pássaros, santuário<br /><b>J29</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j30.png" /><figcaption>Parque zoológico<br /><b>J30</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j31.png" /><figcaption>Parque de cobras<br /><b>J31</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j32.png" /><figcaption>Parque de crocodilos<br /><b>J32</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j33.png" /><figcaption>Parque de rinocerontes<br /><b>J33</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j34.png" /><figcaption>Parque de leões<br /><b>J34</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j35.png" /><figcaption>Lugar histórico e genérico<br /><b>J35</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j36.png" /><figcaption>Museu<br /><b>J36</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j37.png" /><figcaption>Mina histórica<br /><b>J37</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j38.png" /><figcaption>Estação de Caminhos de Ferro histórica<br /><b>J38</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j39.png" /><figcaption>Fortaleza histórica<br /><b>J39</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j40.png" /><figcaption>Cemitério histórico<br /><b>J40</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j41.png" /><figcaption>Lugar geológico<br /><b>J41</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j42.png" /><figcaption>Costa<br /><b>J42</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j43.png" /><figcaption>Reserva marinha<br /><b>J43</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j44.png" /><figcaption>Museu marítimo<br /><b>J44</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j45.png" /><figcaption>Aquário<br /><b>J45</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j46.png" /><figcaption>Baleia<br /><b>J46</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j47.png" /><figcaption>Golfinhos<br /><b>J47</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j48.png" /><figcaption>Farol<br /><b>J48</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j49.png" /><figcaption>Doca<br /><b>J49</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j50.png" /><figcaption>Rampa para lançamento de barcos<br /><b>J50</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j51.png" /><figcaption>Pesca<br /><b>J51</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j52.png" /><figcaption>Lagosta<br /><b>J52</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j53.png" /><figcaption>Pintura e desenho<br /><b>J53</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j54.png" /><figcaption>Cerâmica<br /><b>J54</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j55.png" /><figcaption>Joalharia<br /><b>J55</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j56.png" /><figcaption>Tecelagem<br /><b>J56</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j57.png" /><figcaption>Curtume<br /><b>J57</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j58.png" /><figcaption>Arte Africana<br /><b>J58</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j59.png" /><figcaption>Exploração de madeira<br /><b>J59</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j60.png" /><figcaption>Exploração de metais<br /><b>J60</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j61.png" /><figcaption>Cultural<br /><b>J61</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j62.png" /><figcaption>Teatro<br /><b>J62</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j63.png" /><figcaption>Anfiteatro<br /><b>J63</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j64.png" /><figcaption>Pista para caminhar<br /><b>J64</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j65.png" /><figcaption>Pista para cavalos<br /><b>J65</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j66.png" /><figcaption>Pista para veículos com tracção às 4 rodas<br /><b>J66</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j67.png" /><figcaption>Pista para motocross<br /><b>J67</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j68.png" /><figcaption>Balsa para o rio<br /><b>J68</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j69.png" /><figcaption>Mergulho<br /><b>J69</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j70.png" /><figcaption>Adega<br /><b>J70</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j71.png" /><figcaption>Rota para a adega<br /><b>J71</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j72.png" /><figcaption>Campo de recreio<br /><b>J72</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j73.png" /><figcaption>Montagem de avestruz<br /><b>J73</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j74.png" /><figcaption>Avestruz<br /><b>J74</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j75.png" /><figcaption>Local de reprodução artificial de peixe<br /><b>J75</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j76.png" /><figcaption>Barraca de estrada<br /><b>J76</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j77.png" /><figcaption>Campo de borboletas<br /><b>J77</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j78.png" /><figcaption>Telefone<br /><b>J78</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j79.png" /><figcaption>Polícia<br /><b>J79</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j80.png" /><figcaption>Hospital<br /><b>J80</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j81.png" /><figcaption>Posto de socorros<br /><b>J81</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j82.png" /><figcaption>Telefone de emergência<br /><b>J82</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j83.png" /><figcaption>Hospital com emergência médica<br /><b>J83</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j84.png" /><figcaption>Bombeiros<br /><b>J84</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j85.png" /><figcaption>Telefone celular de emergência<br /><b>J85</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j86.png" /><figcaption>Posto de abastecimento com oficina<br /><b>J86</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j87.png" /><figcaption>Posto de abastecimento<br /><b>J87</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j88.png" /><figcaption>Oficina<br /><b>J88</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j89.png" /><figcaption>Veículo automóvel de socorro<br /><b>J89</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j90.png" /><figcaption>Restaurante<br /><b>J90</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j91.png" /><figcaption>Café ou bar<br /><b>J91</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j92.png" /><figcaption>Take–away<br /><b>J92</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j93.png" /><figcaption>Quiosque<br /><b>J93</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j94.png" /><figcaption>Parque de estacionamento<br /><b>J94</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j95.png" /><figcaption>Sanitários<br /><b>J95</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j96.png" /><figcaption>Chuveiro público<br /><b>J96</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j97.png" /><figcaption>Água potável<br /><b>J97</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j98.png" /><figcaption>Local para fogueira<br /><b>J98</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j99.png" /><figcaption>Facilidades de cozinha<br /><b>J99</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j100.png" /><figcaption>Área de piquenique<br /><b>J100</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j101.png" /><figcaption>Informação turística<br /><b>J101</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j102.png" /><figcaption>Facilidades para deficientes<br /><b>J102</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j103.png" /><figcaption>Correio<br /><b>J103</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j104.png" /><figcaption>Área de repouso<br /><b>J104</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j105.png" /><figcaption>Área de repouso<br /><b>J105</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j106.png" /><figcaption>Área de repouso com posto de abastecimento<br /><b>J106</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j107.png" /><figcaption>Veículos ligeiros<br /><b>J107</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j108.png" /><figcaption>Parque para reboques de campismo<br /><b>J108</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j109.png" /><figcaption>Paragem de autocarros<br /><b>J109</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j110.png" /><figcaption>Tractor mecânico<br /><b>J110</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j111.png" /><figcaption>Veículos de distribuição<br /><b>J111</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j112.png" /><figcaption>Motociclos simples<br /><b>J112</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j113.png" /><figcaption>Acomodação<br /><b>J113</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j114.png" /><figcaption>Pousada ou Estalagem<br /><b>J114</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j115.png" /><figcaption>Parque de campismo<br /><b>J115</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j116.png" /><figcaption>Hospedagem<br /><b>J116</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j117.png" /><figcaption>Cama e pequeno-almoço<br /><b>J117</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/j118.png" /><figcaption>Cama<br /><b>J118</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/blank.png" /><figcaption></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q11" style="text-transform: uppercase;">QUADRO XI<br />Sinais de Afectação de Vias</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l1.png" /><figcaption>Fim da fila de trânsito à esquerda<br /><b>L1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l2.png" /><figcaption>Fim da fila de trânsito à direita<br /><b>L2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l3.png" /><figcaption>Aumento de filas de trânsito de uma para duas<br /><b>L3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l4.png" /><figcaption>Aumento de filas de trânsito de duas para três<br /><b>L4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l5.png" /><figcaption>Desvio de fila de trânsito para a esquerda<br /><b>L5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l6.png" /><figcaption>Desvio e aumento de fila de trânsito para a esquerda<br /><b>L6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l7.png" /><figcaption>Desvio das filas de trânsito à esquerda<br /><b>L7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l8.png" /><figcaption>Desvio das filas de trânsito à direita<br /><b>L8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l9.png" /><figcaption>Convergência de filas de trânsito<br /><b>L9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l10.png" /><figcaption>Convergência de filas de trânsito<br /><b>L10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l11.png" /><figcaption>Convergência de filas de trânsito a ... m<br /><b>L11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l12.png" /><figcaption>Aumento de uma fila de trânsito<br /><b>L12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l13.png" /><figcaption>Obrigação de circular a velocidade mínima de ... km/h na fila à direita<br /><b>L13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l14.png" /><figcaption>Trânsito proibido a automóveis de mercadorias na fila à direita<br /><b>L14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l15.png" /><figcaption>Obrigação de circular a velocidade mínima de ... km/h, na fila à direita<br /><b>L15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/l16.png" /><figcaption>Aumento de filas de trânsito para...<br /><b>L16</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q12" style="text-transform: uppercase;">QUADRO XII<br />Sinais de Cedência de Passagens</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m1.png" /><figcaption>Aproximação de Estrada com prioridade<br /><b>M1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m2.png" /><figcaption>Paragem obrigatória<br /><b>M2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m3.png" /><figcaption>Dar prioridade nas passagens estreitas<br /><b>M3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m4.png" /><figcaption>Prioridade nas passagens estreitas<br /><b>M4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m5.png" /><figcaption>Estrada com prioridade<br /><b>M5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m6.png" /><figcaption>Dar prioridade na rotunda<br /><b>M6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m7.png" /><figcaption>Paragem obrigatória<br /><b>M7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m8.png" /><figcaption>Avance<br /><b>M8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m9.png" /><figcaption>Paragem obrigatória em três vias<br /><b>M9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m10.png" /><figcaption>Paragem obrigatória em quatro vias<br /><b>M10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m11.png" /><figcaption>Paragem obrigatória<br /><b>M11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m12.png" /><figcaption>Sentidos obrigatórios<br /><b>M12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/m13.png" /><figcaption>Prioridade de passagem para peões<br /><b>M13</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q13" style="text-transform: uppercase;">QUADRO XIII<br />Sinais Combinados</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n1.png" /><figcaption>Curva à direita; não exceder a velocidade indicada no sinal<br /><b>N1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n2.png" /><figcaption>Paragem obrigatória à distância indicada<br /><b>N2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n3.png" /><figcaption>Lomba ou depressão; não exceder a velocidade indicada<br /><b>N3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n4.png" /><figcaption>Descida de inclinação acentuada ao longo da distância indicada<br /><b>N4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n5.png" /><figcaption>Travessia de peões<br /><b>N5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n6.png" /><figcaption>Perigos vários; buracos na estrada<br /><b>N6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n7.png" /><figcaption>Curvas sucessivas, a primeira à direita e ao longo da distância indicada<br /><b>N7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n8.png" /><figcaption>Trânsito nos dois sentidos à distância indicada<br /><b>N8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n9.png" /><figcaption>Curvas sucessivas a primeira à esquerda; não exceder a velocidade indicada<br /><b>N9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n10.png" /><figcaption>Curvas sucessivas a primeira à direita ao longo da distância indicada, não exceder a velocidade indicada<br /><b>N10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n11.png" /><figcaption>Obrigação de contornar o obstáculo e início de uma via dupla à esquerda a ... m<br /><b>N11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n12.png" /><figcaption>Trânsito proibido a veículos de altura a ... m à ... Km<br /><b>N12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n13.png" /><figcaption>Paragem obrigatória<br /><b>N13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n14.png" /><figcaption>Depressão; perigos vários; inundações ocasionais<br /><b>N14</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n15.png" /><figcaption>Descida de forte inclinação<br /><b>N15</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n16.png" /><figcaption>Curva à direita e contracurva; não exceder a velocidade de … km/h<br /><b>N16</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n17.png" /><figcaption>Trânsito proibido a veículos não autorizados das ... às ...<br /><b>N17</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n18.png" /><figcaption>Proibição de inversão de sentido de marcha a noite<br /><b>N18</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n19.png" /><figcaption>Proibição de voltar à esquerda para veículos de mercadorias com peso superior à ... toneladas<br /><b>N19</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n20.png" /><figcaption>Proibição de voltar à direita para veículos com reboque<br /><b>N20</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n21.png" /><figcaption>Paragem proibida a veículos que transportam substâncias perigosas<br /><b>N21</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n22.png" /><figcaption>Proibição de exceder a velocidade de ... km/h de dia<br /><b>N22</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n23.png" /><figcaption>Trânsito proibido a veículos de mercadorias com o comprimento superior a ... m das ... às ...<br /><b>N23</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n24.png" /><figcaption>Proibição de ultrapassar por ... Km<br /><b>N24</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n25.png" /><figcaption>Proibição de ultrapassar por ... Km<br /><b>N25</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n26.png" /><figcaption>Curva acentuada a esquerda a ... m<br /><b>N26</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n27.png" /><figcaption>Visibilidade reduzida por ... Km<br /><b>N27</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n28.png" /><figcaption>Lomba<br /><b>N28</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n29.png" /><figcaption>Sentido obrigatório à esquerda para veículos de mercadorias com peso superior a ... T (Báscula)<br /><b>N29</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n30.png" /><figcaption>Sentido obrigatório para veículos de mercadorias com peso superior a ... T<br /><b>N30</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n31.png" /><figcaption>Sentido obrigatório à esquerda para veículos de mercadorias com peso superior a ... T<br /><b>N31</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n32.png" /><figcaption>Sentido obrigatório para direita das ... as ...<br /><b>N32</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n33.png" /><figcaption>Obrigação de circular a velocidade mínima de ... km/h a veículos de mercadorias<br /><b>N33</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n34.png" /><figcaption>Via com portagem a ... m<br /><b>N34</b></figcaption></figure></div>
+    </div>
+
+    <h3>SINAIS COM PAINEIS ADICIONAIS</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n'1.png" /><figcaption>Parque de estacionamento para veículos de deficientes<br /><b>N'1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n'2.png" /><figcaption>Parque de estacionamento autorizado das ... às ...<br /><b>N'2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n'3.png" /><figcaption>Indicação da existência de báscula a ... km para veículos de mercadorias de peso superior a ...<br /><b>N'3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n'4.png" /><figcaption>Indicação da proximidade de uma curva acentuada à esquerda<br /><b>N'4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n'5.png" /><figcaption>Paragem proibida a veículos que transportam substâncias perigosas<br /><b>N'5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/n'6.png" /><figcaption>Obrigação de circular a velocidade mínima de ... km/h a veículos de mercadorias<br /><b>N'6</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q14" style="text-transform: uppercase;">QUADRO XIV<br />Sinais Marcados no Pavimento</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o1.png" /><figcaption>Linha contínua<br /><b>O1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o2.png" /><figcaption>Linha contínua adjacente<br /><b>O2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o3.png" /><figcaption>Linha descontínua<br /><b>O3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o4.png" /><figcaption>Linha mista, constituída por uma linha contínua adjacente a outra descontínua<br /><b>O4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o5.png" /><figcaption>Linha descontínua de aviso<br /><b>O5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o6.png" /><figcaption>Linha descontínua de abrandamento<br /><b>O6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o7.png" /><figcaption>Linha descontínua de aceleração<br /><b>O7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/o8.png" /><figcaption>Linha contínua e descontínua de identificação de corredores de uso exclusivo<br /><b>O8</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q15" style="text-transform: uppercase;">QUADRO XV<br />Marcas Transversais</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p1.png" /><figcaption>Linha de paragem obrigatória<br /><b>P1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p2.png" /><figcaption>Linha de paragem obrigatória com "STOP"<br /><b>P2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p3.png" /><figcaption>Linha de cedência de prioridade<br /><b>P3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p4.png" /><figcaption>Linha de cedência de prioridade com símbolo triangular<br /><b>P4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p5.png" /><figcaption>Passagem para ciclistas<br /><b>P5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p6.png" /><figcaption>Passagem para peões<br /><b>P6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p7.png" /><figcaption>Passagem para peões<br /><b>P7</b></figcaption></figure></div>
+    </div>
+
+    <h3>MARCAS ORIENTADORAS DE SENTIDOS DE TRÂNSITO</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p8.png" /><figcaption>Setas de pré-sinalização de desvio<br /><b>P8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p9.png" /><figcaption>Setas de pré-sinalização de desvio<br /><b>P9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p10.png" /><figcaption>Fim da faixa de uso exclusivo<br /><b>P10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p11.png" /><figcaption>Seta de informação<br /><b>P11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p12.png" /><figcaption>Seta de bifurcação da via<br /><b>P12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/p13.png" /><figcaption>Setas de obrigação<br /><b>P13</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q16" style="text-transform: uppercase;">QUADRO XVI<br />Marcas Reguladoras do Estacionamento e Paragem</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q1.png" /><figcaption>Baía de estacionamento<br /><b>Q1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q2.png" /><figcaption>Baia de estacionamento exclusivo<br /><b>Q2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q3.png" /><figcaption>Linha de proibição de paragem<br /><b>Q3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q4.png" /><figcaption>Paragem condicionada<br /><b>Q4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q5.png" /><figcaption>Linha de proibição de estacionamento<br /><b>Q5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q6.png" /><figcaption>Linha de estacionamento condicionado<br /><b>Q6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q7.png" /><figcaption>Estacionamento exclusivo para veículos de deficientes físicos<br /><b>Q7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q8.png" /><figcaption>Linha em zigue-zague<br /><b>Q8</b></figcaption></figure></div>
+    </div>
+
+    <h3>MARCAS DIVERSAS</h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r1.png" /><figcaption>Raias oblíquas delimitadas por uma linha contínua<br /><b>R1</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r2.png" /><figcaption>Cruzamento ou entroncamento facilmente congestionáveis<br /><b>R2</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r3.png" /><figcaption>Trânsito proibido para motociclos<br /><b>R3</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r4.png" /><figcaption>Aproximação de passagem de nível<br /><b>R4</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r5.png" /><figcaption>Marca de cedência de prioridade<br /><b>R5</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r6.png" /><figcaption>Listras alternadas de cores amarela e preta<br /><b>R6</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r7.png" /><figcaption>Guias<br /><b>R7</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r8.png" /><figcaption>Lomba<br /><b>R8</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r9.png" /><figcaption>Bandas sonoras<br /><b>R9</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r10.png" /><figcaption>Redução de fila de trânsito<br /><b>R10</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r11.png" /><figcaption>Verificação obrigatória<br /><b>R11</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r12.png" /><figcaption>Inscrições<br /><b>R12</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r13.png" /><figcaption>Faixa de sentido reversível<br /><b>R13</b></figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/r14.png" /><figcaption>Aeroporto<br /><b>R14</b></figcaption></figure></div>
+    </div>
+
+    <h3><span id="q17" style="text-transform: uppercase;">QUADRO XVII<br />Sinais dos Condutores</span></h3>
+    <div class="content">
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-1.jpg" /><figcaption>Vou reduzir a velocidade</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-6.png" /><figcaption>Vou reduzir a velocidade</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-2.jpg" /><figcaption>Pode ultrapassar-me</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-7.png" /><figcaption>Pode ultrapassar-me</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-3.jpg" /><figcaption>Pare</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-8.png" /><figcaption>Pare</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-4.jpg" /><figcaption>Vou voltar para o lado do volante</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-9.png" /><figcaption>Vou voltar para o lado do volante</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-5.jpg" /><figcaption>Vou voltar para o lado oposto ao do volante</figcaption></figure></div>
+        <div class="box"><figure><img src="https://codest.co.mz/images/sinais/q17-10.png" /><figcaption>Vou voltar para o lado oposto ao do volante</figcaption></figure></div>
+    </div>
+
+</section>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

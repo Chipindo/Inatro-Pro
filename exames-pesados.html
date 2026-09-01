@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+    <title>Carta Mestre - Exames Pesados</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; color: #1E293B; display: flex; justify-content: center; min-height: 100dvh; margin: 0; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; display: flex; flex-direction: column; padding-bottom: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .top-section { background-color: #0F172A; color: #FFFFFF; border-radius: 0 0 24px 24px; padding: 24px 24px 32px; margin-bottom: 24px; }
+        .btn-back { color: #94A3B8; text-decoration: none; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: color 0.2s; }
+        .btn-back:hover { color: #FFFFFF; }
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #F8FAFC; margin-bottom: 8px; }
+        .header-subtitle { font-size: 0.9rem; color: #94A3B8; line-height: 1.5; }
+        
+        .professional-desc { background: #EFF6FF; border-left: 4px solid #2563EB; padding: 16px; margin: -10px 24px 24px; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #334155; line-height: 1.5; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .content-section { padding: 0 24px; flex: 1; }
+
+        .premium-card { background: linear-gradient(135deg, #1E293B, #0F172A); border-radius: 16px; padding: 24px; color: #FFFFFF; margin-bottom: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 8px 25px rgba(15,23,42,0.2); }
+        .premium-card::after { content: '\f005'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: -10px; right: -20px; font-size: 7rem; color: rgba(255,255,255,0.03); transform: rotate(15deg); pointer-events: none; }
+        .premium-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #F8FAFC; }
+        .premium-text { font-size: 0.85rem; color: #94A3B8; margin-bottom: 20px; }
+        
+        .pricing-plans { display: flex; gap: 12px; margin-bottom: 20px; position: relative; z-index: 2; }
+        .plan-box { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; text-align: center; }
+        .plan-title { font-size: 0.8rem; font-weight: 700; color: #94A3B8; text-transform: uppercase; margin-bottom: 8px; }
+        .old-price { font-size: 0.9rem; color: #64748B; text-decoration: line-through; }
+        .new-price { font-size: 1.6rem; font-weight: 800; color: #FBBF24; display: flex; align-items: baseline; justify-content: center; gap: 4px; }
+        .new-price span { font-size: 0.8rem; font-weight: 600; }
+        .btn-premium { background: #FBBF24; color: #0F172A; text-decoration: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; position: relative; z-index: 2; }
+        .btn-premium:hover { background: #F59E0B; transform: translateY(-2px); }
+
+        .section-title { font-size: 1.1rem; font-weight: 700; color: #1E293B; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+        .exam-item { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none; }
+        .exam-item.free { border-color: #93C5FD; box-shadow: 0 4px 10px rgba(37,99,235,0.05); }
+        .exam-item.free:hover { transform: translateY(-3px); border-color: #2563EB; }
+        .exam-item.free .exam-icon { color: #2563EB; background: #EFF6FF; }
+        .exam-item.locked { background: #F8FAFC; }
+        .exam-item.locked:hover { border-color: #CBD5E1; }
+        .exam-item.locked .exam-icon { color: #94A3B8; background: #F1F5F9; }
+        .exam-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .exam-title { font-size: 0.9rem; font-weight: 700; color: #1E293B; }
+        .exam-status { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-free { color: #10B981; }
+        .status-locked { color: #64748B; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="top-section">
+        <a href="javascript:history.back()" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <h1 class="header-title">Carta Mestre</h1>
+        <p class="header-subtitle">Categoria: Pesados & Profissional</p>
+    </div>
+
+    <div class="professional-desc">
+        <strong><i class="fas fa-shield-alt"></i> Simulador Oficial:</strong> Os testes da Carta Mestre são rigorosamente elaborados através de simulações com exames reais.
+    </div>
+
+    <div class="content-section">
+        
+        <div class="premium-card" id="premiumContainer">
+            <h2 class="premium-title"><i class="fas fa-crown" style="color: #FBBF24;"></i> Desbloqueie o Sucesso</h2>
+            <p class="premium-text">Tem 3 exames gratuitos. Escolha um plano para aceder aos restantes 22 exames reais.</p>
+            <div class="pricing-plans">
+                <div class="plan-box">
+                    <div class="plan-title">7 Dias</div>
+                    <div class="old-price">123 MT</div>
+                    <div class="new-price">89 <span>MT</span></div>
+                </div>
+                <div class="plan-box">
+                    <div class="plan-title">30 Dias</div>
+                    <div class="old-price">369 MT</div>
+                    <div class="new-price">258 <span>MT</span></div>
+                </div>
+            </div>
+            <a href="assinatura-pesados.html" class="btn-premium">Desbloquear Todos os 25 Exames <i class="fas fa-unlock"></i></a>
+        </div>
+
+        <div class="section-title">
+            <i class="fas fa-list-check" style="color: #2563EB;"></i> Lista de Exames
+        </div>
+
+        <div class="exam-grid" id="examGrid"></div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) { window.location.href = 'index.html'; return; }
+        
+        const userData = JSON.parse(userDataJson);
+        let hasPremium = false;
+        let diasRestantes = 0;
+
+        // Verifica se a assinatura está válida
+        if (userData.assinatura_pesados) {
+            const expDate = new Date(userData.assinatura_pesados);
+            const now = new Date();
+            if (expDate > now) {
+                hasPremium = true;
+                const diffTime = Math.abs(expDate - now);
+                diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+        }
+
+        // Se tem premium, muda o design do banner
+        if (hasPremium) {
+            document.getElementById('premiumContainer').innerHTML = `
+                <h2 class="premium-title"><i class="fas fa-check-circle" style="color: #10B981;"></i> Passe Premium Ativo</h2>
+                <p class="premium-text" style="margin-bottom: 15px;">Todos os exames desta categoria estão desbloqueados. Boa preparação!</p>
+                <div style="background: rgba(255,255,255,0.1); display: inline-block; padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fas fa-clock"></i> Expira em: <strong style="color: #FBBF24; font-size: 1.1rem; margin-left: 5px;">${diasRestantes} dias</strong>
+                </div>
+            `;
+        }
+
+        // Gerar 25 exames
+        const grid = document.getElementById('examGrid');
+        let html = '';
+
+        for(let i = 1; i <= 25; i++) {
+            if(i <= 3 || hasPremium) {
+                html += `
+                <a href="exame-pesado-${i}.html" class="exam-item free">
+                    <div class="exam-icon"><i class="fas fa-play"></i></div>
+                    <div class="exam-title">Exame ${i}</div>
+                    <div class="exam-status status-free">${hasPremium && i > 3 ? 'Desbloqueado' : 'Gratuito'}</div>
+                </a>`;
+            } else {
+                html += `
+                <a href="assinatura-pesados.html" class="exam-item locked">
+                    <div class="exam-icon"><i class="fas fa-lock"></i></div>
+                    <div class="exam-title">Exame ${i}</div>
+                    <div class="exam-status status-locked">Bloqueado</div>
+                </a>`;
+            }
+        }
+        grid.innerHTML = html;
+    });
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

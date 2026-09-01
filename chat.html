@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carta Mestre - Chat da Turma</title>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { 
+            --primary: #2563eb; --primary-hover: #1d4ed8; 
+            --bg: #ece5dd; /* Fundo estilo WhatsApp */
+            --text-main: #1e293b; --text-muted: #64748b; 
+            --border: #e2e8f0; --success: #10b981; 
+            --msg-sent: #dcf8c6; --msg-received: #ffffff;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: #f0f2f5; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        
+        .chat-container { 
+            background: var(--bg); width: 100%; max-width: 600px; 
+            display: flex; flex-direction: column; height: 100vh;
+            position: relative;
+        }
+
+        /* --- NOVO CABEÇALHO AZUL PROFISSIONAL --- */
+        .chat-header {
+            padding: 15px 20px; 
+            background: var(--primary); 
+            color: #ffffff;
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        .chat-header h2 { font-size: 18px; color: #ffffff; display: flex; align-items: center; gap: 10px; margin: 0; font-weight: 600; }
+        .btn-voltar { 
+            color: #ffffff; text-decoration: none; font-weight: 600; font-size: 15px; 
+            display: flex; align-items: center; gap: 5px; opacity: 0.9; transition: 0.2s;
+        }
+        .btn-voltar:hover { opacity: 1; }
+
+        .chat-messages {
+            flex: 1; padding: 20px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 12px;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: cover; background-position: center;
+        }
+
+        /* Estrutura das Mensagens */
+        .message-row { display: flex; width: 100%; position: relative; transition: transform 0.2s; }
+        .message-row.sent { justify-content: flex-end; }
+        .message-row.received { justify-content: flex-start; }
+
+        .message {
+            max-width: 80%; padding: 6px 10px 6px 10px;
+            border-radius: 8px; font-size: 14.5px;
+            line-height: 1.4; position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            word-wrap: break-word; cursor: pointer;
+        }
+        .message-row.sent .message { background: var(--msg-sent); border-top-right-radius: 0; }
+        .message-row.received .message { background: var(--msg-received); border-top-left-radius: 0; }
+
+        .sender-name { font-size: 12px; font-weight: bold; color: var(--primary); margin-bottom: 2px; }
+        
+        /* --- RODAPÉ DA MENSAGEM (Hora + Vistos) --- */
+        .message-footer { display: flex; justify-content: flex-end; align-items: center; gap: 4px; margin-top: 2px; }
+        .message-time { font-size: 10.5px; color: rgba(0,0,0,0.45); }
+        .message-status { width: 15px; height: 15px; color: #53bdeb; /* Cor azul estilo lido/enviado */ }
+
+        /* Fotos no chat */
+        .msg-image { width: 100%; max-width: 250px; border-radius: 6px; margin-bottom: 5px; display: block; }
+        
+        /* Citação / Resposta */
+        .quoted-msg {
+            background: rgba(0,0,0,0.05); border-left: 4px solid var(--primary);
+            padding: 5px 10px; border-radius: 4px; font-size: 13px;
+            margin-bottom: 5px; color: var(--text-muted);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .quoted-msg strong { color: var(--primary); display: block; font-size: 12px; }
+
+        /* Reações */
+        .reaction-badge {
+            position: absolute; bottom: -10px; right: 10px;
+            background: #fff; border-radius: 12px; padding: 2px 5px;
+            font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        /* Área de Input */
+        .input-wrapper { background: #f0f2f5; display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+        .reply-preview-container {
+            display: none; padding: 10px 15px; background: #f0f2f5;
+            border-bottom: 1px solid #e2e8f0; justify-content: space-between; align-items: center;
+        }
+        .reply-content {
+            flex: 1; border-left: 4px solid var(--primary);
+            background: rgba(37, 99, 235, 0.08); padding: 5px 10px; border-radius: 4px;
+        }
+        .reply-content span { display: block; font-size: 12px; font-weight: bold; color: var(--primary); }
+        .reply-content p { font-size: 13px; color: var(--text-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px; }
+        .close-reply { background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer; padding: 5px; }
+
+        .chat-input-area { padding: 10px; display: flex; gap: 8px; align-items: flex-end; }
+        .btn-attach {
+            width: 45px; height: 45px; border-radius: 50%; border: none;
+            background: transparent; color: var(--text-muted); font-size: 20px;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+        }
+        textarea {
+            flex: 1; padding: 12px 15px; border: none; border-radius: 20px;
+            font-size: 15px; outline: none; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            resize: none; min-height: 45px; max-height: 120px; overflow-y: auto;
+            line-height: 1.4; font-family: inherit;
+        }
+        .btn-send {
+            width: 45px; height: 45px; border-radius: 50%; background: var(--primary);
+            color: white; border: none; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(37,99,235,0.3);
+        }
+        .btn-send:disabled { background: #94a3b8; box-shadow: none; }
+
+        /* Menu Contexto (Reações e Responder) */
+        .context-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2); z-index: 100; display: none;
+        }
+        .context-menu {
+            position: absolute; background: #fff; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); padding: 10px; display: flex;
+            flex-direction: column; gap: 10px; min-width: 200px;
+            transform: scale(0.9); opacity: 0; transition: 0.2s;
+        }
+        .context-menu.active { transform: scale(1); opacity: 1; }
+        .emojis-bar { display: flex; gap: 12px; justify-content: center; font-size: 24px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .emojis-bar span { cursor: pointer; transition: transform 0.1s; }
+        .emojis-bar span:active { transform: scale(1.3); }
+        .context-action { background: none; border: none; padding: 10px; text-align: left; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; }
+        
+        .uploading-badge { font-size: 12px; color: var(--primary); text-align: center; padding: 5px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <!-- Cabeçalho Atualizado -->
+        <header class="chat-header">
+            <h2>Carta Mestre</h2>
+            <a href="home.html" class="btn-voltar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Voltar
+            </a>
+        </header>
+
+        <main class="chat-messages" id="messages-container"></main>
+
+        <div class="input-wrapper">
+            <div id="upload-status" class="uploading-badge">A enviar imagem...</div>
+            
+            <div class="reply-preview-container" id="reply-container">
+                <div class="reply-content">
+                    <span id="reply-name">Nome</span>
+                    <p id="reply-text">Texto da mensagem...</p>
+                </div>
+                <button class="close-reply" onclick="cancelarResposta()">×</button>
+            </div>
+
+            <footer class="chat-input-area">
+                <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="enviarImagem(event)">
+                <button class="btn-attach" onclick="document.getElementById('file-input').click()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                </button>
+
+                <textarea id="mensagem-input" rows="1" placeholder="Mensagem"></textarea>
+                
+                <button id="btn-enviar" class="btn-send" onclick="enviarMensagem()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Overlay para reações e resposta -->
+    <div class="context-overlay" id="context-overlay" onclick="fecharContextMenu(event)">
+        <div class="context-menu" id="context-menu">
+            <div class="emojis-bar">
+                <span onclick="enviarReacao('👍')">👍</span>
+                <span onclick="enviarReacao('❤️')">❤️</span>
+                <span onclick="enviarReacao('😂')">😂</span>
+                <span onclick="enviarReacao('😮')">😮</span>
+                <span onclick="enviarReacao('😢')">😢</span>
+                <span onclick="enviarReacao('🙏')">🙏</span>
+            </div>
+            <button class="context-action" onclick="prepararRespostaContextMenu()">↩️ Responder</button>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+        let _supabase;
+        let usuarioLogado;
+        
+        let msgSendoRespondida = null;
+        let msgSelecionadaId = null;
+
+        window.onload = function() {
+            const userStr = localStorage.getItem('usuarioLogado');
+            if (!userStr) { window.location.href = 'index.html'; return; }
+            usuarioLogado = JSON.parse(userStr);
+
+            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            
+            configurarTextarea();
+            carregarMensagens();
+            configurarRealtime();
+        };
+
+        function formatarHora(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // --- LÓGICA DO TEXTAREA (Quebra de linha e Crescimento) ---
+        function configurarTextarea() {
+            const textarea = document.getElementById('mensagem-input');
+            textarea.addEventListener('input', function() {
+                this.style.height = '45px';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        }
+
+        // --- RENDERIZAR MENSAGENS E SWIPE ---
+        function adicionarMensagemNaTela(msg) {
+            const container = document.getElementById('messages-container');
+            const isMinha = msg.usuario_id === usuarioLogado.id || msg.usuario_nome === usuarioLogado.nome;
+            
+            let wrapper = document.getElementById('msg-' + msg.id);
+            if (!wrapper) {
+                wrapper = document.createElement('div');
+                wrapper.id = 'msg-' + msg.id;
+                wrapper.className = `message-row ${isMinha ? 'sent' : 'received'}`;
+                container.appendChild(wrapper);
+            }
+
+            let html = `<div class="message" onclick="abrirContextMenu(event, '${msg.id}', '${msg.usuario_nome}', '${msg.conteudo || 'Foto'}')">`;
+            
+            if(!isMinha) html += `<div class="sender-name">${msg.usuario_nome}</div>`;
+            
+            if (msg.resposta_autor && msg.resposta_texto) {
+                html += `
+                    <div class="quoted-msg">
+                        <strong>${msg.resposta_autor}</strong>
+                        ${msg.resposta_texto}
+                    </div>
+                `;
+            }
+
+            if (msg.imagem_url) {
+                html += `<img src="${msg.imagem_url}" class="msg-image" onclick="event.stopPropagation()">`;
+            }
+
+            if (msg.conteudo) {
+                html += `<span>${msg.conteudo.replace(/\n/g, '<br>')}</span>`;
+            }
+
+            // --- HORA E VISTOS DE ENVIO ---
+            html += `
+                <div class="message-footer">
+                    <span class="message-time">${formatarHora(msg.criado_em)}</span>
+                    ${isMinha ? `
+                    <svg class="message-status" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 6 7 17 2 12"></polyline>
+                        <polyline points="22 6 12 16"></polyline>
+                    </svg>
+                    ` : ''}
+                </div>
+            `;
+
+            if (msg.reacao) {
+                html += `<div class="reaction-badge" style="display:block;">${msg.reacao}</div>`;
+            }
+
+            html += `</div>`;
+            wrapper.innerHTML = html;
+            
+            configurarSwipeHandler(wrapper, msg);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // --- LÓGICA DE DESLIZAR (SWIPE PARA RESPONDER) ---
+        function configurarSwipeHandler(elemento, msg) {
+            let touchstartX = 0;
+            let currentX = 0;
+            const threshold = -50; 
+
+            elemento.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            elemento.addEventListener('touchmove', e => {
+                currentX = e.changedTouches[0].screenX - touchstartX;
+                if (currentX < 0 && currentX > -80) { 
+                    elemento.style.transform = `translateX(${currentX}px)`;
+                }
+            }, {passive: true});
+
+            elemento.addEventListener('touchend', e => {
+                elemento.style.transform = `translateX(0px)`;
+                if (currentX < threshold) {
+                    prepararResposta(msg.usuario_nome, msg.conteudo || "Foto");
+                }
+                currentX = 0;
+            });
+        }
+
+        // --- LÓGICA DE REPOSTA ---
+        function prepararResposta(nome, texto) {
+            msgSendoRespondida = { autor: nome, texto: texto };
+            document.getElementById('reply-name').innerText = nome;
+            document.getElementById('reply-text').innerText = texto;
+            document.getElementById('reply-container').style.display = 'flex';
+            document.getElementById('mensagem-input').focus();
+        }
+
+        function cancelarResposta() {
+            msgSendoRespondida = null;
+            document.getElementById('reply-container').style.display = 'none';
+        }
+
+        // --- MENU DE CONTEXTO (CLIQUE) ---
+        function abrirContextMenu(event, id, nome, texto) {
+            msgSelecionadaId = id;
+            const overlay = document.getElementById('context-overlay');
+            const menu = document.getElementById('context-menu');
+            
+            menu.dataset.nome = nome;
+            menu.dataset.texto = texto;
+
+            let clickY = event.clientY;
+            let clickX = event.clientX;
+            
+            menu.style.top = (clickY - 50) + 'px';
+            menu.style.left = Math.min(clickX, window.innerWidth - 220) + 'px';
+            
+            overlay.style.display = 'block';
+            setTimeout(() => menu.classList.add('active'), 10);
+        }
+
+        function fecharContextMenu(event) {
+            if(event.target.id === 'context-overlay') {
+                document.getElementById('context-menu').classList.remove('active');
+                setTimeout(() => document.getElementById('context-overlay').style.display = 'none', 200);
+            }
+        }
+
+        function prepararRespostaContextMenu() {
+            const menu = document.getElementById('context-menu');
+            prepararResposta(menu.dataset.nome, menu.dataset.texto);
+            document.getElementById('context-overlay').click(); 
+        }
+
+        async function enviarReacao(emoji) {
+            if(!msgSelecionadaId) return;
+            document.getElementById('context-overlay').click(); 
+            await _supabase.from('Mensagens').update({ reacao: emoji }).eq('id', msgSelecionadaId);
+        }
+
+        // --- ENVIO DE IMAGEM ---
+        async function enviarImagem(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('upload-status').style.display = 'block';
+            
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+            const { data, error } = await _supabase.storage.from('chat_imagens').upload(fileName, file);
+            
+            document.getElementById('upload-status').style.display = 'none';
+
+            if (error) {
+                alert('Erro ao enviar imagem. Verificou se criou o bucket "chat_imagens" como Público?');
+                console.error(error);
+                return;
+            }
+
+            const publicUrl = _supabase.storage.from('chat_imagens').getPublicUrl(fileName).data.publicUrl;
+            inserirNoBanco("", publicUrl);
+        }
+
+        // --- ENVIO DE MENSAGEM TEXTO ---
+        async function enviarMensagem() {
+            const input = document.getElementById('mensagem-input');
+            const texto = input.value.trim();
+
+            if (!texto) return;
+
+            input.value = '';
+            input.style.height = '45px';
+            
+            inserirNoBanco(texto, null);
+        }
+
+        async function inserirNoBanco(texto, imagemUrl) {
+            const payload = {
+                usuario_id: usuarioLogado.id || null,
+                usuario_nome: usuarioLogado.nome,
+                conteudo: texto,
+                imagem_url: imagemUrl,
+                resposta_autor: msgSendoRespondida ? msgSendoRespondida.autor : null,
+                resposta_texto: msgSendoRespondida ? msgSendoRespondida.texto : null
+            };
+
+            cancelarResposta(); 
+            
+            const btn = document.getElementById('btn-enviar');
+            btn.disabled = true;
+
+            const { error } = await _supabase.from('Mensagens').insert([payload]);
+
+            if (error) console.error("Erro ao enviar:", error);
+            btn.disabled = false;
+        }
+
+        // --- BANCO DE DADOS E TEMPO REAL ---
+        async function carregarMensagens() {
+            const trintaDiasAtras = new Date();
+            trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
+
+            const { data, error } = await _supabase
+                .from('Mensagens')
+                .select('*')
+                .gte('criado_em', trintaDiasAtras.toISOString())
+                .order('criado_em', { ascending: true });
+
+            if (data) data.forEach(msg => adicionarMensagemNaTela(msg));
+        }
+
+        function configurarRealtime() {
+            _supabase.channel('public:Mensagens')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Mensagens' }, payload => {
+                    adicionarMensagemNaTela(payload.new);
+                })
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'Mensagens' }, payload => {
+                    adicionarMensagemNaTela(payload.new); 
+                })
+                .subscribe();
+        }
+    </script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

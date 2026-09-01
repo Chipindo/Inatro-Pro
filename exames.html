@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+    <title>Carta Mestre - Exames</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; color: #1E293B; display: flex; justify-content: center; min-height: 100dvh; margin: 0; overflow-x: hidden; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; position: relative; display: flex; flex-direction: column; padding-bottom: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .top-section { background-color: #0F172A; color: #FFFFFF; border-radius: 0 0 24px 24px; padding: 24px 24px 32px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15); margin-bottom: 24px; }
+        .btn-back { color: #94A3B8; text-decoration: none; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: color 0.2s; }
+        .btn-back:hover { color: #FFFFFF; }
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #F8FAFC; margin-bottom: 8px; }
+        .header-subtitle { font-size: 0.9rem; color: #94A3B8; line-height: 1.5; }
+        .stats-container { display: flex; gap: 12px; padding: 0 24px; margin-bottom: 24px; margin-top: -45px; }
+        .stat-box { flex: 1; background: #FFFFFF; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #E2E8F0; }
+        .stat-num { font-size: 1.4rem; font-weight: 800; color: #2563EB; }
+        .stat-label { font-size: 0.75rem; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .content-section { padding: 0 24px; flex: 1; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: #1E293B; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;}
+        .section-title i { color: #2563EB; }
+        .category-card { background-color: #FFFFFF; border-radius: 16px; padding: 24px; margin-bottom: 20px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+        .category-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .category-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+        .icon-wrapper { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+        .ic-pesados { background: #EFF6FF; color: #2563EB; }
+        .ic-mecanica { background: #FFF7ED; color: #EA580C; }
+        .category-info h2 { font-size: 1.2rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+        .badge { background: #F1F5F9; color: #475569; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; }
+        .category-desc { font-size: 0.9rem; color: #64748B; line-height: 1.5; margin-bottom: 20px; }
+        .btn-access { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.2s; }
+        .btn-primary { background: #2563EB; color: #FFFFFF; }
+        .btn-primary:hover { background: #1D4ED8; }
+        .btn-secondary { background: #EA580C; color: #FFFFFF; }
+        .btn-secondary:hover { background: #C2410C; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="top-section">
+        <a href="javascript:history.back()" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à plataforma</a>
+        <h1 class="header-title">Centro de Exames</h1>
+        <p class="header-subtitle">Simulações de exames 100% atualizadas e alinhadas com as bases de dados oficiais. Escolha a sua categoria de estudo.</p>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-box">
+            <div class="stat-num">43</div>
+            <div class="stat-label">Exames Totais</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: #10B981;">98.7%</div>
+            <div class="stat-label">Tx. de Aprovação</div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-title">
+            <i class="fas fa-layer-group"></i> Categorias Disponíveis
+        </div>
+
+        <div class="category-card">
+            <div class="category-header">
+                <div class="icon-wrapper ic-pesados">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="category-info">
+                    <h2>Pesados & Profissional</h2>
+                    <span class="badge"><i class="fas fa-file-alt"></i> 25 Exames</span>
+                </div>
+            </div>
+            <p class="category-desc">
+                Direcionado para motoristas de veículos pesados, articulados e passageiros. Aborda pesos, dimensões, tacógrafos e regulamentação profissional.
+            </p>
+            <a href="exames-pesados.html" class="btn-access btn-primary">
+                Aceder aos 25 Exames <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="category-card">
+            <div class="category-header">
+                <div class="icon-wrapper ic-mecanica">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="category-info">
+                    <h2>Mecânica Profissional</h2>
+                    <span class="badge"><i class="fas fa-wrench"></i> 18 Exames</span>
+                </div>
+            </div>
+            <p class="category-desc">
+                Questões essenciais sobre o funcionamento do motor, travões, direção, lubrificação, eletricidade auto e manutenção preventiva do veículo.
+            </p>
+            <a href="exames-mecanica.html" class="btn-access btn-secondary">
+                Aceder aos 18 Exames <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) { window.location.href = 'index.html'; }
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Verifica se a página atual é a página principal (onde o app DEVE fechar se clicar em voltar)
+        var paginaAtual = window.location.pathname;
+        var ehHome = paginaAtual.endsWith("index.html") || paginaAtual === "/";
+        
+        if (!ehHome) {
+            // 1. Cria um "degrau invisível" no histórico assim que a página carrega
+            window.history.pushState({ bloqueioVoltar: true }, null, window.location.href);
+
+            // 2. Intercepta o clique no botão físico de voltar do telemóvel
+            window.addEventListener("popstate", function(event) {
+                // 3. Força o navegador a voltar para a página REAL anterior (ex: da página 3 para a 2)
+                window.history.back();
+            });
+        }
+    });
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+    
+</body>
+</html>

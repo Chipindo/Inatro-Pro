@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Comunidade - Alunos Carta Mestre</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #efeae2;
+            --chat-bg: #ffffff;
+            --msg-mine: #dcf8c6;
+            --msg-other: #ffffff;
+            --text-main: #111b21;
+            --text-meta: #667781;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body { background-color: var(--bg); display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+
+        .chat-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; background: #e5ddd5; position: relative; }
+
+        /* Cabeçalho */
+        .chat-header { background: var(--primary); color: white; padding: 15px; font-size: 18px; font-weight: bold; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); z-index: 10; display: flex; justify-content: space-between; align-items: center;}
+        .btn-voltar { color: white; text-decoration: none; font-size: 14px; font-weight: normal; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px;}
+
+        /* Área de Mensagens */
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+
+        .msg-wrapper { display: flex; flex-direction: column; max-width: 85%; position: relative; margin-bottom: 8px;}
+        .msg-wrapper.mine { align-self: flex-end; }
+        .msg-wrapper.other { align-self: flex-start; }
+
+        .msg-bubble { padding: 8px 12px; border-radius: 12px; font-size: 15px; color: var(--text-main); word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative; }
+        .msg-wrapper.mine .msg-bubble { background-color: var(--msg-mine); border-top-right-radius: 0; }
+        .msg-wrapper.other .msg-bubble { background-color: var(--msg-other); border-top-left-radius: 0; }
+
+        .msg-sender { font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 4px; }
+        .msg-wrapper.mine .msg-sender { display: none; } /* Oculta o teu próprio nome */
+
+        .msg-image { max-width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer; }
+
+        /* Citação / Resposta */
+        .msg-reply-box { background: rgba(0,0,0,0.05); border-left: 4px solid var(--primary); padding: 5px 10px; border-radius: 5px; margin-bottom: 5px; font-size: 13px; cursor: pointer; }
+        .msg-reply-name { font-weight: bold; color: var(--primary); margin-bottom: 2px; }
+        .msg-reply-text { color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+
+        /* Hora e Vistos */
+        .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 11px; color: var(--text-meta); margin-top: 4px; float: right; margin-left: 15px;}
+        .tick { font-size: 14px; font-weight: bold; color: #999; }
+        .tick.read { color: #3b82f6; } /* Azul */
+
+        /* Interações Hover (Apenas PC, no mobile tocam nas mensagens) */
+        .msg-actions { display: none; position: absolute; top: 0; background: white; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); padding: 5px; z-index: 10; white-space: nowrap;}
+        .msg-wrapper.mine .msg-actions { left: -110px; }
+        .msg-wrapper.other .msg-actions { right: -110px; }
+        .msg-wrapper:hover .msg-actions, .msg-wrapper:active .msg-actions { display: flex; gap: 10px; }
+        .action-btn { cursor: pointer; font-size: 16px; transition: transform 0.2s; }
+        .action-btn:hover { transform: scale(1.2); }
+
+        /* Emojis recebidos */
+        .reactions-display { display: flex; gap: 4px; position: absolute; bottom: -12px; right: 10px; background: white; padding: 2px 6px; border-radius: 12px; font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* Input */
+        .input-container { background: #f0f2f5; padding: 10px; display: flex; flex-direction: column; }
+        
+        .reply-preview-bar { display: none; background: #e2e8f0; padding: 10px; border-left: 4px solid var(--primary); border-radius: 5px; margin-bottom: 10px; position: relative; }
+        .reply-preview-close { position: absolute; right: 10px; top: 10px; cursor: pointer; font-weight: bold; color: #888; }
+
+        .chat-input-area { display: flex; align-items: flex-end; gap: 10px; }
+        .icon-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #54656f; padding: 10px; transition: color 0.2s; }
+        
+        .chat-input-area textarea { flex: 1; padding: 12px; border: none; border-radius: 20px; font-size: 15px; resize: none; min-height: 45px; max-height: 120px; font-family: inherit; }
+        .chat-input-area textarea:focus { outline: none; }
+        
+        .btn-send { background: var(--primary); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <a href="home.html" class="btn-voltar">⬅ Voltar</a> <!-- Link para voltar à página do aluno -->
+            Comunidade Alunos
+            <div style="width: 50px;"></div> <!-- Espaçador para centrar o título -->
+        </div>
+        
+        <div class="chat-box" id="chat-box">
+            <!-- Mensagens carregam aqui -->
+        </div>
+
+        <div class="input-container">
+            <!-- Barra a indicar a quem estamos a responder -->
+            <div class="reply-preview-bar" id="reply-bar">
+                <div class="msg-reply-name" id="reply-name">Nome</div>
+                <div class="msg-reply-text" id="reply-text">Texto...</div>
+                <div class="reply-preview-close" onclick="cancelarResposta()">✕</div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="enviarImagem(event)">
+                <button class="icon-btn" onclick="document.getElementById('image-upload').click()">📎</button>
+                <textarea id="msg-input" placeholder="Escreve uma mensagem..." rows="1"></textarea>
+                <button class="btn-send" onclick="enviarMensagem()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÕES SUPABASE
+        const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+        const supabaseUrl = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let meuNome = "";
+        let respondendoA = null; 
+
+        // Auto-expandir textarea
+        const inputField = document.getElementById('msg-input');
+        inputField.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if(this.value.trim() === '') this.style.height = '45px';
+        });
+
+        // 1. VERIFICAR SE O ALUNO FEZ LOGIN PELO TEU SISTEMA
+        window.onload = () => {
+            const dadosSalvos = localStorage.getItem('usuarioLogado');
+            
+            if (!dadosSalvos) {
+                alert("Precisas de fazer login para aceder à comunidade!");
+                window.location.href = "index.html"; // Muda para o nome exato da tua página de login
+                return;
+            }
+
+            try {
+                // Converte os dados do login e apanha o nome do aluno
+                const utilizador = JSON.parse(dadosSalvos);
+                meuNome = utilizador.nome; 
+                iniciarChat();
+            } catch (e) {
+                alert("Erro ao ler os dados da conta. Por favor, faz login novamente.");
+                window.location.href = "index.html";
+            }
+        };
+
+        // 2. INICIAR CHAT (Carregar mensagens dos últimos 30 dias)
+        async function iniciarChat() {
+            const trintaDiasAtras = new Date();
+            trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
+
+            const { data, error } = await supabaseUrl
+                .from('mensagens_chat')
+                .select('*')
+                .gte('created_at', trintaDiasAtras.toISOString())
+                .order('created_at', { ascending: true });
+
+            if (data) {
+                data.forEach(msg => desenharMensagem(msg));
+                marcarMensagensComoLidas(data);
+            }
+
+            // Ativar tempo real
+            supabaseUrl.channel('mensagens')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagens_chat' }, payload => {
+                    desenharMensagem(payload.new);
+                    if (payload.new.nome_usuario !== meuNome) {
+                        supabaseUrl.from('mensagens_chat').update({ lida: true }).eq('id', payload.new.id).then();
+                    }
+                })
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'mensagens_chat' }, payload => {
+                    atualizarMensagemNaTela(payload.new);
+                })
+                .subscribe();
+        }
+
+        function formatarHora(dataISO) {
+            const data = new Date(dataISO);
+            return data.toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // 3. DESENHAR MENSAGENS NA TELA
+        function desenharMensagem(msg) {
+            if (document.getElementById(`msg-${msg.id}`)) return;
+
+            const chatBox = document.getElementById('chat-box');
+            const ehMinha = msg.nome_usuario === meuNome;
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = `msg-wrapper ${ehMinha ? 'mine' : 'other'}`;
+            wrapper.id = `msg-${msg.id}`;
+
+            let htmlInterno = `<div class="msg-bubble">`;
+            
+            // Nome 
+            htmlInterno += `<div class="msg-sender">${msg.nome_usuario}</div>`;
+
+            // Se for resposta
+            if (msg.resposta_a_id) {
+                htmlInterno += `
+                <div class="msg-reply-box" onclick="document.getElementById('msg-${msg.resposta_a_id}')?.scrollIntoView({behavior: 'smooth'})">
+                    <div class="msg-reply-name">${msg.resposta_a_nome || 'Aluno'}</div>
+                    <div class="msg-reply-text">${msg.resposta_a_texto || 'Imagem'}</div>
+                </div>`;
+            }
+
+            // Se tiver imagem
+            if (msg.imagem_url) {
+                htmlInterno += `<img src="${msg.imagem_url}" class="msg-image" onclick="window.open('${msg.imagem_url}', '_blank')">`;
+            }
+
+            // Texto normal
+            if (msg.texto) {
+                htmlInterno += `<div>${msg.texto.replace(/\n/g, '<br>')}</div>`;
+            }
+
+            // Hora e Vistos
+            const vistos = ehMinha ? `<span class="tick ${msg.lida ? 'read' : ''}" id="tick-${msg.id}">✓✓</span>` : '';
+            htmlInterno += `<div class="msg-meta">${formatarHora(msg.created_at)} ${vistos}</div>`;
+            htmlInterno += `</div>`;
+
+            // Interações 
+            htmlInterno += `
+                <div class="msg-actions">
+                    <span class="action-btn" onclick="prepararResposta('${msg.id}', '${msg.nome_usuario}', '${msg.texto ? msg.texto.replace(/'/g, "\\'") : 'Fotografia'}')">↩️</span>
+                    <span class="action-btn" onclick="reagir('${msg.id}', '❤️')">❤️</span>
+                    <span class="action-btn" onclick="reagir('${msg.id}', '👍')">👍</span>
+                    <span class="action-btn" onclick="reagir('${msg.id}', '😂')">😂</span>
+                </div>
+                <div class="reactions-display" id="reacoes-${msg.id}"></div>
+            `;
+
+            wrapper.innerHTML = htmlInterno;
+            chatBox.appendChild(wrapper);
+            
+            mostrarReacoesNaTela(msg.id, msg.reacoes);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // 4. ATUALIZAR MENSAGENS (Vistos e Emojis)
+        function atualizarMensagemNaTela(msg) {
+            const tick = document.getElementById(`tick-${msg.id}`);
+            if (tick && msg.lida) tick.classList.add('read');
+            mostrarReacoesNaTela(msg.id, msg.reacoes);
+        }
+
+        function mostrarReacoesNaTela(msgId, reacoesJSON) {
+            const container = document.getElementById(`reacoes-${msgId}`);
+            if (!container || !reacoesJSON) return;
+            
+            let html = '';
+            for (const [emoji, count] of Object.entries(reacoesJSON)) {
+                if (count > 0) html += `<span>${emoji} ${count}</span>`;
+            }
+            container.innerHTML = html;
+            container.style.display = html ? 'flex' : 'none';
+        }
+
+        // 5. ENVIAR TEXTO
+        async function enviarMensagem() {
+            const texto = inputField.value.trim();
+            if (!texto) return;
+
+            const payload = {
+                nome_usuario: meuNome,
+                texto: texto,
+                resposta_a_id: respondendoA?.id || null,
+                resposta_a_texto: respondendoA?.texto || null,
+                resposta_a_nome: respondendoA?.nome || null
+            };
+
+            inputField.value = '';
+            inputField.style.height = '45px';
+            inputField.focus();
+            cancelarResposta();
+
+            await supabaseUrl.from('mensagens_chat').insert([payload]);
+        }
+
+        // 6. ENVIAR IMAGENS 
+        async function enviarImagem(event) {
+            const ficheiro = event.target.files[0];
+            if (!ficheiro) return;
+            
+            const inputAntigo = inputField.placeholder;
+            inputField.placeholder = "A enviar imagem...";
+            inputField.disabled = true;
+
+            const nomeFicheiro = `${Date.now()}_${ficheiro.name}`;
+            
+            const { data, error } = await supabaseUrl.storage.from('chat_imagens').upload(nomeFicheiro, ficheiro);
+            
+            if (error) {
+                alert("Erro ao enviar imagem. Verificaste o bucket no Supabase?");
+            } else {
+                const { data: urlData } = supabaseUrl.storage.from('chat_imagens').getPublicUrl(nomeFicheiro);
+                await supabaseUrl.from('mensagens_chat').insert([{
+                    nome_usuario: meuNome,
+                    imagem_url: urlData.publicUrl,
+                    resposta_a_id: respondendoA?.id || null,
+                    resposta_a_texto: respondendoA?.texto || 'Fotografia',
+                    resposta_a_nome: respondendoA?.nome || null
+                }]);
+            }
+
+            inputField.placeholder = inputAntigo;
+            inputField.disabled = false;
+            cancelarResposta();
+        }
+
+        // 7. PREPARAR RESPOSTA (Citação)
+        function prepararResposta(id, nome, texto) {
+            respondendoA = { id, nome, texto };
+            document.getElementById('reply-name').innerText = nome;
+            document.getElementById('reply-text').innerText = texto;
+            document.getElementById('reply-bar').style.display = 'block';
+            inputField.focus();
+        }
+
+        function cancelarResposta() {
+            respondendoA = null;
+            document.getElementById('reply-bar').style.display = 'none';
+        }
+
+        // 8. REAÇÕES DE EMOJI
+        async function reagir(msgId, emoji) {
+            const { data } = await supabaseUrl.from('mensagens_chat').select('reacoes').eq('id', msgId).single();
+            if (data) {
+                let reacoesAtuais = data.reacoes || {};
+                reacoesAtuais[emoji] = (reacoesAtuais[emoji] || 0) + 1;
+                await supabaseUrl.from('mensagens_chat').update({ reacoes: reacoesAtuais }).eq('id', msgId);
+            }
+        }
+
+        // 9. MARCAR COMO LIDO
+        async function marcarMensagensComoLidas(mensagens) {
+            const idsNaoLidos = mensagens
+                .filter(m => m.nome_usuario !== meuNome && m.lida === false)
+                .map(m => m.id);
+
+            if (idsNaoLidos.length > 0) {
+                await supabaseUrl.from('mensagens_chat').update({ lida: true }).in('id', idsNaoLidos);
+            }
+        }
+
+        // 10. ENVIAR COM ENTER (Sem Shift)
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                enviarMensagem();
+            }
+        });
+    </script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

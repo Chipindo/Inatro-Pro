@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inatro Pro - Transgressões</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; display: flex; justify-content: center; min-height: 100dvh; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; display: flex; flex-direction: column; padding-bottom: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+
+        .top-section { background-color: #0F172A; color: #FFFFFF; border-radius: 0 0 24px 24px; padding: 24px 24px 30px; margin-bottom: 24px; }
+        .btn-back { color: #94A3B8; text-decoration: none; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #F8FAFC; margin-bottom: 8px; }
+        .header-subtitle { font-size: 0.9rem; color: #94A3B8; line-height: 1.5; }
+
+        .search-bar { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+        .search-bar i { color: #94A3B8; }
+        .search-bar input { background: transparent; border: none; outline: none; color: white; width: 100%; font-size: 0.95rem; }
+        .search-bar input::placeholder { color: #94A3B8; }
+
+        .content-section { padding: 0 24px; flex: 1; }
+        .section-title { font-size: 1rem; font-weight: 700; color: #64748B; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .multa-card { background: #FFFFFF; border-radius: 12px; padding: 16px; border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; text-decoration: none; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .multa-card:hover { transform: translateX(5px); border-color: #CBD5E1; }
+        
+        .multa-info { display: flex; align-items: center; gap: 16px; }
+        .icon-box { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        
+        .ic-velocidade { background: #FEF2F2; color: #EF4444; }
+        .ic-alcool { background: #F5F3FF; color: #8B5CF6; }
+        .ic-documentos { background: #EFF6FF; color: #3B82F6; }
+        .ic-estacionamento { background: #FFFBEB; color: #F59E0B; }
+
+        .multa-text h3 { font-size: 1rem; font-weight: 600; color: #1E293B; margin-bottom: 4px; }
+        .multa-text p { font-size: 0.75rem; color: #64748B; }
+        
+        .arrow-icon { color: #CBD5E1; }
+
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="top-section">
+        <a href="javascript:history.back()" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <h1 class="header-title">Transgressões & Multas</h1>
+        <p class="header-subtitle">Consulte o valor das multas e os artigos legais correspondentes a cada infração.</p>
+        
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Pesquisar por infração ou artigo...">
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-title">Categorias Frequentes</div>
+        
+        <a href="#" class="multa-card">
+            <div class="multa-info">
+                <div class="icon-box ic-velocidade"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="multa-text">
+                    <h3>Excesso de Velocidade</h3>
+                    <p>Artigos sobre limites de velocidade.</p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right arrow-icon"></i>
+        </a>
+
+        <a href="#" class="multa-card">
+            <div class="multa-info">
+                <div class="icon-box ic-alcool"><i class="fas fa-wine-glass-alt"></i></div>
+                <div class="multa-text">
+                    <h3>Álcool e Substâncias</h3>
+                    <p>Condução sob efeito de álcool.</p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right arrow-icon"></i>
+        </a>
+
+        <a href="#" class="multa-card">
+            <div class="multa-info">
+                <div class="icon-box ic-documentos"><i class="fas fa-id-card"></i></div>
+                <div class="multa-text">
+                    <h3>Falta de Documentação</h3>
+                    <p>Carta, livrete e seguros.</p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right arrow-icon"></i>
+        </a>
+
+        <a href="#" class="multa-card">
+            <div class="multa-info">
+                <div class="icon-box ic-estacionamento"><i class="fas fa-parking"></i></div>
+                <div class="multa-text">
+                    <h3>Estacionamento Irregular</h3>
+                    <p>Paragens e estacionamentos proibidos.</p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right arrow-icon"></i>
+        </a>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!localStorage.getItem('usuarioLogado')) window.location.href = 'index.html';
+    });
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

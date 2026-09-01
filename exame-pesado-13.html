@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Carta Mestre - Exame Teórico 13</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* VARIAVEIS DE CORES */
+:root {
+    --primary: #04182B !important;
+    --primary-light: #112B47 !important;
+    --green: #00D37F !important;
+    --red: #EF4444 !important;
+    --orange: #F59E0B !important;
+    --bg: #F0F4F8 !important;
+    --card: #ffffff !important;
+    --text: #1F2937 !important;
+    --muted: #9CA3AF !important;
+    --blue-active: #3B82F6 !important;
+}
+
+/* SISTEMA ANTI-CÓPIA & RESET */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none; text-decoration: none;
+}
+
+html, body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex; 
+    flex-direction: column;
+}
+
+/* ================= TOPO FIXO (HEADER + NAV) ================= */
+.fixed-top-area {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+}
+
+header {
+    background: var(--primary);
+    width: 100%; 
+    padding: 15px 15px 45px 15px;
+    border-radius: 0 0 30px 30px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-container {
+    min-width: 0; /* Permite encolher se necessário para não empurrar os botões */
+    flex-shrink: 1;
+}
+
+.brand-title { 
+    font-size: 1.35rem; 
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 900; 
+    color: white;
+    letter-spacing: -0.5px; 
+    line-height: 1.1;
+    white-space: nowrap;
+}
+.brand-title span { color: var(--green); }
+.brand-subtitle { 
+    font-size: 0.7rem; 
+    font-weight: 600; 
+    color: white;
+    opacity: 0.8; 
+    margin-top: 3px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.header-right { 
+    display: flex; 
+    gap: 6px; 
+    align-items: center; 
+    flex-shrink: 0;
+}
+
+.timer-box {
+    background: var(--primary-light); 
+    color: white;
+    padding: 7px 10px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 5px; 
+    font-weight: 700; font-size: 0.85rem;
+    white-space: nowrap;
+}
+.timer-box i { font-size: 0.85rem; color: var(--orange); }
+
+.btn-terminar {
+    background: var(--red); color: white; border: none;
+    padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+    font-size: 0.75rem; text-transform: uppercase;
+    white-space: nowrap;
+}
+.btn-terminar:active { transform: scale(0.95); }
+
+/* ================= BARRA DE PAGINAÇÃO ================= */
+.nav-wrapper {
+    width: 100%; max-width: 600px; 
+    margin: -24px auto 0 auto;
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 15px;
+}
+.nav-container {
+    display: flex; align-items: center; gap: 10px; 
+    overflow-x: auto; scrollbar-width: none;
+    flex-grow: 1; padding: 10px 0;
+}
+.nav-container::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+    background: var(--card); color: var(--primary); border: none;
+    width: 48px; height: 48px; border-radius: 14px; font-size: 1.1rem;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; flex-shrink: 0; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+.nav-btn:active { background: #E5E7EB; }
+
+.page-num {
+    min-width: 48px; height: 48px; 
+    background: var(--card); color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px; font-weight: 700; cursor: pointer; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04); 
+    font-size: 1rem; flex-shrink: 0;
+}
+.page-num.active { 
+    background: var(--blue-active); 
+    color: white; 
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); 
+    transform: translateY(-2px);
+}
+.page-num.answered { border-bottom: 4px solid var(--green); color: var(--primary); font-weight: 800; }
+
+.page-num.rev-correct { background: var(--green) !important; color: white !important; border-bottom: none; }
+.page-num.rev-wrong { background: var(--red) !important; color: white !important; border-bottom: none; }
+
+/* ================= ÁREA DE CONTEÚDO ROLÁVEL ================= */
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 15px 40px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.container { width: 100%; max-width: 580px; }
+
+.question-wrapper { display: none; animation: fadeIn 0.3s ease; }
+.question-wrapper.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-inner {
+    background: var(--card); 
+    border-radius: 24px; 
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03); 
+}
+
+.q-img { 
+    width: 100%; height: auto; max-height: 250px; 
+    object-fit: contain; border-radius: 12px; 
+    margin-bottom: 25px; pointer-events: none; display: block; 
+}
+.q-text-area { 
+    font-weight: 800; font-size: 1.15rem; 
+    color: var(--primary); margin-bottom: 25px; 
+    line-height: 1.4; 
+}
+
+/* ================= OPÇÕES ================= */
+.options-container { display: flex; flex-direction: column; gap: 14px; }
+
+.option {
+    display: flex; align-items: center; background: var(--card);
+    border: 1.5px solid #E5E7EB; border-radius: 16px; padding: 12px 16px;
+    cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text);
+}
+.option:hover { border-color: #D1D5DB; }
+.option input { display: none; }
+
+.option-letter {
+    background: var(--primary); color: white; border-radius: 12px;
+    width: 42px; height: 42px; display: flex; align-items: center;
+    justify-content: center; font-weight: 800; margin-right: 16px; 
+    flex-shrink: 0; font-size: 1rem;
+}
+
+/* Estado Selecionado */
+.option:has(input:checked) { 
+    border-color: var(--blue-active); 
+    background: #F3F8FF; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08); 
+}
+.option:has(input:checked) .option-letter { background: var(--blue-active); }
+
+/* Correção Final */
+.correct-ans { background: #ECFDF5 !important; border-color: var(--green) !important; }
+.correct-ans .option-letter { background: var(--green) !important; }
+.wrong-ans { background: #FEF2F2 !important; border-color: var(--red) !important; }
+.wrong-ans .option-letter { background: var(--red) !important; }
+
+.label-certa {
+    background: var(--green); color: white; font-size: 0.7rem; padding: 5px 10px;
+    border-radius: 8px; margin-left: auto; font-weight: 800; display: none; text-transform: uppercase;
+}
+
+.exam-finished .option { pointer-events: none; }
+
+/* ================= MODAL DE RESULTADO ================= */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(4, 24, 43, 0.85); backdrop-filter: blur(8px);
+    z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+}
+.modal-content {
+    background: white; width: 100%; max-width: 380px; border-radius: 28px;
+    padding: 40px 30px; text-align: center; position: relative; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+#modalIcon i { font-size: 4.5rem; margin-bottom: 15px; }
+.modal-status { font-size: 2rem; font-family: 'Montserrat', sans-serif; font-weight: 900; margin-bottom: 25px; letter-spacing: -0.5px; }
+.status-reprovado { color: var(--red); }
+.status-aprovado { color: var(--green); }
+
+.modal-stats { 
+    display: flex; justify-content: space-between; background: #F9FAFB; 
+    padding: 20px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #E5E7EB; 
+}
+.modal-stats div { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; width: 33%; }
+.modal-stats .divider { width: 1px; background: #E5E7EB; height: 40px; align-self: center; }
+.stat-value { font-size: 1.6rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+
+.modal-footer { display: flex; flex-direction: column; gap: 12px; }
+.btn-ver {
+    background: var(--blue-active); color: white; padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+.btn-sair {
+    background: #F3F4F6; color: var(--primary); padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+<!-- AREA FIXA NO TOPO -->
+<div class="fixed-top-area">
+    <header>
+        <div class="brand-container">
+            <div class="brand-title">CARTA<span>MESTRE</span></div>
+            <div class="brand-subtitle">Exame Teórico 13</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-box"><i class="fas fa-clock"></i> <span id="timer">60:00</span></div>
+            <button class="btn-terminar" id="btnFinish" onclick="checkExam()">Finalizar</button>
+        </div>
+    </header>
+
+    <div class="nav-wrapper" id="navBar">
+        <button class="nav-btn" onclick="prevQ()"><i class="fas fa-chevron-left"></i></button>
+        <div class="nav-container"><div id="pagination_bar" style="display: flex; gap: 10px;"></div></div>
+        <button class="nav-btn" onclick="nextQ()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- AREA DE SCROLL PARA AS PERGUNTAS -->
+<div class="scrollable-content">
+    <div class="container">
+        <form id="exam" onsubmit="return false;"><div id="q_list"></div></form>
+    </div>
+</div>
+
+<!-- MODAL RESULTADO -->
+<div class="modal-overlay" id="modalRes">
+    <div class="modal-content">
+        <div id="modalIcon"></div>
+        <div class="modal-status" id="modalTitle">Reprovado</div>
+        
+        <div class="modal-stats">
+            <div><span id="resAcertos" class="stat-value text-green">0</span> Acertos</div>
+            <div class="divider"></div>
+            <div><span id="resErros" class="stat-value text-red">25</span> Erros</div>
+            <div class="divider"></div>
+            <div><span id="resMedia" class="stat-value">0</span> Pontos</div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn-ver" onclick="closeModal()"><i class="fas fa-search"></i> Ver Correção</button>
+            <button class="btn-sair" onclick="window.location.href='exames-pesados.html'"><i class="fas fa-arrow-left"></i> Voltar à Lista</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // BLOQUEIO DE TECLADO E CLIQUE DIREITO
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'p' || e.key === 'a')) { e.preventDefault(); }
+    });
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const EXAME_ID_UNICO = "exame_13"; 
+    const NOME_DO_EXAME = "Exame Teórico 13";
+
+    // AS 25 PERGUNTAS DO INATRO PRO 13 100% INTACTAS
+    const questions = [
+        { id: 1, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjp_FKfDFE8ksjiwU56beuEW3P4VOdf9_vj4CV-Lqk4kTw8CODRt3YibLW5LMYWVTX5kXv8pGI710jFS0I3wRYm9CNoJ7iGOdztTIGmBUQNzewVkeTDfrmTaXFs56SMwnUEeduPt-yRXyQjPKU3aG1WaOpT6u2q4f0CM11jaZm79zZ9i6lgUUqKuwh7zkw/s320/1000074770.jpg", q: "O que é a ergonomia de um veículo?", options: {A: "É a capacidade de adaptação do equipamento às particularidades de cada ser humano.", B: "É a capacidade de um condutor economizar no combustível.", C: "É a capacidade de um veículo economizar no combustível."}, ans: "A" },
+        { id: 2, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgIxw1LPpwuII8pu8w6BaOeTkcee5mjM87WpRz7tmE_kTVOoNqxsILvsnRnZVuYucgxtDNd6b-pnR8JcGWVi7lRMMPoiHiKAGsE2jl7yJdfB-ggbFFvVphd9TwrzoBFeLMfKDtbXSvz3I1mkzl-18f8mhZmmUXbYwnBgdBLea5fqeSzPmXy5o4dbO90ruI/s320/1000074793.jpg", q: "O significado deste sinal é:", options: {A: "Zona onde só podem passar três carros de cada vez.", B: "Congestionamento de tráfego.", C: "Zona de estacionamento em fila.", D: "Zona de paragem em fila."}, ans: "B" },
+        { id: 3, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDnqJDq7tIpjpfw_VwxktlN52VFucppl9rhy1D5yhpyr57oj6c4gyJzcgUwuLi0db0_qilkhTQzipetAqShvl06pMTRBuhtDEtjuHqB5rZd4k46jub7U8oJSPnRJPaYC17eknj-XHEeOo29zR7f6JSpa18QwwaECqawg4cN7-gZ5rro0LjNmS5uu_kzSo/s320/1000074801.jpg", q: "A definição de tara é:", options: {A: "Peso do veículo com carga.", B: "Peso do veículo em vazio.", C: "Peso da carga que o veículo transporta.", D: "Peso do veículo mais o condutor."}, ans: "B" },
+        { id: 4, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjYiHFsmMaVgEDnAvhAyxiXS2wbtF2Tot5w1hTLupH48q1QrqDSAc7nsOOHtsgc6ZAvVLVhBYCwRQ0z-ZT85QF0zhRMQ8qNpqCiLMEqe_7SU4AcicOXJ7aLSoI9jicmJg8-yFyb3Q95YlXdVJPXGP3SQ1P9_M2YNIg9WwOUtN72r9hgS7b7s0pmHiTobx8/s320/1000074804.jpg", q: "O significado deste sinal é:", options: {A: "Passagem estreita.", B: "Só veículos pesados de passageiros.", C: "Um veículo de cada vez.", D: "Só veículos pesados de mercadorias."}, ans: "C" },
+        { id: 5, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdzZ8WnPS6Ue3fg0x7TwbJbUU25qt_dFXMCD2B1GuJg7FeepPviP8RbNGU2BvRSnY9ugx7y_aPFgBAtxEzKnwTRUJETIBpPHdjkhjK9VlQ6SdKOpsB81F1ab1teq1ILZo9qOaz_EqZRqOsOsA98mV4o5Ke5iLKfQl-5JVBZAS5vwUHz4tzuIsL1PEmHo8/s320/1000074807.jpg", q: "As luzes de travagem dos automóveis tem a cor:", options: {A: "Branca ou amarela.", B: "Amarela ou alaranjada.", C: "Vermelha."}, ans: "C" },
+        { id: 6, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZy3ZR0cVOtENUdNGpYiUSgP_JTM3FlR6dypJtd8dTDZioXbH_FqWvm6LfPOeZEHQqjrCTSK3Y3W6f4D9_OsTTkhTwTbpRUFsXMeZYl1MdrdgH8F2DctLYIkwhBc-eZNh9nbHPdGyuPUb3vknNUqllPkjUPUzA8QNMrpe_JZESfN1hh2LefMXh_q2jQ74/s320/1000074810.jpg", q: "Como é feito o processo de eliminação do álcool no organismo?", options: {A: "Pela urina e pela transpiração.", B: "Pelo ar expirado, pela urina e quantidade de água ingerida.", C: "Pelo fígado, pelo ar expirado, pela urina e pela transpiração.", D: "Pela quantidade de café e água que tome depois de beber."}, ans: "C" },
+        { id: 7, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh84qXq3Do3-5eojo7aTcfrMiRb7d5XuCNUvkXjs7cpaS3jOZ_Wn-t39Cb37zfzmjVM5B9XRL88-7STULcNLwConxMUmS4TBXrqdX3S9oZTIGzAFUkuaeHpvrqdrnTp3rZXI4eVD0ZxlJPy2uG1SLqIjdF_Aa-5VK_UNK9A5lYWW0ATeWAjkFwhZerbgLA/s320/1000074819.jpg", q: "Nos veículos de mercadorias, a carga deve ser disposta de modo a que:", options: {A: "O principal peso fique sobre o eixo da retaguarda.", B: "Seja assegurado o equilíbrio do veículo, parado ou em movimento.", C: "Fique livre o maior espaço possível à retaguarda da caixa de carga."}, ans: "B" },
+        { id: 8, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCQRKlOTZiRL-4771ZNX1Oni3U1d5TGpN10RLSHbQCseHbZ30OanH6uffP538a6Colm6ztSAaEHxzZYR3t55tFTShdVLsrfZTCw6dTVobDjJA1K9gBeFmXZmI_bRWI7KkyP8gP3Jd-RegEnXmroQIms_UF3RSA2eL-pAsCzIs4N5dI1qG7bBfOuG88w3w/s320/1000074822.jpg", q: "A marcha atrás é uma manobra que deve ser efetuada...", options: {A: "o mais à direita possível, em local de boa visibilidade.", B: "o mais rapidamente possível, em local onde não prejudique o trânsito.", C: "lentamente e o mais possível à esquerda.", D: "rapidamente e no menor trajeto possível."}, ans: "C" },
+        { id: 9, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjO2SfGk55ZNw0iR0AFyUdEFJ8KzluCzwNmrueYHXH3GseWEfaQJAy2JMhrxFacYn_qk5M2gdH8CB4KGC4TgspfDH7_IPtFJNzCMMyobIxcSMPT9f0Z9TXSKQ9LF7CIs-l7-59-_E1ZvYeVxmkuBC8t7H6lp5BmP0HY7bXrYjyVfSHyRmljIE2tCkktNzs/s320/1000074825.jpg", q: "O que deve fazer o condutor se a fila da esquerda estiver a circular mais rapidamente?", options: {A: "Manter-se na fila de trânsito em que se encontra.", B: "Mudar de fila de trânsito.", C: "Sinalizar e mudar de fila de trânsito."}, ans: "A" },
+        { id: 10, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIMQVAqk9qb6XlY0R_1D6dLkWfhZjcvXD093CS8TXFbLODWNJLsSCqBAyG1spsXCOq5kwgJ3Y80h-FGCZ7ZlNf8-uD1GgTVKvwEQfmK2lXV8b29dL-GDbO7BnefHy8QB8xgIbbslyV4ReOAUx9UBUv-7wHZ0aD_D-w82i3aLL0_GBf1dSmi9Xr52d4m-Q/s320/1000074829.jpg", q: "O condutor de veículo utilizado no transporte colectivo de passageiros, só pode parar nas faixas de rodagem para:", options: {A: "Carregar e descarregar mercadorias, só durante o dia.", B: "Carregar e descarregar mercadorias, só durante o noite.", C: "A entrada e saída de passageiros nos locais especialmente destinados a esse fim.", D: "A entrada e saída de passageiros, em qualquer lugar que lhe dê mais jeito."}, ans: "C" },
+        { id: 11, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQKj8Ct9JgG0Rh7k3_XBFeD8hAii4RzSpi7T5azJiYrwJJc_cqpI9B_vPbRziEVgVlUeC9MaBLold59XnWxjcP1gchrxdx72fPCiJbQ0vzEEGYgMaw0UpfjGEqOGgWzRhEVkDo9VMbaNJmZQGOaPcrzOcmSIR4NQnnohgSIHQJoOvkWB7QpxEszWD95Ts/s320/1000074832.jpg", q: "O agente de trânsito que aparece na fotografia, manda:", options: {A: "Avançar o tráfego que venha da retaguarda.", B: "Avançar o tráfego que venha da esquerda.", C: "Parar o tráfego que venha da esquerda."}, ans: "B" },
+        { id: 12, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi71BMxKsfPVxwNHhKl7pCutAx3GlB4QwxM7PaeVopig6_49EGHIsrSyj4DSjzmhKGtU-h2Bi-LADnk5kIbcSL9ghl5Cj6wL1VI-qv59qS3YpRqpAw4JTlLcTCz-u_OQSCpCyY71w033cP5r9-O9KCi1V3FBMnFTPjzfDF9Q9L7184wlZ649vXiUixiARg/s320/1000074835.jpg", q: "O que é a força centrífuga?", options: {A: "É a força aparente que 'empurra' os veículos para o interior das curvas.", B: "É a força aparente que 'empurra' os veículos para o exterior das curvas.", C: "É a força aparente que trava os veículos nas curvas.", D: "Uma força que só ocorre quando o veículo vai em linha reta."}, ans: "B" },
+        { id: 13, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhgFtceWT1PeLqTrBJZBxjAVAYhm25Z-O1H_FIP_26ZrfDBWQNyCcAd3Bezh6nlh3kc5NyBAC1fbo4Vd3hkfyt5qdS7dlJIW8Hn27SbaQNbTbD5QY6m2NFKKzz0-rUAwFSDmLODRuQz0XAg4P-t3iKaYtodbSItwGR9QzMgW4lIDAMnpebbZWyjEoyO1AY/s320/1000074838.jpg", q: "Dentro das localidades, durante a noite:", options: {A: "Não é obrigatória a substituição dos sinais sonoros pelos sinais luminosos.", B: "É obrigatória a substituição dos sinais sonoros pelos sinais gestuais.", C: "É obrigatória a substituição dos sinais sonoros pelos sinais luminosos.", D: "É escolha do condutor a substituição dos sinais sonoros pelos sinais gestuais."}, ans: "C" },
+        { id: 14, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOeo62xZOguJYrt6ZKt2XJUbJsRCzMFA_fhUml9yQRWxo9G-ryzXV7dCJyjisr0icJS2P62w6e1fdsttVeqPA8_Ti7mNtNCbr34-4YJNyP7iVv_hA1u1SjlRsuvsDl9Som0CsCr3cPKJGX74rCcdmFco5s7xKVXnIHyOeKBmpEWXWECS5Hi6S4WixGbW4/s320/1000074843.jpg", q: "Podem ser submetidos às provas para a detecção de álcool ou substâncias estupefacientes ou psicotrópicas:", options: {A: "Os peões, sempre que sejam intervenientes em acidentes de trânsito e os condutores.", B: "Apenas os condutores de veículos automóveis.", C: "Todos os condutores e peões que transitem pela via pública.", D: "Só os condutores que sejam intervenientes em acidentes de trânsito."}, ans: "A" },
+        { id: 15, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhqIt-icWjQywSWNjXSOVhMu-YdPjZqNY7jm6xB706DeO5306mE1MpaBe2KnDmnkaDVi85xSarLXnJDrTLWUcZ3e1ZdrgGkyuLD3Siidu17Bg01RNKyWyfZwgqVgm0KIvUPzEhEu8cYFJSTueQpRfhBaa81Zw7dv_-MHIRsMDsrI1y5Nu6tStTvDLREpB8/s320/1000074856.jpg", q: "Nas pontes, túneis e passagens de nível:", options: {A: "Os animais atrelados ou não, devem seguir a passo.", B: "Os animais só quando estiverem atrelados, devem seguir a passo.", C: "Os animais quando não atrelados, devem seguir a passo de corrida.", D: "Os animais atrelados ou não, devem seguir a passo de corrida."}, ans: "A" },
+        { id: 16, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXdzDOOy2tKs0Jq8T2Yjs4xe99E5lTscDhBIB1TU091thkHv3MAKpRKzlIzNviY7m-AyVeE8jUyZszM59v5NXjKQ1Es1_JpibLcYLRp1HYJ3n6iWysK1t5dITddKyorXq_uJ89FvLk0uVADuudYHD3kj637eXInlMx7u_8EiCNAR35PMAK_2PwQwDyoCw/s320/1000074860.jpg", q: "Se conduz muito tempo sem descansar...", options: {A: "aumenta a atenção do condutor.", B: "a condução torna-se perigosa.", C: "aumenta a segurança.", D: "o condutor relaxa-se e conduz melhor."}, ans: "B" },
+        { id: 17, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSmBbifFofvJYpvT-L5kLO8ZOtFr2xHi0etzbpnzo4sAB2O1_8aOlK48sg4OFlGAY01W_5dxrUcdMObIYvoEYvbeSHQQFtLcBJ1QjaPXsgDUAT_IYN4BkyCw3f9JzzXD3YB6i5Al2fbgUFiFSdvJZiTzBb6ZwRGQH6SOBnnSjRtTJH9d3YdO-Ip6UrwSg/s320/1000074865.jpg", q: "O que indica o sinal?", options: {A: "Trânsito proibido ao conjunto de veículos de mercadorias, de peso total superior a 10t.", B: "Trânsito proibido a veículos de peso por eixo superior a 10t.", C: "Trânsito proibido a veículos de peso por eixo múltiplo superior a 10t."}, ans: "C" },
+        { id: 18, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjErFucKvBobvYQy9xSIwIn0z-MtB-7ucFrd4pVOHzAcAFbU_LTFPkZAThX8QVSUhJiUTzcsbAbYIAF3-GRbC-g9iAZ1yVuvM6eM_CMLzlPaAZUcLmFgQ0YbmeMuEPgkNv8c5IULdmBW6lTdvkf7-CHm3vi5BSfOGgiokQg5I8-wvZ_rtzcZ1hDMgHr7NI/s320/1000074871.jpg", q: "O que indica o sinal de perigo?", options: {A: "Controlo policial por pirilampos.", B: "Aproximação de uma estrada com prioridade.", C: "Sinalização luminosa."}, ans: "C" },
+        { id: 19, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5L9gsQ43k-UPA70WQyqNmZGwI4zdlSUBAsEr607909gRlZfYMIHGYk8hq62nsYvoPNoA2MjZRaia3ONhj3y6sWuTBwu6fviNA3yDUFJInLaXGyFJcBUHTCt2CaN3c4CETcQ60229S9otkAc5jE4YxaOWWCJyxIw2Eq9SschVIZC906EXMCdXPebuapLg/s320/1000074876.jpg", q: "Depois de ter tomado bebidas alcoólicas:", options: {A: "O álcool entra rapidamente no sistema circulatório.", B: "O álcool entra directamente no sistema urinário.", C: "O álcool demora duas horas a entrar no sistema circulatório."}, ans: "A" },
+        { id: 20, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhi3sJAoQVzrNwhUmfS26t87UmM-2pZYNi095mws5V4MFoANH61Az5Rtya0XbdMod8hc9QctbZjYrbEvPyC9cqVK_VWCzEhmJg3GULKYwZz8CCXIpcs5xuvdYQjfx9oHKX60akLuelONVqjwSzK8h43xAwGvnA6_P4n9ZjkqtIclV8XQCVRWxvhyphenhyphenWUxtxQ/s320/1000074883.jpg", q: "Que indica o sinal?", options: {A: "Terreno falso à direita.", B: "Cruzamento facilmente congestionável.", C: "Congestionamento de tráfego."}, ans: "C" },
+        { id: 21, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiNLnXC6fp5dwBqOE74s3C8fPoNe2rXeS98SHm0gUcIU_OuKsFRoW3_HtmVLcGeV1DrtchGqOT_R0nw_pxzQ_5d6dcuiBHfTFXbOv7n6wS0lQL7GEESiCO_ulh5vJ4tDwoYSm9zxyFm87DbmQCPg2ffjkPWx62KMhSYW1JnzFnjxTrKqHMWCx6OxsnQiLw/s320/1000074888.jpg", q: "O sinal pertence ao grupo de sinais de:", options: {A: "Pré-sinalização e de direcção.", B: "Direcção.", C: "Direcção para auto-estradas."}, ans: "C" },
+        { id: 22, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4g_qYrhn2nZK27yWG4XTPLgzckiP1Q7gldV2sbKJ4GT8eW-pqPYGrJiqvI1NcrQ7aCibO7WFVl0LIyiuASaT49BjarbGP82hbLjiKzNkKIk57PLYCimpQNK_IpUV2TD9OLmo7O9Jva2bbhahSbGL0sNODYXfh5AjkO7788PVIWt7o-OUMkOX8NqUlXxg/s320/1000074891.jpg", q: "A definição de tractor é:", options: {A: "Veículo a motor exclusivamente construído para desenvolver esforço de tracção, sem comportar carga útil.", B: "Veículo automóvel exclusivamente construído para desenvolver esforço de tracção, sem comportar carga útil.", C: "Veículo automóvel exclusivamente construído para desenvolver esforço de tracção, comportando carga útil.", D: "Veículo automóvel exclusivamente construído para desenvolver esforço do motor, comportando alguma carga."}, ans: "B" },
+        { id: 23, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhQFGI1tZs4L4d4VSEQpbELdgTc3R4W-j24XFPh2REie3IaJBGKDYxtdyNDQgW7U1zTTj08FMuY2CzzEbpotxSnVj3A_czEqE9yNCaHPgi3HE7reoURHqP9UnKDQOoUNwMYCEBReOTQfYkZV6cEAXlw1LmLJVzHHsaFfvZU9y3g8PGIX8z7bbs-If5D_vk/s320/1000074894.jpg", q: "A definição de tractor é:", options: {A: "Veículo a motor exclusivamente construído para desenvolver esforço de tracção, sem comportar carga útil.", B: "Veículo automóvel exclusivamente construído para desenvolver esforço de tracção, sem comportar carga útil.", C: "Veículo automóvel exclusivamente construído para desenvolver esforço de tracção, comportando carga útil.", D: "Veículo automóvel exclusivamente construído para desenvolver esforço do motor, comportando alguma carga."}, ans: "B" },
+        { id: 24, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjW9njwKeElPYpY2KNghJVDky-ZlfZTW1eEjnh_5-UhWJXmyXN-1H544NzM3PM_OY6z6NGHZ2nIcogbNIaGEmMUdSPjZI6Z6GsuB7kTFvQTVH3OssPfZP3iUULuNdQWxMIaN5w8CIK1T8IeFbIuqnJLOKMNOIf9OE9zjCXslE9Ri7w5NlnKgT5Fh7LL1yw/s320/1000074897.jpg", q: "A condução em dias de chuva provoca um aumento do risco de acidente, por causa de factores como:", options: {A: "Menor visibilidade, menor aderência e maior stress físico.", B: "Maior tempo de reacção e menor tempo de paragem.", C: "Piso mais escorregadio e menor distância de paragem.", D: "Diminuição do tempo de reacção por falta de visibilidade."}, ans: "A" },
+        { id: 25, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxBIlvHRyvnpn2_IkIeGIVRC7EEnNNf3uYhciWhVxkVyC2dX9_aS_tqnfcN0GzPy7TAkuo-H3fWJhLtt_lx49EH7_Pp1oBpVmDkhtaxEYZ79JZPDF9bkXoWMo5nrur_9fIcT9XB0mvCtc9VhVzUzhs4pCUDL33yIpixvAXXmhOIptvYPdJGOUb6rsOK1E/s320/1000074900.jpg", q: "Como deve actuar o condutor quando tem que fazer uma curva?", options: {A: "Reduzir a velocidade, já dentro da curva.", B: "Aumentar a velocidade, antes de entrar na curva.", C: "Adaptar a velocidade, antes de entrar na curva.", D: "Pressionar o pedal de embraiagem e não acelerar dentro da curva."}, ans: "C" }
+    ];
+
+    let currentIdx = 0;
+    let time = 3600;
+    let countdown;
+    let isExamFinished = false;
+    let userAnswers = {};
+
+    function init() {
+        renderQuestions();
+        startTimer();
+    }
+
+    function renderQuestions() {
+        document.getElementById('q_list').innerHTML = '';
+        document.getElementById('pagination_bar').innerHTML = '';
+        questions.forEach((item, index) => {
+            document.getElementById('pagination_bar').innerHTML += `<div class="page-num ${index === 0 ? 'active' : ''}" id="page_${index}" onclick="goToQuestion(${index})">${index + 1}</div>`;
+
+            let optionsHtml = '';
+            for(let key in item.options) {
+                optionsHtml += `
+                    <label class="option" id="label-${item.id}-${key}">
+                        <div class="option-letter">${key}</div>
+                        <input type="radio" name="q${item.id}" value="${key}" onchange="saveProgress(${index}, '${item.id}', '${key}')">
+                        <span>${item.options[key]}</span>
+                        <span class="label-certa" id="certa-${item.id}-${key}">CORRETA</span>
+                    </label>`;
+            }
+
+            document.getElementById('q_list').innerHTML += `
+                <div class="question-wrapper ${index === 0 ? 'active' : ''}" id="q_wrap_${index}">
+                    <div class="card-inner">
+                        <img src="${item.img}" class="q-img" loading="lazy">
+                        <div class="q-text-area">${index + 1}. ${item.q}</div>
+                        <div class="options-container">${optionsHtml}</div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function saveProgress(index, qId, val) {
+        if (isExamFinished) return;
+        userAnswers[`q${qId}`] = val;
+        document.getElementById(`page_${index}`).classList.add('answered');
+        setTimeout(() => nextQ(), 400);
+    }
+
+    function startTimer() {
+        clearInterval(countdown);
+        countdown = setInterval(() => {
+            if (time <= 0) { checkExam(); } else { time--; updateTimerDisplay(); }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(time / 60), s = time % 60;
+        document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function goToQuestion(index) {
+        if (index < 0 || index >= questions.length) return;
+        currentIdx = index;
+        document.querySelectorAll('.question-wrapper').forEach(w => w.classList.remove('active'));
+        document.querySelectorAll('.page-num').forEach(p => p.classList.remove('active'));
+        document.getElementById(`q_wrap_${index}`).classList.add('active');
+        document.getElementById(`page_${index}`).classList.add('active');
+        
+        document.getElementById(`page_${index}`).scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        document.querySelector('.scrollable-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextQ() { goToQuestion(currentIdx + 1); }
+    function prevQ() { goToQuestion(currentIdx - 1); }
+
+    async function checkExam() {
+        if (isExamFinished) return;
+        clearInterval(countdown);
+        isExamFinished = true;
+        
+        document.getElementById('exam').classList.add('exam-finished');
+        
+        let score = 0;
+        questions.forEach((item, index) => {
+            const userAns = userAnswers[`q${item.id}`];
+            const isCorrect = userAns === item.ans;
+            
+            document.getElementById(`label-${item.id}-${item.ans}`).classList.add('correct-ans');
+            document.getElementById(`certa-${item.id}-${item.ans}`).style.display = 'block';
+            
+            if (userAns && !isCorrect) {
+                document.getElementById(`label-${item.id}-${userAns}`).classList.add('wrong-ans');
+            }
+
+            const pageBtn = document.getElementById(`page_${index}`);
+            if (isCorrect) {
+                score++;
+                pageBtn.classList.add('rev-correct');
+            } else {
+                pageBtn.classList.add('rev-wrong');
+            }
+        });
+
+        showModal(score);
+
+        const totalErros = questions.length - score;
+        const percentagem = Math.round((score / questions.length) * 100);
+
+        try {
+            const userDataJson = localStorage.getItem('usuarioLogado');
+            if (userDataJson) {
+                const userData = JSON.parse(userDataJson);
+                
+                await _supabase.from('Historico_Exames').insert([{ 
+                    user_id: userData.id, 
+                    modulo: 'pesados', 
+                    percentagem: percentagem, 
+                    acertos: score, 
+                    erros: totalErros 
+                }]);
+            }
+        } catch(e) {
+            console.error('Erro ao guardar histórico:', e);
+        }
+
+        const dadosParaSalvar = {
+            nome: NOME_DO_EXAME,
+            acertos: score,
+            total: questions.length,
+            data: new Date().toLocaleDateString('pt-MZ')
+        };
+        localStorage.setItem(EXAME_ID_UNICO, JSON.stringify(dadosParaSalvar));
+    }
+
+    function showModal(score) {
+        const aprovado = score >= 18;
+        const modal = document.getElementById('modalRes');
+        const title = document.getElementById('modalTitle');
+        const iconDiv = document.getElementById('modalIcon');
+        
+        title.innerText = aprovado ? "Aprovado" : "Reprovado";
+        title.className = "modal-status " + (aprovado ? "status-aprovado" : "status-reprovado");
+        
+        iconDiv.innerHTML = aprovado 
+            ? '<i class="fas fa-check-circle" style="color: var(--green);"></i>' 
+            : '<i class="fas fa-times" style="color: var(--red);"></i>';
+        
+        document.getElementById('resAcertos').innerText = score;
+        document.getElementById('resErros').innerText = questions.length - score;
+        document.getElementById('resMedia').innerText = score;
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modalRes').style.display = 'none';
+        document.getElementById('btnFinish').style.display = 'none';
+        goToQuestion(0);
+    }
+
+    init();
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

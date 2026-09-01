@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inatro Pro - Sobre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; display: flex; justify-content: center; min-height: 100dvh; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; display: flex; flex-direction: column; padding-bottom: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+
+        .top-section { background-color: #0F172A; color: #FFFFFF; border-radius: 0 0 24px 24px; padding: 24px 24px 30px; margin-bottom: 24px; }
+        .btn-back { color: #94A3B8; text-decoration: none; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #F8FAFC; margin-bottom: 8px; }
+        .header-subtitle { font-size: 0.9rem; color: #94A3B8; line-height: 1.5; }
+
+        .content-section { padding: 0 24px; flex: 1; text-align: center; }
+        
+        .about-card { background: #FFFFFF; border-radius: 16px; padding: 30px 20px; border: 1px solid #E2E8F0; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 20px; }
+        .about-logo { font-size: 3rem; color: #2563EB; margin-bottom: 15px; }
+        .about-card h2 { font-size: 1.3rem; font-weight: 800; color: #1E293B; margin-bottom: 5px; }
+        .version-tag { font-size: 0.8rem; background: #EFF6FF; color: #2563EB; padding: 4px 12px; border-radius: 20px; font-weight: 600; display: inline-block; margin-bottom: 20px; }
+        .about-card p { font-size: 0.9rem; color: #64748B; line-height: 1.6; }
+
+        .developer-box { background: #FFFFFF; border-radius: 12px; padding: 20px; border: 1px solid #E2E8F0; text-align: left; display: flex; align-items: center; gap: 15px; }
+        .dev-icon { width: 45px; height: 45px; background: #F1F5F9; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #1E293B; font-size: 1.2rem; flex-shrink: 0; }
+        .dev-info h4 { font-size: 0.95rem; font-weight: 700; color: #1E293B; }
+        .dev-info p { font-size: 0.8rem; color: #64748B; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="top-section">
+        <a href="javascript:history.back()" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <h1 class="header-title">Sobre a Plataforma</h1>
+        <p class="header-subtitle">Informações gerais, versão e desenvolvedores do Inatro Pro.</p>
+    </div>
+
+    <div class="content-section">
+        <div class="about-card">
+            <div class="about-logo"><i class="fas fa-car-side"></i></div>
+            <h2>Inatro Pro</h2>
+            <span class="version-tag">Versão 2.5.0</span>
+            <p>
+                Plataforma independente de simulação, testes teóricos e apoio à preparação para a obtenção da carta de condução em Moçambique. Desenvolvida para maximizar a taxa de aprovação dos estudantes.
+            </p>
+        </div>
+
+        <div class="developer-box">
+            <div class="dev-icon"><i class="fas fa-code"></i></div>
+            <div class="dev-info">
+                <h4>Desenvolvido e Mantido por</h4>
+                <p><b>OLC</b> &bull; Soluções Tecnológicas</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!localStorage.getItem('usuarioLogado')) window.location.href = 'index.html';
+    });
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

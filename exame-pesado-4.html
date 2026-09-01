@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Carta Mestre - Exame Teórico 4</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* VARIAVEIS DE CORES */
+:root {
+    --primary: #04182B !important;
+    --primary-light: #112B47 !important;
+    --green: #00D37F !important;
+    --red: #EF4444 !important;
+    --orange: #F59E0B !important;
+    --bg: #F0F4F8 !important;
+    --card: #ffffff !important;
+    --text: #1F2937 !important;
+    --muted: #9CA3AF !important;
+    --blue-active: #3B82F6 !important;
+}
+
+/* SISTEMA ANTI-CÓPIA & RESET */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none; text-decoration: none;
+}
+
+html, body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex; 
+    flex-direction: column;
+}
+
+/* ================= TOPO FIXO (HEADER + NAV) ================= */
+.fixed-top-area {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+}
+
+header {
+    background: var(--primary);
+    width: 100%; 
+    padding: 15px 15px 45px 15px;
+    border-radius: 0 0 30px 30px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-container {
+    min-width: 0; /* Permite encolher se necessário para não empurrar os botões */
+    flex-shrink: 1;
+}
+
+.brand-title { 
+    font-size: 1.35rem; 
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 900; 
+    color: white;
+    letter-spacing: -0.5px; 
+    line-height: 1.1;
+    white-space: nowrap;
+}
+.brand-title span { color: var(--green); }
+.brand-subtitle { 
+    font-size: 0.7rem; 
+    font-weight: 600; 
+    color: white;
+    opacity: 0.8; 
+    margin-top: 3px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.header-right { 
+    display: flex; 
+    gap: 6px; 
+    align-items: center; 
+    flex-shrink: 0;
+}
+
+.timer-box {
+    background: var(--primary-light); 
+    color: white;
+    padding: 7px 10px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 5px; 
+    font-weight: 700; font-size: 0.85rem;
+    white-space: nowrap;
+}
+.timer-box i { font-size: 0.85rem; color: var(--orange); }
+
+.btn-terminar {
+    background: var(--red); color: white; border: none;
+    padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+    font-size: 0.75rem; text-transform: uppercase;
+    white-space: nowrap;
+}
+.btn-terminar:active { transform: scale(0.95); }
+
+/* ================= BARRA DE PAGINAÇÃO ================= */
+.nav-wrapper {
+    width: 100%; max-width: 600px; 
+    margin: -24px auto 0 auto;
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 15px;
+}
+.nav-container {
+    display: flex; align-items: center; gap: 10px; 
+    overflow-x: auto; scrollbar-width: none;
+    flex-grow: 1; padding: 10px 0;
+}
+.nav-container::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+    background: var(--card); color: var(--primary); border: none;
+    width: 48px; height: 48px; border-radius: 14px; font-size: 1.1rem;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; flex-shrink: 0; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+.nav-btn:active { background: #E5E7EB; }
+
+.page-num {
+    min-width: 48px; height: 48px; 
+    background: var(--card); color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px; font-weight: 700; cursor: pointer; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04); 
+    font-size: 1rem; flex-shrink: 0;
+}
+.page-num.active { 
+    background: var(--blue-active); 
+    color: white; 
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); 
+    transform: translateY(-2px);
+}
+.page-num.answered { border-bottom: 4px solid var(--green); color: var(--primary); font-weight: 800; }
+
+.page-num.rev-correct { background: var(--green) !important; color: white !important; border-bottom: none; }
+.page-num.rev-wrong { background: var(--red) !important; color: white !important; border-bottom: none; }
+
+/* ================= ÁREA DE CONTEÚDO ROLÁVEL ================= */
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 15px 40px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.container { width: 100%; max-width: 580px; }
+
+.question-wrapper { display: none; animation: fadeIn 0.3s ease; }
+.question-wrapper.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-inner {
+    background: var(--card); 
+    border-radius: 24px; 
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03); 
+}
+
+.q-img { 
+    width: 100%; height: auto; max-height: 250px; 
+    object-fit: contain; border-radius: 12px; 
+    margin-bottom: 25px; pointer-events: none; display: block; 
+}
+.q-text-area { 
+    font-weight: 800; font-size: 1.15rem; 
+    color: var(--primary); margin-bottom: 25px; 
+    line-height: 1.4; 
+}
+
+/* ================= OPÇÕES ================= */
+.options-container { display: flex; flex-direction: column; gap: 14px; }
+
+.option {
+    display: flex; align-items: center; background: var(--card);
+    border: 1.5px solid #E5E7EB; border-radius: 16px; padding: 12px 16px;
+    cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text);
+}
+.option:hover { border-color: #D1D5DB; }
+.option input { display: none; }
+
+.option-letter {
+    background: var(--primary); color: white; border-radius: 12px;
+    width: 42px; height: 42px; display: flex; align-items: center;
+    justify-content: center; font-weight: 800; margin-right: 16px; 
+    flex-shrink: 0; font-size: 1rem;
+}
+
+/* Estado Selecionado */
+.option:has(input:checked) { 
+    border-color: var(--blue-active); 
+    background: #F3F8FF; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08); 
+}
+.option:has(input:checked) .option-letter { background: var(--blue-active); }
+
+/* Correção Final */
+.correct-ans { background: #ECFDF5 !important; border-color: var(--green) !important; }
+.correct-ans .option-letter { background: var(--green) !important; }
+.wrong-ans { background: #FEF2F2 !important; border-color: var(--red) !important; }
+.wrong-ans .option-letter { background: var(--red) !important; }
+
+.label-certa {
+    background: var(--green); color: white; font-size: 0.7rem; padding: 5px 10px;
+    border-radius: 8px; margin-left: auto; font-weight: 800; display: none; text-transform: uppercase;
+}
+
+.exam-finished .option { pointer-events: none; }
+
+/* ================= MODAL DE RESULTADO ================= */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(4, 24, 43, 0.85); backdrop-filter: blur(8px);
+    z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+}
+.modal-content {
+    background: white; width: 100%; max-width: 380px; border-radius: 28px;
+    padding: 40px 30px; text-align: center; position: relative; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+#modalIcon i { font-size: 4.5rem; margin-bottom: 15px; }
+.modal-status { font-size: 2rem; font-family: 'Montserrat', sans-serif; font-weight: 900; margin-bottom: 25px; letter-spacing: -0.5px; }
+.status-reprovado { color: var(--red); }
+.status-aprovado { color: var(--green); }
+
+.modal-stats { 
+    display: flex; justify-content: space-between; background: #F9FAFB; 
+    padding: 20px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #E5E7EB; 
+}
+.modal-stats div { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; width: 33%; }
+.modal-stats .divider { width: 1px; background: #E5E7EB; height: 40px; align-self: center; }
+.stat-value { font-size: 1.6rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+
+.modal-footer { display: flex; flex-direction: column; gap: 12px; }
+.btn-ver {
+    background: var(--blue-active); color: white; padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+.btn-sair {
+    background: #F3F4F6; color: var(--primary); padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+<!-- AREA FIXA NO TOPO -->
+<div class="fixed-top-area">
+    <header>
+        <div class="brand-container">
+            <div class="brand-title">CARTA<span>MESTRE</span></div>
+            <div class="brand-subtitle">Exame Teórico 4</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-box"><i class="fas fa-clock"></i> <span id="timer">60:00</span></div>
+            <button class="btn-terminar" id="btnFinish" onclick="checkExam()">Finalizar</button>
+        </div>
+    </header>
+
+    <div class="nav-wrapper" id="navBar">
+        <button class="nav-btn" onclick="prevQ()"><i class="fas fa-chevron-left"></i></button>
+        <div class="nav-container"><div id="pagination_bar" style="display: flex; gap: 10px;"></div></div>
+        <button class="nav-btn" onclick="nextQ()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- AREA DE SCROLL PARA AS PERGUNTAS -->
+<div class="scrollable-content">
+    <div class="container">
+        <form id="exam" onsubmit="return false;"><div id="q_list"></div></form>
+    </div>
+</div>
+
+<!-- MODAL RESULTADO -->
+<div class="modal-overlay" id="modalRes">
+    <div class="modal-content">
+        <div id="modalIcon"></div>
+        <div class="modal-status" id="modalTitle">Reprovado</div>
+        
+        <div class="modal-stats">
+            <div><span id="resAcertos" class="stat-value text-green">0</span> Acertos</div>
+            <div class="divider"></div>
+            <div><span id="resErros" class="stat-value text-red">25</span> Erros</div>
+            <div class="divider"></div>
+            <div><span id="resMedia" class="stat-value">0</span> Pontos</div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn-ver" onclick="closeModal()"><i class="fas fa-search"></i> Ver Correção</button>
+            <button class="btn-sair" onclick="window.location.href='exames-pesados.html'"><i class="fas fa-arrow-left"></i> Voltar à Lista</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // BLOQUEIO DE TECLADO E CLIQUE DIREITO
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'p' || e.key === 'a')) { e.preventDefault(); }
+    });
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const EXAME_ID_UNICO = "exame_teorico_4"; 
+    const NOME_DO_EXAME = "Exame Teórico 4";
+
+    // O BANCO DE DADOS INTACTO DO EXAME 4
+    const questions = [
+        { id: 1, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhbej_ViD0DFwT4EKq81o1_W4s5sIIlA596ZqFgwM5eBdIUKZ3TKVYygmd8wfFvafn_o1UT9T0EBjcXtOZbT6HGhB2TvtfA3tiPStUd9f33IBKC1F_QK4DgzXES_JDcDKyiA9SNYH-02Eb598o8MbBQPqhwvUW01MM9tiKT7R24P8UdgKvZCnwnBd-5foxE/s320/1000044053.jpg", q: "O que indica o sinal?", options: {A: "Desvio da fila de trânsito para a direita.", B: "Desvio da fila de trânsito para a esquerda.", C: "Desvio e aumento de filas de trânsito para a esquerda."}, ans: "B" },
+        { id: 2, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw0ULjrU-qysMyZzZ7FjdLshNd5nfZyCm9CxSMz21924Ac2FmMACIX92uyWzSr-tcr8pIA3JvCAnIAYsUaWnA2bVG45ZBzU1cHL8Yg5AvX4bV2uMsqUpUl67E-RTNptQY8h2vWr00gHCQ0D7rLauA1gGJVG-uAO350p8_51l6Lenc_ZekcCQz4Yon74kmC/s320/1000044057.jpg", q: "É necessário verificar com frequência o sistema de iluminação?", options: {A: "Sim, mudando todos os fusiveis.", B: "Sim, para se assegurar que todas as luzes funcionam e que os faróis estão bem regulados.", C: "Não, porque se deve fazer unicamente numa oficina.", D: "Não, é suficiente a revisão na inspecção periódica obrigatória."}, ans: "B" },
+        { id: 3, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVpJvDP4RrpYceX9orkA9RVCizSEEQenpZSRMxsygFe1ocY11mSUVVwvocwUmGhF6CipFiynDqPnRbYRo24x2fdwHi8DT6uvM5GPvRVIzn8o9XBBOoZ9xJKpxCOVtiHEMGRsDH5CwKYlyjXsUfcCYP5ttVlCYQ_ffJfs6Sc8uHSlZzqklHelqkaQQcOzoR/s320/1000044060.jpg", q: "Que deve fazer o condutor de um veículo avariado enquanto não for devidamente estacionado ou removido?", options: {A: "Colocar os sinais de pré-sinalização de perigo e depois vestir o colete reflector.", B: "Colocar um sinal de pré-sinalização de perigo 5 metros à frente do veículo.", C: "Adoptar as medidas necessárias para que os outros se apercebam da sua presença.", D: "Colocar um sinal de pré-sinalização de perigo 10 metros à retaguarda do veículo."}, ans: "C" },
+        { id: 4, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj24FatAcVgb0l3oFjDlA1dNNwBfN4YL8O6ZB3fUQvWB0TTL9g1d8uLIaKESDWYRdScytYSMj6SisRIQ35682K0f9xDcfyUTBF9Bg1zkoWmqTN09RrbVMyrRHuAeIGpmICPRiFgkTCF8If-8aV2_TL4-mnA1MEmcGSrPuYTdZSqr2jow7_q0BIZhNj1Hcj2/s320/1000044063.jpg", q: "O que deve fazer o condutor que circula por uma auto-estrada?", options: {A: "Aumentar a distância de segurança, por se seguir a velocidades mais elevadas.", B: "Diminuir a distância de segurança, por se seguir a velocidades elevadas.", C: "Circular pela via de trânsito mais à direita, ainda que a via da esquerda se encontre livre de trânsito."}, ans: "A" },
+        { id: 5, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtT3CmGsh5I50oe8EreUOS583WKbCqPvyeXfzP8LNT2LAmUsPRmaoro2bx2nFIY_QjEcNjK4Bj6cdYA5szaIK-XvsPCweviMrgdhdsSyDpMXYxXjlRcm0uVgnzR0Utrlan5BUIYZ8YDNM9ZpqHTNtOyQnnBl-uWuM4ZL26ruwB14Id2YYWxhsxQQF8CCRS/s320/1000044066.jpg", q: "O que indica o sinal luminoso?", options: {A: "Acesso ou passagem interdito.", B: "Acesso ou passagem autorizado.", C: "Acesso ou passagem condicionado."}, ans: "A" },
+        { id: 6, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNFCg4UmKxjvf2rApVdXaGK2Ou2xbrxaPKyWaXnmbiaVVkI9WmpK4MpTJP9j__8I0GqY8iS6wQQGUCPKD3aI97K2W7z0QWbSZF9fMh4lnDCCyENogBqy_XOcKNUsGqaxeWoyefp8Mo11pRVvb_cX39O_4-uFC9k3O2KV2G8lSU28NuHzDZvqLW_MwPA5y9/s320/1000044074.jpg", q: "A luz de cruzamento (médios), destina-se a iluminar a via para frente do veículo numa distância até:", options: {A: "30 metros.", B: "40 metros.", C: "50 metros.", D: "60 metros."}, ans: "A" },
+        { id: 7, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZu8R04sPa1BbFTmYa-F52vROLZGmPblzbPgzemxBfpJdQIWIPY8TrC38Fhjdb6K-3fjM8LXSiUuBDDHDFofih6dXoohtDgka9vZ-r_3qzlgfq4Hgd-_rHZFTodbUIxoiKE6xkmnXiCEeI_uPENXKIn-VhaqDhkke54ffiCFhlT7iM0fHvLuZ7QTb1I1cY/s320/1000044087.jpg", q: "Que indica a marca rodoviária?", options: {A: "Linha de cedência de prioridade com simbolo triangular.", B: "Linha de paragem obrigatória com stop.", C: "Linha de paragem obrigatória."}, ans: "A" },
+        { id: 8, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-DnGOf2CS6joVtRBRxTmZTOg-sJfKyECY77H2rHyTL-RkmJFhyphenhyphenMalF2LcBqVps23aDc67PRI521S1zhJO_RXcR38UWgCXMTPcw1dmTgtN2pLbuS2e6OwT4HG6HZIqHfAQ1HLQ0HG1EwEjyAxM26pL2PczDmvQNq3qHh_aqYZ9eWsX-mRTTkV6vBRf5h_H/s320/1000044090.jpg", q: "Um torniquete é...", options: {A: "um pedaço de pau curto amarrado em torno de um membro.", B: "um pedaço de papel onde se menciona a parte do corpo que foi amarrada.", C: "uma tira larga de pano, amarrada firmemente em torno de um membro.", D: "uma peça de madeira, utilizada para aliviar a dor da vitima de acidente."}, ans: "C" },
+        { id: 9, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjkm3QdQyNYA1jFAZaT5QGTJwpES463xS2i6DMouzJvu8uhM-vsiFNPhO-FqKA2_1ZFOBvgZaYigf-hcAKtR4hjujpY4iP1cfDoYhs7LOWoLVv3_LdF7NqBIMJfAiMv53RbPW7Q9P0rS9hD3Sy3_JDZeLEvXsbdLj1-MIDuJV9IiIdeItW15Vq97BiT99sF/s320/1000044096.jpg", q: "Podem ser submetidos às provas para a detecção de álcool ou substâncias estupefacientes ou psicotrópicas:", options: {A: "Apenas os condutores de veiculos automóveis.", B: "Os peões, sempre que sejam intervenientes em acidentes de trânsito e os condutores.", C: "Todos os condutores e peões que transitem pela via pública.", D: "Só os condutores que sejam intervenientes em acidentes de trânsito."}, ans: "B" },
+        { id: 10, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj8HAMDR7TEyA5dUMA6sx1HzrTGssxNczX7LdmiLgUhLqW61DoqSiZlitS01SIH6HJDY5Gp-Y0x-ck4gQ_9wHW0hiP6HMEXTeKzwVDCKNIALU-igeKrxNwN39FbHl-74-ItKZh-aSrOYKmsG8e-O56H1YkbUrffMcDyMCSm_2qWgzF5M1z6WOkDfbuC2XiA/s320/1000044099.jpg", q: "Fora das localidades, os condutores de ciclomotores e quadriciclos, não devem exceder a velocidade instantânea de:", options: {A: "50 km/h.", B: "40 km/h.", C: "45 km/h.", D: "35 km/h."}, ans: "C" },
+        { id: 11, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhbNzW1gjzM251tTpfV-pLyzMKPl5YMMtIWbWge20aJ2qSnxFvXlzxInStlYmhMDYmsfklRsEABcFuglpGg7gic3Jzprd4fO_bG8uT7ZR-7ONz5lFi8ooFb0lCtroZmy0Z7thFwMoZ2D3Qd4tiAYb0h1pv7itPwitI_6nuiHRkzoQ4TZ2Toc-qsBnlSTkGw/s320/1000044105.jpg", q: "Que veiculos devem ter o seguro de responsabilidade civil para transitar na via pública?", options: {A: "Todos os veiculos.", B: "Os veiculos a motor.", C: "Só os ciclomotores.", D: "Apenas os veiculos automóveis."}, ans: "B" },
+        { id: 12, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjhWOOVO4NffZ7-dTyesVFHFpI-ZuWKdprgeI-jhEig7gWTUd9sPakSYjlB2ckN-icQtpKL_S32sTuB16HlDlKyNF6DvZdz-nBRAkPUOYNVosa6HVXZ5xe4Xei5A6mEKWGdcXTJsdeYUWG0z7j0mpx5B8SNSydGU8IcEkOViP9FPL121IcA2f-v23fQ5R_3/s320/1000044109.jpg", q: "Qual é a função do cinto de segurança de um veículo?", options: {A: "Reter e proteger os ocupantes numa colisão.", B: "Manter os ocupantes sentados na posição correcta.", C: "Permitir que os ocupantes se desloquem sobre o assento em caso de acidente.", D: "Apenas impedir as lesões do condutor em caso de capotagem."}, ans: "A" },
+        { id: 13, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj8R6H1pbECBK6oKrviyhZ3T7DuWK6rBipqQf02XhUsglRo2yFtQ2CqWwf_7p3MtJwBOq0BEb0pkEL1s7DONQhwBVUuV2eXfP9gh2okMfz2dsd5gaCQedYKTgaUfpLb0i0JKdANtYKTuaJQowNR8W38qy4RUJ7DNfl0cgWCzN_GkbdEoA73g-9IK9uc2Z93/s320/1000044116.jpg", q: "Para garantir uma proteção adequada, os sistemas de retenção de crianças devem ser:", options: {A: "Da cor dos estofos do veículo.", B: "Colocados sem cautela em cima dos bancos do veículo.", C: "Adequados ao tamanho e peso da criança."}, ans: "C" },
+        { id: 14, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilAXIygqMsN_ijcjNjXFNkA2uvX4IKTQMLoLTEjnXy8uYy6jZtF8-1Ody9XlR6ag8DxAq7dxid_NyH1OG-L3tgYxSJHZMXvQIIma1pKaKiJcu-D6cBdJndYmsVt8bSGWQBkHXIQmYVEDhBuXic4pfkdf0k1IG3sAeb3tgwQJ7WWuEddKrlz96vxMX4eU0-/s320/1000044124.jpg", q: "É perigoso conduzir quando o condutor está cansado?", options: {A: "Não há perigo, já que o cansaço relaxa.", B: "Sim, porque o condutor demora mais tempo a reagir.", C: "Não, porque se conduz mais devagar.", D: "Sim, mas só quando se conduz dentro das localidades."}, ans: "B" },
+        { id: 15, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj2A1OqLco4Ntn41FjcTLUE6MfNTDII68MjwMbhHyJUha7j2hLd5XRZbQxDCaspJ72qEgS24g-FEBvfFfNm8fbvzvHM6YMyknkVUhc6t3j3L0uZhiSAYAVnvXgXkoPUn2M7widmPYlZB_43o_t5oIZ7G6GAy46aqL8PbGVr2t8oWKVtD4_fGOezGGo9H05P/s320/1000044127.jpg", q: "O que indica o sinal?", options: {A: "Indica a existência de uma via rápida.", B: "Indica a existência de uma via de sentido único.", C: "Indica a existência de uma Auto-Estrada."}, ans: "C" },
+        { id: 16, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh6IV2YkTL3CV-Q5VUcrQFkgnml09FHK1sx1urYNGydmhJFE0SEOX1wuv-Y7IBSfSOuQuSnRZj_65dPqxnHwilYH6lUMUL-Sc42Z8EnCzt1PWftZWeJerEQDL2BBdDxGZxts-qQN1vq47DbnH-P8nH-hT50McnK5Sz2wlrGqVDzNFbNqqsWfGqiwp7mVMB0/s320/1000044143.jpg", q: "O que significa responsabilidade moral?", options: {A: "Responder perante o Tribunal.", B: "Responder pelos seus próprios actos.", C: "Prestar contas perante os membros da sociedade."}, ans: "B" },
+        { id: 17, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgDqdnAn0co1k90QnFcBj49jeT1kBHs6WE37Et8amwx8jKbkhe8w4133FizV29SnmGbHktmDqfIE2bQm8Xyz89182JnNhwHBpZZnJvx6PWgNXIelNnySmSmeIzgT8Th3p5VD-VIim-x0Q-rJGt4P-kSxkfcEVVuoV9xtTqkv4Dh_yECOeJ8-6DAA3zvt9ZL/s320/1000044147.jpg", q: "O que indica o sinal?", options: {A: "Via obrigatória para veiculos que transportam substâncias perigosas.", B: "Fim da proibição de circulação de veículos que transportam substâncias perigosas.", C: "Via obrigatória para automóveis pesados."}, ans: "A" },
+        { id: 18, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUyGGZ-19bstTff7DUHz36WUbh70350Rpl03tuWUAg-vzUz1dPheb_aqn7RVGTYqyQb9VkhfDsUesmM76U9wXCjDEzyyI3ZemKeJd_9NnDzn_gWO8xnuIME8D1cNFKvZTvFoRTV9uq0d8wIVdfPPP9GSfuMqBRUgyYzkSog-xVvu3qQ0U3A-ab8_tV7DzG/s320/1000044150.jpg", q: "Nesta situação, quem tem prioridade de passagem?", options: {A: "O condutor que entra na rotunda.", B: "O condutor que chegar primeiro.", C: "O condutor que circula dentro da rotunda.", D: "O condutor que circule com uma velocidade mais elevada."}, ans: "C" },
+        { id: 19, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcqJUH-gRhk8B6fjkKFKwDItr6epL9D8ZAmXD45l63CiQGEeTiuL1bJQy-NgfAuo5fqdTjwQwZTJKqxb6kugz8U43zIOTcz4bZGfJAvc5KztQlK44xf_bdu_rcGNhYWw-o_zORDqpCBhD8KPIg-UvCqA3kPOw9So8JYkL5g8LAGqYdShEeQBBJjWji6JCE/s320/1000044153.jpg", q: "Fumar enquanto conduz...", options: {A: "é aconselhável, pois ajuda a manter a atenção.", B: "é proibido.", C: "pode afectar a atenção na condução.", D: "reduz a agressividade do condutor."}, ans: "C" },
+        { id: 20, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2YuxRrAyfwkXOo1BVtDo6FSW4dyRG7at3IpxbRYYX9QX-eaERscfoSEvo6gOgYSvxXMFR4InwRqukILoF5_gTpr0Q5EULahYFb02IO75LLldSweuTxnu_8ZUiFVVZ7wda4kIsEWUYmNh-xg7ZeTcnmNDOMqf5Bs8RJuWJ-pfhv2QFFbM8P_1lNYXSxqsR/s320/1000044157.jpg", q: "O que indica o sinal?", options: {A: "Estacionamento proibido.", B: "Paragem e estacionamento proibidos.", C: "Estacionamento condicionado."}, ans: "B" },
+        { id: 21, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgIXj2LxoOWYA0xVrDdZana8hGQn0ksRZdGWOthRQB6YM3ZcjUcIZNFYmev7LmFm1hHAA999KlnOSmuTK9-4PnK4y1PgOVKB7jZp0My66f0-x0TFUodxpI_Cb9MHktAEsdoeqaWEA6eSAFCLq5newgPMgvj-8oxISq-iJ2W2WEoCbwyub0M2CueZ_WvC59Z/s320/1000044160.jpg", q: "Na situação apresentada, pode ultrapassar o veículo pela esquerda?", options: {A: "Sim, se esse veículo circula por baixo do limite máximo de velocidade.", B: "Não.", C: "Sim, pode-se sempre ultrapassar pela esquerda.", D: "Sim, porque a linha é descontinua."}, ans: "B" },
+        { id: 22, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgaQehZzX-x-xnIF9RrEQhLdvebHwfCIHNNxtlZrVQxk6rW-zu74MtIUDktAUfqKdJu6JuQ_4yl7dB_3BIXl9v_n_mGZosC-lPSW_flziXhMyGVExROt2cjPU9qFCFSM6_5ceEUadLmVo4BmIwRuWcVG3lLmR47XwamegsMrZeWBMtaaej8cTh2KygRR_8i/s320/1000044163.jpg", q: "O que indica o sinal?", options: {A: "Proibição de circulação de peões.", B: "Prioridade de passagem para peões.", C: "Proibição de passagem de peões.", D: "Pista obrigatória para peões."}, ans: "B" },
+        { id: 23, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjlcVvKr9zEMBYzqd5d2gE8uXnSpR4SBd4x6C-VEKpbEqLaOCZZutHUWW0ykswJj3h9J40rBE33x3sFYdJCnUSdoGXZwkTtYW67ciuaeEWHCR7PIUIw8FlTd22yjyruHkMr9eRLlXzneOuByuwPbMzG6nKKeUi4XTsGXD9ROXEnrUgsYgYaXI9gC1IgDXmx/s320/1000044166.jpg", q: "O que indica o sinal?", options: {A: "Sinalização luminosa em manutenção.", B: "Sinalização luminosa.", C: "Passagem de nivel."}, ans: "A" },
+        { id: 24, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhd8fqeyDDnSxNlE9ioe6IWQVYNA3SwDWf9HAp87IiBaOPxcrMgteGZetehTb7nVtJktJXflSJb8CMBsJ54ZpaX4UGWmfgs234ELSS_CFX3gLdOXoPJ1tMozFlZzHEJ48UFIzMfigWpBR9GsX3ZRepfW_XR7AJXWXfMO7tWWvuYf-rdHxJ3R7ngahxmZ3An/s320/1000044169.jpg", q: "Posso mudar de direcção para a direita nesta situação?", options: {A: "Sim, desde que o assinale com a devida antecedência.", B: "Sim, porque não há nenhuma sinalização que o impeça.", C: "Não, porque não é possível assegurar-se que a manobra pode ser realizada sem perigo."}, ans: "C" },
+        { id: 25, img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_kqRMCPitxSEOzDj8Z9hrtPNScr5ErwPDxoe3ZPbsTfDvNt6z55hruT96392Cb1VFEKsKLZC0lVDLJLB3l97F53sS3e-yo0aqTC4ZUPys09CLDqd8C5TTkGoBessnSCRfu2b23hyVYw8erxTwjvCvx0RkLQbF3j6k2DFYAXzSdqGIZuXMOaS4SP6i_xwh/s320/1000044172.jpg", q: "Diante do sinal, o condutor fica a saber que:", options: {A: "Não pode utilizar os sinais sonoros.", B: "Deve utilizar os sinais sonoros.", C: "É obrigado a desligar as luzes de estrada."}, ans: "A" }
+    ];
+
+    let currentIdx = 0;
+    let time = 3600;
+    let countdown;
+    let isExamFinished = false;
+    let userAnswers = {};
+
+    function init() {
+        renderQuestions();
+        startTimer();
+    }
+
+    function renderQuestions() {
+        document.getElementById('q_list').innerHTML = '';
+        document.getElementById('pagination_bar').innerHTML = '';
+        questions.forEach((item, index) => {
+            document.getElementById('pagination_bar').innerHTML += `<div class="page-num ${index === 0 ? 'active' : ''}" id="page_${index}" onclick="goToQuestion(${index})">${index + 1}</div>`;
+
+            let optionsHtml = '';
+            for(let key in item.options) {
+                optionsHtml += `
+                    <label class="option" id="label-${item.id}-${key}">
+                        <div class="option-letter">${key}</div>
+                        <input type="radio" name="q${item.id}" value="${key}" onchange="saveProgress(${index}, '${item.id}', '${key}')">
+                        <span>${item.options[key]}</span>
+                        <span class="label-certa" id="certa-${item.id}-${key}">CORRETA</span>
+                    </label>`;
+            }
+
+            document.getElementById('q_list').innerHTML += `
+                <div class="question-wrapper ${index === 0 ? 'active' : ''}" id="q_wrap_${index}">
+                    <div class="card-inner">
+                        <img src="${item.img}" class="q-img" loading="lazy" ondragstart="return false;" oncontextmenu="return false;">
+                        <div class="q-text-area">${item.q}</div>
+                        <div class="options-container">${optionsHtml}</div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function saveProgress(index, qId, val) {
+        if (isExamFinished) return;
+        userAnswers[`q${qId}`] = val;
+        document.getElementById(`page_${index}`).classList.add('answered');
+        setTimeout(() => nextQ(), 400);
+    }
+
+    function startTimer() {
+        clearInterval(countdown);
+        countdown = setInterval(() => {
+            if (time <= 0) { checkExam(); } else { time--; updateTimerDisplay(); }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(time / 60), s = time % 60;
+        document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function goToQuestion(index) {
+        if (index < 0 || index >= questions.length) return;
+        currentIdx = index;
+        document.querySelectorAll('.question-wrapper').forEach(w => w.classList.remove('active'));
+        document.querySelectorAll('.page-num').forEach(p => p.classList.remove('active'));
+        document.getElementById(`q_wrap_${index}`).classList.add('active');
+        document.getElementById(`page_${index}`).classList.add('active');
+        
+        document.getElementById(`page_${index}`).scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        document.querySelector('.scrollable-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextQ() { goToQuestion(currentIdx + 1); }
+    function prevQ() { goToQuestion(currentIdx - 1); }
+
+    async function checkExam() {
+        if (isExamFinished) return;
+        clearInterval(countdown);
+        isExamFinished = true;
+        
+        document.getElementById('exam').classList.add('exam-finished');
+        
+        let score = 0;
+        questions.forEach((item, index) => {
+            const userAns = userAnswers[`q${item.id}`];
+            const isCorrect = userAns === item.ans;
+            
+            document.getElementById(`label-${item.id}-${item.ans}`).classList.add('correct-ans');
+            document.getElementById(`certa-${item.id}-${item.ans}`).style.display = 'block';
+            
+            if (userAns && !isCorrect) {
+                document.getElementById(`label-${item.id}-${userAns}`).classList.add('wrong-ans');
+            }
+
+            const pageBtn = document.getElementById(`page_${index}`);
+            if (isCorrect) {
+                score++;
+                pageBtn.classList.add('rev-correct');
+            } else {
+                pageBtn.classList.add('rev-wrong');
+            }
+        });
+
+        showModal(score);
+
+        const totalErros = questions.length - score;
+        const percentagem = Math.round((score / questions.length) * 100);
+
+        try {
+            const userDataJson = localStorage.getItem('usuarioLogado');
+            if (userDataJson) {
+                const userData = JSON.parse(userDataJson);
+                
+                await _supabase.from('Historico_Exames').insert([{ 
+                    user_id: userData.id, 
+                    modulo: 'pesados', 
+                    percentagem: percentagem, 
+                    acertos: score, 
+                    erros: totalErros 
+                }]);
+            }
+        } catch(e) {
+            console.error('Erro ao guardar histórico:', e);
+        }
+
+        const dadosParaSalvar = {
+            nome: NOME_DO_EXAME,
+            acertos: score,
+            total: questions.length,
+            data: new Date().toLocaleDateString('pt-MZ')
+        };
+        localStorage.setItem(EXAME_ID_UNICO, JSON.stringify(dadosParaSalvar));
+    }
+
+    function showModal(score) {
+        const aprovado = score >= 18;
+        const modal = document.getElementById('modalRes');
+        const title = document.getElementById('modalTitle');
+        const iconDiv = document.getElementById('modalIcon');
+        
+        title.innerText = aprovado ? "Aprovado" : "Reprovado";
+        title.className = "modal-status " + (aprovado ? "status-aprovado" : "status-reprovado");
+        
+        iconDiv.innerHTML = aprovado 
+            ? '<i class="fas fa-check-circle" style="color: var(--green);"></i>' 
+            : '<i class="fas fa-times" style="color: var(--red);"></i>';
+        
+        document.getElementById('resAcertos').innerText = score;
+        document.getElementById('resErros').innerText = questions.length - score;
+        document.getElementById('resMedia').innerText = score;
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modalRes').style.display = 'none';
+        document.getElementById('btnFinish').style.display = 'none';
+        goToQuestion(0);
+    }
+
+    init();
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

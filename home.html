@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+    <title>Carta Mestre - Plataforma</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --bg-color: #F8FAFC; --card-bg: #FFFFFF; --text-main: #1E293B; --text-muted: #64748B;
+            --primary: #2563EB; --primary-light: #60A5FA; --border-color: #E2E8F0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; color: #1E293B; display: flex; justify-content: center; min-height: 100dvh; margin: 0; overflow-x: hidden; }
+        
+        /* Ecrã de bloqueio invisível para evitar cliques antes da verificação */
+        #block-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #F8FAFC; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: #2563EB; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; position: relative; display: flex; flex-direction: column; padding-bottom: 80px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .top-section { background-color: #0F172A; color: #FFFFFF; border-radius: 0 0 24px 24px; padding: 32px 24px 24px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15); margin-bottom: 24px; }
+        .prep-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+        .prep-info { flex: 1; }
+        .prep-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: #94A3B8; letter-spacing: 0.5px; margin-bottom: 8px; display: block; }
+        .prep-title { font-size: 1.4rem; font-weight: 700; line-height: 1.3; color: #F8FAFC; margin-bottom: 16px; max-width: 220px; }
+        .dash-indicators { display: flex; gap: 4px; margin-bottom: 12px; }
+        .dash-indicators span { height: 4px; width: 16px; background-color: #334155; border-radius: 2px; }
+        .dash-indicators span.active { background-color: #2563EB; }
+        .link-small { font-size: 0.8rem; color: #60A5FA; text-decoration: none; font-weight: 500; transition: opacity 0.2s; }
+        .prep-circle-container { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .progress-ring { width: 75px; height: 75px; border-radius: 50%; border: 6px solid #1E293B; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; color: #FFFFFF; }
+        .status-badge-gray { background-color: #1E293B; border: 1px solid #334155; color: #94A3B8; font-size: 0.7rem; padding: 4px 12px; border-radius: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .link-full { display: inline-flex; align-items: center; color: #60A5FA; text-decoration: none; font-weight: 500; font-size: 0.9rem; margin-bottom: 20px; }
+        .divider { height: 1px; background-color: #1E293B; margin-bottom: 16px; }
+        .link-refresh { display: flex; align-items: center; justify-content: space-between; color: #CBD5E1; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+        .link-refresh a { color: inherit; text-decoration: none; cursor: pointer; }
+        .explore-section { padding: 0 24px; flex: 1; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-header h2 { font-size: 1.2rem; font-weight: 700; color: #1E293B; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .card { background-color: #FFFFFF; border-radius: 12px; padding: 20px 16px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; text-decoration: none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); border: 1px solid #E2E8F0; transition: all 0.2s ease-in-out; cursor: pointer; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .icon-box { position: relative; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 16px; }
+        .card h3 { font-size: 0.95rem; font-weight: 600; color: #1E293B; margin-bottom: 8px; }
+        .card p { font-size: 0.75rem; color: #64748B; line-height: 1.5; }
+
+        .msg-badge {
+            position: absolute; top: -6px; right: -6px; background-color: #10B981; color: white;
+            font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 12px;
+            border: 2px solid #FFFFFF; min-width: 20px; text-align: center; display: none;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); z-index: 2;
+        }
+
+        .ic-helios { background: #EFF6FF; color: #3B82F6; } .ic-exames { background: #ECFDF5; color: #10B981; }
+        .ic-testes { background: #FFFBEB; color: #F59E0B; } .ic-sinais { background: #FEF2F2; color: #EF4444; }
+        .ic-multas { background: #F5F3FF; color: #8B5CF6; } .ic-manuais { background: #EFF6FF; color: #3B82F6; }
+        .ic-escolas { background: #F0FDFA; color: #14B8A6; } .ic-ajuda { background: #F1F5F9; color: #64748B; }
+        .ic-creditos { background: #FDF2F8; color: #EC4899; }
+        footer { text-align: center; padding: 40px 20px 30px; font-size: 0.8rem; color: #64748B; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<!-- Overlay de Carregamento/Verificação -->
+<div id="block-overlay">
+    <div class="spinner"></div>
+    <div style="color: #64748B; font-weight: 600; font-size: 0.9rem;">A verificar credenciais...</div>
+</div>
+
+<div class="app-container" style="display: none;" id="main-content">
+    
+    <div class="top-section">
+        <div class="prep-header">
+            <div class="prep-info">
+                <span class="prep-label" id="userNameLabel">Olá, Estudante</span>
+                <h1 class="prep-title" id="dashStatusTitle">Pronto para Começar</h1>
+                <div class="dash-indicators" id="dashIndicators">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <a href="progresso-completo.html" class="link-small" id="dashMetaLabel">Histórico de Exames</a>
+            </div>
+            <div class="prep-circle-container">
+                <div class="progress-ring"><span id="dashPercent">0%</span></div>
+                <div class="status-badge-gray" id="dashBadge"><i class="fas fa-circle" style="color:#10B981"></i> Ativo</div>
+            </div>
+        </div>
+        
+        <a href="progresso-completo.html" class="link-full">Ver progresso completo <i class="fas fa-arrow-right"></i></a>
+        <div class="divider"></div>
+        <div class="link-refresh">
+            <a href="#" onclick="location.reload(); return false;"><i class="fas fa-sync-alt"></i> Actualizar Dados</a>
+            <a href="#" onclick="fazerLogout(); return false;" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> Sair</a>
+        </div>
+    </div>
+
+    <div class="explore-section">
+        <div class="grid-container">
+            <a href="tutor-ia.html" class="card">
+                <div class="icon-box ic-helios"><i class="far fa-comment-dots"></i></div>
+                <h3>Tutor IA</h3><p>Assistência e preparação via IA.</p>
+            </a>
+            <a href="exames.html" class="card">
+                <div class="icon-box ic-exames"><i class="far fa-file-alt"></i></div>
+                <h3>Exames</h3><p>Simulações reais da Carta Mestre.</p>
+            </a>
+            
+            <a href="chat.html" class="card" onclick="marcarChatComoLido()">
+                <div class="icon-box ic-testes">
+                    <i class="fas fa-comments"></i>
+                    <div class="msg-badge" id="chat-badge"></div>
+                </div>
+                <h3>Chat entre alunos</h3>
+                <p>Espaço para tirar dúvidas e interagir com a turma.</p>
+            </a>
+            
+            <a href="sinalizacao.html" class="card">
+                <div class="icon-box ic-sinais"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3>Sinalização</h3><p>Catálogo completo de sinais de trânsito.</p>
+            </a>
+            <a href="doacao.html" class="card">
+                <div class="icon-box ic-creditos"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3>Doação</h3><p>Apoie o nosso projeto com uma doação.</p>
+            </a>
+            <a href="multas.html" class="card">
+                <div class="icon-box ic-multas"><i class="fas fa-gavel"></i></div>
+                <h3>Transgressões</h3><p>Consulta de artigos legais e valores de multas.</p>
+            </a>
+            <a href="manuais.html" class="card">
+                <div class="icon-box ic-manuais"><i class="fas fa-book"></i></div>
+                <h3>Manuais</h3><p>Código de Estrada e normas de Condução Defensiva.</p>
+            </a>
+            <a href="escolas.html" class="card">
+                <div class="icon-box ic-escolas"><i class="fas fa-building"></i></div>
+                <h3>Escolas</h3><p>Diretório de escolas de condução certificadas.</p>
+            </a>
+            <a href="suporte.html" class="card">
+                <div class="icon-box ic-ajuda"><i class="fas fa-life-ring"></i></div>
+                <h3>Suporte</h3><p>Central de ajuda e perguntas frequentes.</p>
+            </a>
+            <a href="sobre.html" class="card">
+                <div class="icon-box ic-creditos"><i class="fas fa-info-circle"></i></div>
+                <h3>Sobre</h3><p>Créditos e informações do sistema.</p>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 20px; margin: 10px 20px 24px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #1E293B; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;">Métodos de Pagamento</div>
+            <p style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 16px;">
+                <img style="width: 70px; object-fit: contain;" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUwJdM5IPL17Uvll1HorD-UgFz0DJjKQYvBadh_RALLJS8z1LaJ0oYN7UKXC8_OwGeADco2dL0g-6ct0YFKGTaZfG1u288p-a-tRXAceTjUJuypIN6bysamv4itVQFGjjy_coj929WA_4NCm3zG9MpuJ4dlYq9S_2U3jZMDr5GtRbFSxyoyX3PUtihdw/s1600/1000240834.png" alt="e-Mola">
+                <img style="width: 70px; object-fit: contain;" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjMAKNJD48yLPhEYQnGJ46TyR-z76UkYd0Mga0JQdxnars32hYmV48-9zfLnu5SFw-N6QLLZouakhRXB5b8m5-e8-H7TwMyUhyphenhyphenuIu-QAmdeHKE1PNIFY-2q7JkQU4BJ6dPez_wKTEX5nZkSAWCRNtk444DfiB7YomkaLLfa7FzejiRNojO8-f3jjN29LA/s1600/1000240833.png" alt="M-Pesa">
+                <img style="width: 70px; object-fit: contain;" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTLEaFtKQ_tRV_5t86HhDL-3-aKjAA-Phk3v0eQEQi49tlmGZNJH_Y2r5_RHugpbUepuieuOryzwp22t3li6MpircvEaOjASMJSnQTmNasqjOxaT9khDysqOg8_x8JRBPUE3grHOFupAiIdT4qaaaR-7dxMVR8i_kz7QRxwKhcsv4ncRHRTdUjmYCWSw/s1600/1000240835.png" alt="mKesh">
+            </p>
+            <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: #10B981; background: #ECFDF5; padding: 6px 12px; border-radius: 12px; border: 1px solid #A7F3D0;">
+                <i class="fas fa-shield-alt"></i> Pagamento Seguro & Confirmado
+            </div>
+        </div>
+        Versão 2.5.0 &nbsp;&bull;&nbsp; Mantido pela <b>OLC</b>
+    </footer>
+</div>
+
+<script>
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let usuarioData = null;
+
+    document.addEventListener("DOMContentLoaded", async function() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) { window.location.href = 'index.html'; return; }
+        
+        try {
+            usuarioData = JSON.parse(userDataJson);
+            const primeiroNome = usuarioData.nome.split(' ')[0];
+            document.getElementById('userNameLabel').innerText = 'Olá, ' + primeiroNome;
+            
+            // 1. PRIMEIRO PASSO: Verificar se o utilizador está banido ANTES de mostrar a app
+            await verificarStatusConta();
+            
+        } catch (e) {
+            console.error(e);
+            fazerLogout(); // Se os dados locais estiverem corrompidos, atira para fora
+        }
+    });
+
+    // --- NOVA FUNÇÃO DE SEGURANÇA MÁXIMA ---
+    async function verificarStatusConta() {
+        try {
+            // Vai à base de dados perguntar especificamente por este utilizador
+            const { data, error } = await _supabase
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', usuarioData.id)
+                .single();
+
+            if (error) throw error;
+
+            // Verifica se a tag [BANIDO] está na mensagem ou se a coluna banido é true
+            const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+
+            if (isBanido) {
+                // Se estiver banido, impede o fecho do popup, não carrega a app e força o logout
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Acesso Bloqueado',
+                    html: `<b>A sua conta foi banida por violação dos termos.</b><br><br><span style="font-size:0.85rem; color:#64748B;">Motivo: ${data.mensagem_admin}</span>`,
+                    confirmButtonText: 'Sair do Sistema',
+                    confirmButtonColor: '#EF4444',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+                
+                fazerLogout();
+                return; // Pára a execução aqui
+            }
+
+            // SE NÃO ESTIVER BANIDO: 
+            // Esconde a tela de carregamento e mostra o painel da App
+            document.getElementById('block-overlay').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+
+            // Carrega o resto das funções normalmente
+            calcularEstatisticaGeral();
+            verificarNovasMensagensChat();
+
+        } catch(e) {
+            console.log("Erro na ligação à base de dados. O utilizador pode estar offline.", e);
+            // Se falhar apenas porque está sem internet, deixa abrir a app usando os dados em cache
+            document.getElementById('block-overlay').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+            calcularEstatisticaGeral();
+        }
+    }
+
+    async function verificarNovasMensagensChat() {
+        if(!usuarioData) return;
+        
+        try {
+            let ultimoAcesso = localStorage.getItem('ultimoAcessoChat');
+            
+            if (!ultimoAcesso) {
+                let dataAntiga = new Date();
+                dataAntiga.setDate(dataAntiga.getDate() - 3);
+                ultimoAcesso = dataAntiga.toISOString();
+            }
+
+            const { count, error } = await _supabase
+                .from('Mensagens')
+                .select('*', { count: 'exact', head: true })
+                .gt('criado_em', ultimoAcesso)
+                .neq('usuario_id', usuarioData.id);
+
+            if (error) throw error;
+
+            if (count > 0) {
+                const badge = document.getElementById('chat-badge');
+                badge.innerText = count > 99 ? '99+' : count;
+                badge.style.display = 'block';
+            }
+        } catch(e) {
+            console.log("Erro ao contar novas mensagens:", e);
+        }
+    }
+
+    function marcarChatComoLido() {
+        localStorage.setItem('ultimoAcessoChat', new Date().toISOString());
+    }
+
+    async function calcularEstatisticaGeral() {
+        if(!usuarioData) return;
+        
+        try {
+            const { data, error } = await _supabase
+                .from('Historico_Exames')
+                .select('percentagem')
+                .eq('user_id', usuarioData.id)
+                .order('created_at', { ascending: false })
+                .limit(6);
+
+            const indicatorsContainer = document.getElementById('dashIndicators');
+            
+            if (error || !data || data.length === 0) {
+                document.getElementById('dashPercent').innerText = '0%';
+                indicatorsContainer.innerHTML = '<span></span><span></span><span></span><span></span><span></span><span></span>';
+                return;
+            }
+
+            let somaPercentagens = 0;
+            let numExames = data.length;
+
+            data.forEach(exame => {
+                somaPercentagens += exame.percentagem;
+            });
+
+            let mediaGeral = Math.round(somaPercentagens / numExames);
+            if (mediaGeral > 100) mediaGeral = 100;
+            
+            document.getElementById('dashPercent').innerText = `${mediaGeral}%`;
+
+            indicatorsContainer.innerHTML = '';
+            for (let i = 0; i < 6; i++) {
+                if (i < numExames) {
+                    indicatorsContainer.innerHTML += '<span class="active"></span>';
+                } else {
+                    indicatorsContainer.innerHTML += '<span></span>';
+                }
+            }
+
+        } catch(e) {
+            console.log("Erro ao puxar histórico:", e);
+        }
+    }
+
+    function fazerLogout() {
+        localStorage.removeItem('usuarioLogado');
+        window.location.href = 'index.html'; // Volta para a página de login
+    }
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

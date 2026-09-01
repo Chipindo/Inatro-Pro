@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat IA - Código da Estrada</title>
+    <!-- Importar o Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f1f5f9;
+            --chat-bg: #ffffff;
+            --text-main: #1e293b;
+            --msg-user: #2563eb;
+            --msg-ia: #f3f4f6;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body { background-color: var(--bg); display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+
+        .chat-container {
+            background: var(--chat-bg);
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #fafafa;
+            scroll-behavior: smooth;
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .msg.user {
+            background-color: var(--msg-user);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.ia {
+            background-color: var(--msg-ia);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        /* ----- ESTILOS PARA O TEU CÓDIGO HTML DOS SINAIS ----- */
+        .msg.ia .box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .msg.ia figure {
+            margin: 0;
+            padding: 0;
+        }
+        .msg.ia figcaption {
+            font-size: 14px;
+            color: #475569;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #cbd5e1; /* Linha de separação entre a imagem e a legenda */
+        }
+        .msg.ia img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+        /* --------------------------------------------------- */
+
+        .tick {
+            font-size: 13px;
+            margin-left: 8px;
+            color: #cbd5e1;
+            display: inline-block;
+        }
+        .tick.read {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        #typing-indicator {
+            padding: 5px 20px 10px;
+            font-size: 13px;
+            color: var(--primary);
+            font-style: italic;
+            display: none;
+            background-color: #fafafa;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid var(--border);
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input-area textarea {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+            resize: none;
+            min-height: 48px;
+            max-height: 120px;
+            font-family: inherit;
+            overflow-y: auto;
+        }
+
+        .chat-input-area textarea:focus { border-color: var(--primary); }
+
+        .chat-input-area button {
+            padding: 12px 20px;
+            height: 48px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+
+        .chat-input-area button:hover { background: var(--primary-hover); }
+        .chat-input-area button:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        #status-bar {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            padding: 5px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">Instrutor IA - Carta Mestre</div>
+        <div id="status-bar">A conectar ao servidor...</div>
+        
+        <div class="chat-box" id="chat-box"></div>
+
+        <div id="typing-indicator">A IA está a escrever...</div>
+
+        <div class="chat-input-area">
+            <textarea id="user-input" placeholder="Faz uma pergunta sobre o código ou sinais..." disabled rows="1"></textarea>
+            <button id="btn-send" onclick="enviarMensagem()" disabled>Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+        const supabaseUrl = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let chavesAtivas = [];
+        let chaveAtualIndex = 0;
+        let versaoModelo = "gemini-1.5-flash";
+        let regrasSistema = "";
+        let historicoMensagens = [];
+
+        const inputField = document.getElementById('user-input');
+        inputField.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if(this.value.trim() === '') this.style.height = '48px'; 
+        });
+
+        async function inicializarIA() {
+            try {
+                const { data, error } = await supabaseUrl.from('ConfiguracoesIA').select('*').eq('id', 1).single();
+                
+                if (error) throw error;
+
+                if (data) {
+                    chavesAtivas = (data.chaves_api || '').split(/[\n,]+/).map(c => c.trim()).filter(c => c !== "");
+                    versaoModelo = data.versao_modelo || "gemini-1.5-flash";
+                    
+                    regrasSistema = `${data.regras || ''}\n\n⚠️ INSTRUÇÃO OBRIGATÓRIA: Sempre que mencionares, explicares ou listares um sinal de trânsito, deves OBRIGATORIAMENTE exibir a imagem desse sinal e usar todo o bloco HTML original correspondente que está na tua base de dados. Nunca omitas a estrutura HTML ao referir um sinal.\n\nBase de Conhecimento (Código da Estrada):\n${data.codigo_estrada || ''}\n\nBase de Conhecimento (Sinais de Trânsito HTML/Imagens):\n${data.sinais_transito || ''}`;
+                    
+                    document.getElementById('status-bar').innerText = "Sistema Online - Pronto a ajudar!";
+                    document.getElementById('status-bar').style.color = "#10b981";
+                    
+                    inputField.disabled = false;
+                    document.getElementById('btn-send').disabled = false;
+                    
+                    adicionarMensagem('ia', "Olá! Sou o teu instrutor virtual. Podes perguntar-me sobre o código da estrada ou pedir para te mostrar sinais de trânsito.");
+                }
+            } catch (error) {
+                console.error("Erro ao ligar ao Supabase:", error);
+                document.getElementById('status-bar').innerText = "Erro ao carregar sistema.";
+                document.getElementById('status-bar').style.color = "red";
+                adicionarMensagem("ia", "Sistema em manutenção. Não foi possível carregar as configurações do servidor.");
+            }
+        }
+
+        function adicionarMensagem(tipo, texto) {
+            const box = document.getElementById('chat-box');
+            const div = document.createElement('div');
+            div.className = 'msg ' + tipo;
+            
+            let textoSeguro = texto;
+
+            if (tipo === 'user') {
+                // Bloqueia qualquer HTML no que o utilizador escreve (Proteção máxima)
+                textoSeguro = textoSeguro.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+                
+                const tickId = 'tick-' + Date.now(); 
+                textoSeguro += `<span class="tick" id="${tickId}">✓</span>`; 
+                setTimeout(() => {
+                    const tickElement = document.getElementById(tickId);
+                    if (tickElement) {
+                        tickElement.innerText = '✓✓';
+                        tickElement.classList.add('read');
+                    }
+                }, 800); 
+            } else {
+                // A IA TEM PERMISSÃO PARA MOSTRAR O TEU CÓDIGO HTML DOS SINAIS
+                
+                // Converte imagens Markdown caso a IA decida inventar formatos
+                textoSeguro = textoSeguro.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+                
+                // Remove espaços em branco indesejados entre as tuas tags HTML para não estragar as Caixas
+                textoSeguro = textoSeguro.replace(/>\s+</g, '><');
+
+                // Converte o resto do Markdown em HTML
+                textoSeguro = textoSeguro
+                    .replace(/(^|\n)#{1,6}\s+(.*)/g, '$1<strong>$2</strong>') 
+                    .replace(/(^|\n)---+(\n|$)/g, '$1<hr style="border:0; border-top:1px solid #cbd5e1; margin:10px 0;">$2')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                    .replace(/(^|\n)\s*\*\s+/g, '$1• ') 
+                    .replace(/\n/g, '<br>'); // Aplica quebras de linha normais no texto
+            }
+
+            div.innerHTML = textoSeguro;
+            box.appendChild(div);
+
+            if (tipo === 'user') {
+                box.scrollTop = box.scrollHeight;
+            } else {
+                setTimeout(() => {
+                    div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
+        async function enviarMensagem() {
+            const textoUser = inputField.value.trim();
+            if (!textoUser) return;
+            
+            if (chavesAtivas.length === 0) {
+                alert("O sistema ainda não possui chaves de API configuradas. Contacta o administrador.");
+                return;
+            }
+
+            inputField.blur(); 
+            adicionarMensagem('user', textoUser);
+            
+            inputField.value = '';
+            inputField.style.height = '48px'; 
+            
+            historicoMensagens.push({ role: "user", parts: [{ text: textoUser }] });
+            
+            document.getElementById('btn-send').disabled = true;
+            inputField.disabled = true;
+            document.getElementById('btn-send').innerText = '...';
+
+            document.getElementById('typing-indicator').style.display = 'block';
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+
+            await pedirRespostaGemini();
+        }
+
+        async function pedirRespostaGemini() {
+            let chaveApi = chavesAtivas[chaveAtualIndex];
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${versaoModelo}:generateContent?key=${chaveApi}`;
+            
+            const payload = {
+                system_instruction: { parts: [{ text: regrasSistema }] },
+                contents: historicoMensagens
+            };
+
+            try {
+                const resposta = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!resposta.ok) {
+                    throw new Error(`Erro na API (Status: ${resposta.status})`);
+                }
+
+                const dados = await resposta.json();
+                const textoResposta = dados.candidates[0].content.parts[0].text;
+                
+                document.getElementById('typing-indicator').style.display = 'none';
+
+                adicionarMensagem('ia', textoResposta);
+                historicoMensagens.push({ role: "model", parts: [{ text: textoResposta }] });
+                
+                resetBotao();
+
+            } catch (erro) {
+                console.error("Falha com a chave no índice", chaveAtualIndex, erro);
+                
+                if (chaveAtualIndex < chavesAtivas.length - 1) {
+                    chaveAtualIndex++;
+                    console.log("A tentar com a próxima chave de API...");
+                    await pedirRespostaGemini();
+                } else {
+                    document.getElementById('typing-indicator').style.display = 'none';
+                    adicionarMensagem('ia', "Desculpa, os nossos servidores estão sobrecarregados neste momento. Tenta novamente mais tarde.");
+                    historicoMensagens.pop();
+                    chaveAtualIndex = 0;
+                    resetBotao();
+                }
+            }
+        }
+
+        function resetBotao() {
+            document.getElementById('btn-send').disabled = false;
+            inputField.disabled = false;
+            document.getElementById('btn-send').innerText = 'Enviar';
+        }
+
+        window.onload = inicializarIA;
+    </script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carta Mestre - Acesso</title>
+    
+    <!-- Supabase e SweetAlert (Para o aviso de banimento) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root { --primary: #2563eb; --primary-hover: #1d4ed8; --bg: #f8fafc; --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --success: #10b981; --danger: #ef4444; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .card { background: #ffffff; padding: 35px 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 400px; }
+        .logo-container { text-align: center; margin-bottom: 25px; }
+        
+        /* Nova classe para a logo em imagem */
+        .logo-img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
+        
+        h2 { color: var(--text-main); font-size: 22px; margin-bottom: 4px; }
+        p.subtitle { color: var(--text-muted); font-size: 14px; }
+        
+        .form-container { display: none; animation: fadeIn 0.4s ease; }
+        .form-container.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+        input { width: 100%; padding: 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; transition: all 0.2s; background: #fdfdfd; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: #fff; }
+        
+        button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px; margin-top: 10px; }
+        button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        button:active { transform: translateY(1px); }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+        .btn-secondary { background: var(--text-muted); }
+        .btn-secondary:hover { background: #475569; }
+        
+        /* Estilos dos links modernos na parte inferior */
+        .modern-links { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 25px; font-size: 14px; }
+        .modern-links a { color: var(--primary); text-decoration: none; font-weight: 600; transition: 0.2s; }
+        .modern-links a:hover { color: var(--primary-hover); text-decoration: underline; }
+        .modern-links span { color: var(--text-muted); }
+        
+        .result-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { padding: 15px 20px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; transform: translateX(120%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .toast.show { transform: translateX(0); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        
+        @media (max-width: 480px) { body { padding: 0; background: white; } .card { box-shadow: none; border-radius: 0; padding: 25px 20px; } #toast-container { top: 10px; right: 10px; left: 10px; } .toast { width: 100%; justify-content: center; } }
+
+        /* Estilos adicionados para o botão de visualizar senha */
+        .pwd-wrapper { position: relative; display: flex; align-items: center; }
+        .pwd-wrapper input { padding-right: 45px; }
+        button.toggle-pwd {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            background: transparent;
+            color: var(--text-muted);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            box-shadow: none;
+        }
+        button.toggle-pwd:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-50%); /* Sobrescreve o hover global */
+        }
+        button.toggle-pwd:active {
+            transform: translateY(-50%); /* Sobrescreve o active global */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <div class="card">
+        <div class="logo-container">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHt7VWZ9s7HgNon88uTal4lkKbISxdTi5r4NqHeRdMlmEkpqjFEK_9JJGPILPXoWnHbMJMK3pIQEXn1BstLae10Fq2H2YWqt-D6qgmjpzGRMCo_kNeoe_eNtrMJudNRLN69FP6UwAPrAA3hCoOQ0KwDXiOXa_vwY5Gk7V5bxHLZk38d361eBi8R9mdSw/s1254/1000240751.png" alt="Carta Mestre Logo" class="logo-img">
+            <h2>Carta Mestre</h2>
+            <p class="subtitle">A sua carta à primeira tentativa.</p>
+        </div>
+
+        <div id="login-form" class="form-container active">
+            <div class="input-group">
+                <label>E-mail</label>
+                <input type="email" id="login-email" placeholder="O seu e-mail">
+            </div>
+            <div class="input-group">
+                <label>Senha</label>
+                <div class="pwd-wrapper">
+                    <input type="password" id="login-senha" placeholder="A sua senha secreta">
+                    <button type="button" class="toggle-pwd" onclick="togglePassword('login-senha', this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+            </div>
+            <button id="btn-login" onclick="fazerLogin()">Entrar na Conta</button>
+            
+            <div class="modern-links">
+                <span>Esqueceu a senha? <a href="javascript:void(0)" onclick="switchTab('recover')">Recuperar senha</a></span>
+                <span>Não tem conta? <a href="javascript:void(0)" onclick="switchTab('register')">Criar conta</a></span>
+            </div>
+        </div>
+
+        <div id="register-form" class="form-container">
+            <div class="input-group"><label>Nome Completo</label><input type="text" id="reg-nome" placeholder="Ex: Onésio Chipindo"></div>
+            <div class="input-group"><label>Número de Telefone</label><input type="tel" id="reg-numero" placeholder="840000000"></div>
+            <div class="input-group"><label>E-mail</label><input type="email" id="reg-email" placeholder="exemplo@email.com"></div>
+            <div class="input-group">
+                <label>Senha</label>
+                <div class="pwd-wrapper">
+                    <input type="password" id="reg-senha" placeholder="Crie uma senha segura">
+                    <button type="button" class="toggle-pwd" onclick="togglePassword('reg-senha', this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- NOVO CAMPO: CONFIRMAR SENHA -->
+            <div class="input-group">
+                <label>Confirmar Senha</label>
+                <div class="pwd-wrapper">
+                    <input type="password" id="reg-senha-confirm" placeholder="Repita a senha">
+                    <button type="button" class="toggle-pwd" onclick="togglePassword('reg-senha-confirm', this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+            </div>
+            <button id="btn-reg" onclick="criarConta()">Criar Minha Conta</button>
+            
+            <div class="modern-links">
+                <span>Já tem conta? <a href="javascript:void(0)" onclick="switchTab('login')">Entrar</a></span>
+            </div>
+        </div>
+
+        <div id="recover-form" class="form-container">
+            <div id="recover-step-1">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Preencha os dados exatos da sua conta para validar a identidade.</p>
+                <div class="input-group"><label>Nome Completo</label><input type="text" id="rec-nome" placeholder="O nome registado"></div>
+                <div class="input-group"><label>Número</label><input type="tel" id="rec-numero" placeholder="O telefone registado"></div>
+                <div class="input-group"><label>E-mail</label><input type="email" id="rec-email" placeholder="O e-mail registado"></div>
+                <button id="btn-rec" onclick="verificarRecuperacao()">Validar Identidade</button>
+                
+                <div class="modern-links">
+                    <span>Lembrou da senha? <a href="javascript:void(0)" onclick="switchTab('login')">Voltar para Entrar</a></span>
+                </div>
+            </div>
+
+            <div id="recover-step-2" style="display: none;">
+                <div class="result-box">
+                    <strong style="color: #15803d; font-size: 15px;">✓ Identidade Confirmada</strong>
+                    <p id="info-detalhes" style="font-size: 13px; color: #166534; margin-top: 5px;"></p>
+                </div>
+                <div class="input-group">
+                    <label>Nova Senha (Opcional)</label>
+                    <div class="pwd-wrapper">
+                        <input type="password" id="rec-nova-senha" placeholder="Nova senha ou deixe em branco">
+                        <button type="button" class="toggle-pwd" onclick="togglePassword('rec-nova-senha', this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </div>
+                <button id="btn-upd" onclick="atualizarSenha('update')">Atualizar Senha e Entrar</button>
+                <button onclick="atualizarSenha('keep')" class="btn-secondary">Manter Senha e Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de toggle do ícone de senha -->
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+            } else {
+                input.type = 'password';
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+            }
+        }
+    </script>
+
+    <script>
+        function switchTab(tabName) {
+            var forms = document.querySelectorAll('.form-container');
+            
+            for(var j = 0; j < forms.length; j++) {
+                forms[j].classList.remove('active');
+            }
+            
+            document.getElementById(tabName + '-form').classList.add('active');
+            
+            if (tabName === 'recover') {
+                document.getElementById('recover-step-1').style.display = 'block';
+                document.getElementById('recover-step-2').style.display = 'none';
+            }
+        }
+
+        function showNotification(message, type) {
+            type = type || 'success';
+            var container = document.getElementById('toast-container');
+            var toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.innerHTML = type === 'success' ? '✓ ' + message : '✕ ' + message;
+            container.appendChild(toast);
+            
+            setTimeout(function() { toast.classList.add('show'); }, 10);
+            setTimeout(function() {
+                toast.classList.remove('show');
+                setTimeout(function() { toast.remove(); }, 300);
+            }, 3500);
+        }
+
+        function setLoading(btnId, isLoading, defaultText) {
+            var btn = document.getElementById(btnId);
+            if (isLoading) {
+                btn.disabled = true;
+                btn.innerHTML = 'A processar...';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = defaultText;
+            }
+        }
+    </script>
+
+    <script>
+        var _supabase = null;
+
+        window.onload = function() {
+            try {
+                if (typeof supabase !== 'undefined') {
+                    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+                    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+                    _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                } else {
+                    console.error("Script do Supabase não carregou. Falta de internet?");
+                }
+            } catch(e) {
+                console.error("Erro ao configurar Supabase:", e);
+            }
+        };
+
+        // --- SISTEMA DE LOGIN COM VERIFICAÇÃO DE BANIMENTO ---
+        async function fazerLogin() {
+            if(!_supabase) return showNotification("Verifique a sua ligação à internet.", "error");
+
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value.trim();
+
+            if(!email || !senha) return showNotification("Preencha o e-mail e a senha.", "error");
+            setLoading('btn-login', true, 'Entrar na Conta');
+
+            const { data, error } = await _supabase.from('Utilizadores').select('*').eq('email', email).eq('senha', senha);
+
+            setLoading('btn-login', false, 'Entrar na Conta');
+
+            if (error || !data || data.length === 0) {
+                showNotification("E-mail ou senha incorretos.", "error");
+            } else {
+                const user = data[0];
+                
+                // 🔴 VERIFICAÇÃO DE BANIMENTO
+                const isBanido = user.banido === true || (user.mensagem_admin && user.mensagem_admin.includes('[BANIDO]'));
+                
+                if (isBanido) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acesso Bloqueado',
+                        html: `<b>A sua conta foi banida.</b><br><br><span style="font-size:0.85rem; color:#64748B;">Motivo: ${user.mensagem_admin}</span>`,
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#EF4444'
+                    });
+                    return; // Interrompe o processo e não deixa fazer login
+                }
+
+                localStorage.setItem('usuarioLogado', JSON.stringify(user));
+                showNotification("Bem-vindo(a) de volta!", "success");
+                setTimeout(() => window.location.href = "home.html", 1000);
+            }
+        }
+
+        // --- REGISTO MELHORADO (CONFIRMAÇÃO DE SENHA, VALIDAÇÃO DE DADOS E PREVENÇÃO DE DUPLICADOS) ---
+        async function criarConta() {
+            if(!_supabase) return showNotification("Verifique a sua ligação à internet.", "error");
+
+            const nome = document.getElementById('reg-nome').value.trim();
+            const numero = document.getElementById('reg-numero').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const senha = document.getElementById('reg-senha').value.trim();
+            const senhaConfirm = document.getElementById('reg-senha-confirm').value.trim();
+
+            if(!nome || !numero || !email || !senha || !senhaConfirm) return showNotification("Preencha todos os campos obrigatórios.", "error");
+            
+            // 0. Validação de COINCIDÊNCIA DE SENHAS
+            if(senha !== senhaConfirm) {
+                return showNotification("As senhas não coincidem. Tente novamente.", "error");
+            }
+
+            // 1. Validação de NOME (Exige pelo menos duas palavras e apenas letras/espaços)
+            const nomeRegex = /^[a-zA-ZÀ-ÿ]+\s+[a-zA-ZÀ-ÿ\s]+$/;
+            if(!nomeRegex.test(nome) || nome.length < 5) {
+                return showNotification("Introduza o seu nome e apelido reais (apenas letras).", "error");
+            }
+
+            // 2. Validação de E-MAIL (Exige formato correto com @ e domínio)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailRegex.test(email)) {
+                return showNotification("Por favor, introduza um e-mail válido (ex: nome@dominio.com).", "error");
+            }
+
+            // 3. Validação de NÚMERO DE TELEFONE (Exatamente 9 dígitos)
+            if(numero.length !== 9 || !/^\d+$/.test(numero)) {
+                return showNotification("O número de telefone deve conter exatamente 9 dígitos.", "error");
+            }
+
+            setLoading('btn-reg', true, 'Criar Minha Conta');
+
+            // Verificar se o E-MAIL já existe
+            const { data: checkEmail } = await _supabase.from('Utilizadores').select('id').eq('email', email);
+            if (checkEmail && checkEmail.length > 0) {
+                setLoading('btn-reg', false, 'Criar Minha Conta');
+                return showNotification("Este e-mail já se encontra registado. Por favor, utilize outro ou faça login.", "error");
+            }
+
+            // Verificar se o NÚMERO já existe
+            const { data: checkNum } = await _supabase.from('Utilizadores').select('id').eq('numero', numero);
+            if (checkNum && checkNum.length > 0) {
+                setLoading('btn-reg', false, 'Criar Minha Conta');
+                return showNotification("Este número de telefone já está associado a uma conta existente.", "error");
+            }
+
+            // Verificar se o NOME já existe
+            const { data: checkNome } = await _supabase.from('Utilizadores').select('id').eq('nome', nome);
+            if (checkNome && checkNome.length > 0) {
+                setLoading('btn-reg', false, 'Criar Minha Conta');
+                return showNotification("Este nome já está em uso no sistema. Recomendamos que adicione um apelido.", "error");
+            }
+
+            // Se tudo estiver correto, efetuar a criação da conta
+            const { data, error } = await _supabase.from('Utilizadores').insert([{ nome, numero, email, senha }]).select();
+
+            setLoading('btn-reg', false, 'Criar Minha Conta');
+
+            if (error) {
+                showNotification("Ocorreu um erro ao comunicar com o servidor. Tente novamente.", "error");
+            } else {
+                if(data && data.length > 0) { localStorage.setItem('usuarioLogado', JSON.stringify(data[0])); }
+                showNotification("Conta criada com sucesso!", "success");
+                setTimeout(() => window.location.href = "home.html", 1500);
+            }
+        }
+
+        let userRecData = null; 
+        
+        // --- RECUPERAÇÃO DE SENHA COM VERIFICAÇÃO DE BANIMENTO ---
+        async function verificarRecuperacao() {
+            if(!_supabase) return showNotification("Verifique a sua ligação à internet.", "error");
+            const nome = document.getElementById('rec-nome').value.trim();
+            const numero = document.getElementById('rec-numero').value.trim();
+            const email = document.getElementById('rec-email').value.trim();
+
+            if(!nome || !numero || !email) return showNotification("Preencha todos os dados.", "error");
+            setLoading('btn-rec', true, 'Validar Identidade');
+
+            const { data, error } = await _supabase.from('Utilizadores').select('*').eq('email', email).eq('numero', numero).eq('nome', nome);
+            setLoading('btn-rec', false, 'Validar Identidade');
+
+            if (error || !data || data.length === 0) {
+                showNotification("Nenhuma conta encontrada com estes dados.", "error");
+            } else {
+                const user = data[0];
+                
+                // 🔴 VERIFICAÇÃO DE BANIMENTO NA RECUPERAÇÃO
+                const isBanido = user.banido === true || (user.mensagem_admin && user.mensagem_admin.includes('[BANIDO]'));
+                
+                if (isBanido) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acesso Bloqueado',
+                        text: 'Esta conta foi banida e não pode ser recuperada.',
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#EF4444'
+                    });
+                    return; 
+                }
+
+                userRecData = user;
+                document.getElementById('info-detalhes').innerHTML = `<b>${user.nome}</b><br>${user.email}`;
+                document.getElementById('recover-step-1').style.display = 'none';
+                document.getElementById('recover-step-2').style.display = 'block';
+                showNotification("Conta localizada!", "success");
+            }
+        }
+
+        async function atualizarSenha(acao) {
+            if(!_supabase) return showNotification("Verifique a sua ligação à internet.", "error");
+
+            if (acao === 'keep') {
+                localStorage.setItem('usuarioLogado', JSON.stringify(userRecData));
+                showNotification("Acedendo à conta...", "success");
+                setTimeout(() => window.location.href = "home.html", 1000);
+                return;
+            }
+
+            const novaSenha = document.getElementById('rec-nova-senha').value.trim();
+            if(!novaSenha) return showNotification("Introduza a nova senha.", "error");
+
+            setLoading('btn-upd', true, 'Atualizar Senha e Entrar');
+            const { data, error } = await _supabase.from('Utilizadores').update({ senha: novaSenha }).eq('id', userRecData.id).select();
+
+            if (error) {
+                setLoading('btn-upd', false, 'Atualizar Senha e Entrar');
+                showNotification("Erro ao atualizar a senha.", "error");
+            } else {
+                localStorage.setItem('usuarioLogado', JSON.stringify(data && data.length > 0 ? data[0] : userRecData));
+                showNotification("Senha atualizada com sucesso!", "success");
+                setTimeout(() => window.location.href = "home.html", 1500);
+            }
+        }
+    </script>
+</body>
+</html>

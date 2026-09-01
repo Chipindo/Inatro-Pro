@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inatro Pro - Doação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E1; display: flex; justify-content: center; min-height: 100dvh; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100dvh; background-color: #F8FAFC; display: flex; flex-direction: column; padding-bottom: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+
+        .top-section { background-color: #0F172A; color: #FFFFFF; border-radius: 0 0 24px 24px; padding: 24px 24px 40px; margin-bottom: 24px; text-align: center; position: relative; }
+        .btn-back { color: #94A3B8; text-decoration: none; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; position: absolute; left: 24px; top: 24px; }
+        .heart-icon { font-size: 3rem; color: #EC4899; margin: 30px 0 15px; animation: pulse 2s infinite; }
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #F8FAFC; margin-bottom: 12px; }
+        .header-subtitle { font-size: 0.95rem; color: #94A3B8; line-height: 1.5; padding: 0 15px; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .content-section { padding: 0 24px; flex: 1; margin-top: -20px; }
+        
+        .donation-card { background: #FFFFFF; border-radius: 16px; padding: 20px; border: 1px solid #E2E8F0; box-shadow: 0 8px 25px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; }
+        .payment-title { font-size: 1rem; font-weight: 700; color: #1E293B; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Lista de Métodos de Pagamento */
+        .payment-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+        .payment-item { display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 16px; border-radius: 12px; }
+        .payment-info { display: flex; align-items: center; gap: 14px; text-align: left; }
+        .payment-info img { height: 40px; width: 45px; object-fit: contain; }
+        .method-name { font-size: 0.8rem; font-weight: 700; color: #64748B; text-transform: uppercase; display: block; }
+        .method-number { font-size: 1.05rem; font-weight: 800; color: #1E293B; letter-spacing: 0.5px; }
+        
+        .btn-copy-small { background: #FFFFFF; border: 1px solid #CBD5E1; padding: 8px 12px; border-radius: 8px; color: #1E293B; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+        .btn-copy-small:hover { background: #E2E8F0; }
+
+        .account-holder { font-size: 0.9rem; color: #64748B; font-weight: 600; padding: 12px; background: #F1F5F9; border-radius: 10px; margin-bottom: 15px; }
+        .account-holder span { color: #1E293B; font-weight: 700; }
+
+        .thank-you-msg { font-size: 0.85rem; color: #64748B; line-height: 1.5; text-align: center; padding: 0 10px; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="top-section">
+        <a href="javascript:history.back()" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <div class="heart-icon"><i class="fas fa-hand-holding-heart"></i></div>
+        <h1 class="header-title">Apoie o Projeto</h1>
+        <p class="header-subtitle">O Carta Mestre é desenvolvido para ajudar estudantes. Qualquer contribuição ajuda a manter os servidores online.</p>
+    </div>
+
+    <div class="content-section">
+        <div class="donation-card">
+            <div class="payment-title">Dados para Contribuição</div>
+            
+            <div class="account-holder">
+                Titular: <span>Onésio Chipindo</span>
+            </div>
+
+            <div class="payment-list">
+                <!-- E-Mola -->
+                <div class="payment-item">
+                    <div class="payment-info">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUwJdM5IPL17Uvll1HorD-UgFz0DJjKQYvBadh_RALLJS8z1LaJ0oYN7UKXC8_OwGeADco2dL0g-6ct0YFKGTaZfG1u288p-a-tRXAceTjUJuypIN6bysamv4itVQFGjjy_coj929WA_4NCm3zG9MpuJ4dlYq9S_2U3jZMDr5GtRbFSxyoyX3PUtihdw/s1600/1000240834.png" alt="e-Mola">
+                        <div>
+                            <span class="method-name">e-Mola</span>
+                            <span class="method-number">82 170 1000</span>
+                        </div>
+                    </div>
+                    <button class="btn-copy-small" onclick="copiarNumero('821701000', this)">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+
+                <!-- M-Pesa -->
+                <div class="payment-item">
+                    <div class="payment-info">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjMAKNJD48yLPhEYQnGJ46TyR-z76UkYd0Mga0JQdxnars32hYmV48-9zfLnu5SFw-N6QLLZouakhRXB5b8m5-e8-H7TwMyUhyphenhyphenuIu-QAmdeHKE1PNIFY-2q7JkQU4BJ6dPez_wKTEX5nZkSAWCRNtk444DfiB7YomkaLLfa7FzejiRNojO8-f3jjN29LA/s1600/1000240833.png" alt="M-Pesa">
+                        <div>
+                            <span class="method-name">M-Pesa</span>
+                            <span class="method-number">85 646 5217</span>
+                        </div>
+                    </div>
+                    <button class="btn-copy-small" onclick="copiarNumero('856465217', this)">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+
+                <!-- MKesh -->
+                <div class="payment-item">
+                    <div class="payment-info">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjTLEaFtKQ_tRV_5t86HhDL-3-aKjAA-Phk3v0eQEQi49tlmGZNJH_Y2r5_RHugpbUepuieuOryzwp22t3li6MpircvEaOjASMJSnQTmNasqjOxaT9khDysqOg8_x8JRBPUE3grHOFupAiIdT4qaaaR-7dxMVR8i_kz7QRxwKhcsv4ncRHRTdUjmYCWSw/s1600/1000240835.png" alt="mKesh">
+                        <div>
+                            <span class="method-name">mKesh</span>
+                            <span class="method-number">82 170 1000</span>
+                        </div>
+                    </div>
+                    <button class="btn-copy-small" onclick="copiarNumero('821701000', this)">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <p class="thank-you-msg">
+            <i class="fas fa-shield-alt" style="color: #10B981;"></i> Transação segura e direta. Muito obrigado por acreditar no nosso trabalho e contribuir para a educação rodoviária!
+        </p>
+    </div>
+</div>
+
+<script>
+    function copiarNumero(numero, btn) {
+        navigator.clipboard.writeText(numero);
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check" style="color:#10B981"></i> Copiado!';
+        btn.style.borderColor = '#10B981';
+        
+        setTimeout(() => { 
+            btn.innerHTML = originalText; 
+            btn.style.borderColor = '#CBD5E1';
+        }, 2000);
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!localStorage.getItem('usuarioLogado')) window.location.href = 'index.html';
+    });
+</script>
+
+<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            // Inicializa o Supabase nesta página específica
+            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const user = JSON.parse(userDataJson);
+            
+            // Verifica o estado atual na base de dados
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    // Executa ao abrir e repete a cada 30 segundos
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>
