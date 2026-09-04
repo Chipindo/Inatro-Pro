@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <!-- Supabase incluído para atualizar na BD -->
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -78,7 +78,7 @@
 
         <div class="instruction-card" style="border-color: #BFDBFE; background: #EFF6FF;">
             <div class="step-title"><span class="badge" style="background: #1D4ED8;">2</span> Valide a Transação</div>
-            <p class="info-text">Escolha o pacote que pagou e insira o <strong>ID da Transação</strong> da SMS (Ex: PP260806.1625.U72802).</p>
+            <p class="info-text">Escolha o pacote que pagou e insira o <strong>ID da Transação</strong> da SMS para nossa equipa validar o acesso.</p>
             
             <div class="input-group">
                 <label class="input-label">Pacote Escolhido</label>
@@ -93,8 +93,8 @@
                 <input type="text" id="transIdInput" class="input-field" placeholder="Ex: PP26... ou 8G54..." autocomplete="off">
             </div>
 
-            <button class="btn-validate" onclick="validarID()">
-                <i class="fas fa-check-circle"></i> Validar Pagamento
+            <button class="btn-validate" onclick="enviarParaAprovacao()">
+                <i class="fas fa-paper-plane"></i> Enviar Comprovativo
             </button>
             <a href="passo-a-passo.html" class="btn-help"><i class="fas fa-question-circle"></i> Como encontrar o ID da transação?</a>
         </div>
@@ -102,35 +102,23 @@
 </div>
 
 <script>
-    const tempoInicio = Date.now();
     const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // VERIFICA SE O ADMIN DEIXOU MENSAGEM DE BLOQUEIO ASSIM QUE ABRIR A PÁGINA
+    // CONFIGURAÇÕES DO BOT TELEGRAM
+    const TELEGRAM_BOT_TOKEN = 'SEU_TOKEN_DO_BOT'; // Ex: 123456789:ABCdefGhIJKlmNoPQRsTuvWxyz
+    const TELEGRAM_CHAT_ID = 'SEU_CHAT_ID'; // Ex: 123456789 (ID da sua conta ou grupo)
+
     window.addEventListener('DOMContentLoaded', async () => {
         const userDataJson = localStorage.getItem('usuarioLogado');
         if(!userDataJson) return;
         const userData = JSON.parse(userDataJson);
 
         try {
-            const { data, error } = await _supabase
-                .from('Utilizadores')
-                .select('mensagem_admin')
-                .eq('id', userData.id)
-                .single();
-
+            const { data } = await _supabase.from('Utilizadores').select('mensagem_admin').eq('id', userData.id).single();
             if (data && data.mensagem_admin) {
-                // Alerta que obriga a clicar em OK
-                Swal.fire({
-                    title: 'Aviso Importante',
-                    text: data.mensagem_admin,
-                    icon: 'warning',
-                    confirmButtonText: 'OK, Entendi',
-                    confirmButtonColor: '#2563EB',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-                });
+                Swal.fire({ title: 'Aviso Importante', text: data.mensagem_admin, icon: 'warning', confirmButtonText: 'OK, Entendi', confirmButtonColor: '#2563EB', allowOutsideClick: false, allowEscapeKey: false });
             }
         } catch(e) { console.log(e); }
     });
@@ -142,100 +130,58 @@
         });
     }
 
-    async function validarID() {
+    async function enviarParaAprovacao() {
         const transId = document.getElementById('transIdInput').value.trim();
-        const diasEscolhidos = parseInt(document.getElementById('pacoteEscolhido').value);
-        const tempoDecorridoSegundos = (Date.now() - tempoInicio) / 1000;
+        const diasEscolhidos = document.getElementById('pacoteEscolhido').value;
 
         if (transId === '') {
-            Swal.fire('Campo Vazio', 'Por favor, insira o ID da transação recebido na SMS.', 'error'); return;
+            Swal.fire('Campo Vazio', 'Por favor, insira o ID da transação.', 'error'); return;
+        }
+        if (transId.length < 5) {
+            Swal.fire('ID Inválido', 'O ID da transação parece ser demasiado curto. Verifique a SMS.', 'error'); return;
         }
 
-        // NOVO ALERTA PROFISSIONAL PARA MENSAGEM WHATSAPP (Anti-Fraude)
-        if (tempoDecorridoSegundos < 45) {
-            Swal.fire({
-                title: 'ID Não Encontrado',
-                text: 'Verificamos o ID, mas ele não consta no nosso banco de dados. Entre em contacto no WhatsApp 821701000. As nossas conversas vão estar armazenadas por questões de segurança.',
-                icon: 'error',
-                confirmButtonColor: '#1E293B'
-            });
-            return;
-        }
+        Swal.fire({ title: 'A enviar...', text: 'O seu pedido está a ser registado...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
-        Swal.fire({ title: 'A Validar ID...', text: 'Conectando à rede da operadora...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
-
-        // ATUALIZAÇÃO DA CONTA (Adiciona os dias selecionados)
         const userDataJson = localStorage.getItem('usuarioLogado');
         if(!userDataJson) return;
         const userData = JSON.parse(userDataJson);
 
-        const expDate = new Date();
-        expDate.setDate(expDate.getDate() + diasEscolhidos);
-        const expIso = expDate.toISOString();
-        
-        userData.assinatura_pesados = expIso;
-        localStorage.setItem('usuarioLogado', JSON.stringify(userData)); // Salva no celular
-
-        // Envia para a nova coluna de Pesados no Supabase
         try {
+            // Guarda APENAS o ID na base de dados para análise do Admin, NÃO atribui dias aqui
             await _supabase.from('Utilizadores').update({ 
-                assinatura_pesados: expIso,
                 id_transacao_pesados: transId,
                 mensagem_admin: null 
             }).eq('id', userData.id);
-        } catch(e) { console.log(e); }
 
-        setTimeout(() => {
-            Swal.fire({
-                title: 'Pagamento Confirmado!',
-                text: `O seu passe premium de ${diasEscolhidos} dias foi ativado com sucesso.`,
-                icon: 'success', confirmButtonColor: '#2563EB'
-            }).then(() => { window.location.href = 'exames-pesados.html'; });
-        }, 3000);
-    }
-</script>
-
-<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    async function caoDeGuarda() {
-        const userDataJson = localStorage.getItem('usuarioLogado');
-        if (!userDataJson) {
-            window.location.href = 'index.html';
-            return;
-        }
-
-        try {
-            // Inicializa o Supabase nesta página específica
-            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
-            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
-            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-            const user = JSON.parse(userDataJson);
+            // Preparar Notificação no Telegram
+            const nomeCli = userData.nome || 'Desconhecido';
+            const telCli = userData.numero || userData.telefone || 'N/D';
+            const emailCli = userData.email || userData.correio || 'N/D';
             
-            // Verifica o estado atual na base de dados
-            const { data } = await sClient
-                .from('Utilizadores')
-                .select('mensagem_admin, banido')
-                .eq('id', user.id)
-                .single();
+            const msgTexto = `🚨 *NOVO PAGAMENTO (PESADOS)* 🚨\n\n👤 *Nome:* ${nomeCli}\n📱 *Contacto:* ${telCli}\n📧 *Email:* ${emailCli}\n\n💳 *ID da Transação:* \`${transId}\`\n📦 *Pacote Exigido:* ${diasEscolhidos} Dias\n\n👉 *Vá ao Painel Admin para Aprovar*`;
+            const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-            if (data) {
-                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
-                if (isBanido) {
-                    localStorage.removeItem('usuarioLogado');
-                    window.location.replace('index.html'); 
-                }
+            // Envia para o Telegram
+            if (TELEGRAM_BOT_TOKEN !== 'SEU_TOKEN_DO_BOT') {
+                await fetch(telegramUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgTexto, parse_mode: 'Markdown' })
+                }).catch(err => console.log("Erro no bot:", err));
             }
-        } catch (e) {
-            console.log("Modo offline ativo ou sem internet.");
+
+            Swal.fire({
+                title: 'Pedido Em Análise!',
+                html: 'Recebemos o seu ID de transação com sucesso.<br><br>A nossa equipa está a confirmar o recebimento e <b>o seu acesso será libertado em breve</b>.',
+                icon: 'info', confirmButtonColor: '#2563EB', confirmButtonText: 'Entendido'
+            }).then(() => { window.location.href = 'index.html'; });
+
+        } catch(e) {
+            console.log(e);
+            Swal.fire('Erro', 'Houve um problema de conexão. Tente novamente.', 'error');
         }
     }
-
-    // Executa ao abrir e repete a cada 30 segundos
-    caoDeGuarda();
-    setInterval(caoDeGuarda, 30000);
 </script>
-
 </body>
 </html>
