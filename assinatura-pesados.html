@@ -80,6 +80,17 @@
             <div class="step-title"><span class="badge" style="background: #1D4ED8;">2</span> Valide a Transação</div>
             <p class="info-text">Escolha o pacote que pagou e insira o <strong>ID da Transação</strong> da SMS para nossa equipa validar o acesso.</p>
             
+            <!-- NOVO CAMPO: FORMA DE PAGAMENTO -->
+            <div class="input-group">
+                <label class="input-label">Onde efetuou o pagamento?</label>
+                <select id="formaPagamento" class="input-field">
+                    <option value="" disabled selected>Selecione a carteira...</option>
+                    <option value="e-Mola">e-Mola (871701000)</option>
+                    <option value="M-Pesa">M-Pesa (856465217)</option>
+                    <option value="mKesh">mKesh (821701000)</option>
+                </select>
+            </div>
+            
             <div class="input-group">
                 <label class="input-label">Pacote Escolhido</label>
                 <select id="pacoteEscolhido" class="input-field">
@@ -106,9 +117,9 @@
     const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // CONFIGURAÇÕES DO BOT TELEGRAM
-    const TELEGRAM_BOT_TOKEN = 'SEU_TOKEN_DO_BOT'; // Ex: 123456789:ABCdefGhIJKlmNoPQRsTuvWxyz
-    const TELEGRAM_CHAT_ID = 'SEU_CHAT_ID'; // Ex: 123456789 (ID da sua conta ou grupo)
+    // CONFIGURAÇÕES DO BOT TELEGRAM ATUALIZADAS
+    const TELEGRAM_BOT_TOKEN = '8799592111:AAEoZ5aND7gC-OTlijqnCLJBXSL9mYl8_CI';
+    const TELEGRAM_CHAT_ID = '@assinatura_inatropro';
 
     window.addEventListener('DOMContentLoaded', async () => {
         const userDataJson = localStorage.getItem('usuarioLogado');
@@ -133,7 +144,11 @@
     async function enviarParaAprovacao() {
         const transId = document.getElementById('transIdInput').value.trim();
         const diasEscolhidos = document.getElementById('pacoteEscolhido').value;
+        const formaPagamento = document.getElementById('formaPagamento').value; // Capta a seleção da carteira
 
+        if (formaPagamento === '') {
+            Swal.fire('Campo Vazio', 'Por favor, selecione onde efetuou o pagamento (e-Mola, M-Pesa ou mKesh).', 'warning'); return;
+        }
         if (transId === '') {
             Swal.fire('Campo Vazio', 'Por favor, insira o ID da transação.', 'error'); return;
         }
@@ -148,28 +163,26 @@
         const userData = JSON.parse(userDataJson);
 
         try {
-            // Guarda APENAS o ID na base de dados para análise do Admin, NÃO atribui dias aqui
+            // Guarda APENAS o ID na base de dados para análise do Admin
             await _supabase.from('Utilizadores').update({ 
                 id_transacao_pesados: transId,
                 mensagem_admin: null 
             }).eq('id', userData.id);
 
-            // Preparar Notificação no Telegram
+            // Preparar Notificação no Telegram com a Forma de Pagamento
             const nomeCli = userData.nome || 'Desconhecido';
             const telCli = userData.numero || userData.telefone || 'N/D';
             const emailCli = userData.email || userData.correio || 'N/D';
             
-            const msgTexto = `🚨 *NOVO PAGAMENTO (PESADOS)* 🚨\n\n👤 *Nome:* ${nomeCli}\n📱 *Contacto:* ${telCli}\n📧 *Email:* ${emailCli}\n\n💳 *ID da Transação:* \`${transId}\`\n📦 *Pacote Exigido:* ${diasEscolhidos} Dias\n\n👉 *Vá ao Painel Admin para Aprovar*`;
+            const msgTexto = `🚨 *NOVO PAGAMENTO (PESADOS)* 🚨\n\n👤 *Nome:* ${nomeCli}\n📱 *Contacto:* ${telCli}\n📧 *Email:* ${emailCli}\n\n💳 *Carteira:* ${formaPagamento}\n🔢 *ID da Transação:* \`${transId}\`\n📦 *Pacote Exigido:* ${diasEscolhidos} Dias\n\n👉 *Vá ao Painel Admin para Aprovar*`;
             const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-            // Envia para o Telegram
-            if (TELEGRAM_BOT_TOKEN !== 'SEU_TOKEN_DO_BOT') {
-                await fetch(telegramUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgTexto, parse_mode: 'Markdown' })
-                }).catch(err => console.log("Erro no bot:", err));
-            }
+            // Envia para o Telegram diretamente
+            await fetch(telegramUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgTexto, parse_mode: 'Markdown' })
+            }).catch(err => console.log("Erro no bot:", err));
 
             Swal.fire({
                 title: 'Pedido Em Análise!',
