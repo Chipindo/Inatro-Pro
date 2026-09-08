@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Carta Mestre - Exame de Mecânica</title>
+<title>Carta Mestre - Exame de Mecânica 2</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -287,7 +287,7 @@ header {
     <header>
         <div class="brand-container">
             <div class="brand-title">CARTA<span>MESTRE</span></div>
-            <div class="brand-subtitle">Exame de Mecânica 1</div>
+            <div class="brand-subtitle">Exame de Mecânica 2</div>
         </div>
         <div class="header-right">
             <div class="timer-box"><i class="fas fa-clock"></i> <span id="timer">60:00</span></div>
@@ -343,150 +343,152 @@ header {
     const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const EXAME_ID_UNICO = "exame_mecanica_1"; 
-    const NOME_DO_EXAME = "Exame de Mecânica";
+    const EXAME_ID_UNICO = "exame_mecanica_3_4"; 
+    const NOME_DO_EXAME = "Exame de Mecânica - Testes 3 e 4";
 
-    // PERGUNTAS DE MECÂNICA COM AS IMAGENS EXATAS DO TEU LINK DO GOOGLE FORMS (1 a 20)
+    // PERGUNTAS COMBINADAS DOS TESTES 3 E 4 COM AS IMAGENS CORRIGIDAS DE 1 A 20
     const questions = [
+        // --- TESTE 3 ---
         { 
             id: 1, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1b1aD-apHDhsDEeXaLDmn3dvQ_RBB_0m7RQjmHeb19trDqLZybb2SqbPdyTeWQ8XUzroDAbVokCCHQk0Wy5dMFztwaXjBha9KL-RDRuTaMQrZpJLIH5M2jx4d_TdxuLmR6AzuPfj5qaq4rT7BSMcGNdIOvPCG9tXLRKXDBo7IM4YKNLRXJ5WT5oM0PFoX/s1600/unnamed%20%2819%29.jpg", 
-            q: "Durante o tempo de escape de um motor de combustão interna, como se encontram as válvulas?", 
-            options: {A: "As duas abertas.", B: "A de admissão fechada e a de escape aberta.", C: "A de admissão aberta e a de escape fechada."}, 
-            ans: "B" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhhvMhfEnhP1L3pFQMfkhzC0LBNQ4mnT6Zy9qaldVNTEmGZA73gD_ToUEFIhC-E-5hBCjPcrpElI8Dp5EH1zBfRnnE3OJr8f0nM1bfYdf_g7YqfCwbMV5dSW6Mb-iieupBj_sZNaF1hpNPAZBc29tox7WzJIS4dylTtEgKAhimsh2y2PqIt_1NgPJ4Ac1Ro/s1600/unnamed.jpg", 
+            q: "Os órgãos que servem para impedir a passagem dos gases da câmara de explosão para o cárter são:", 
+            options: {A: "Os êmbolos.", B: "As válvulas.", C: "Os segmentos."}, 
+            ans: "C" 
         },
         { 
             id: 2, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgD7ROB05B9WuR3523Dr1SjUVQB7p58Ds-QrSRjp_95uMUYdKfeOa73GTtz6rBynW708ICOR9RTaP-0kmhoUTlqjI9PMbEDrfR-sxfGl2Rdq5S_0QlgVeCTEf1_IOoY_lQOxs1kT8tg9GRIpUAUuxy_oO4CaGoLg-sSq8JJFC7WKN6NHWj7wFrhyt5m_-J-/s1600/unnamed%20%2818%29.jpg", 
-            q: "Para que os travões atuem com eficácia num veículo com servo-freio, o condutor deve:", 
-            options: {A: "Durante a condução, manter o motor sempre a trabalhar.", B: "Ter o cuidado de acelerar ao mesmo tempo que trava.", C: "Ter o cuidado de desembraiar sempre que trava."}, 
-            ans: "A" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2-s2SDbl3aNExLsNnf91EMcFilMlhcUAxfYk5tHVOM0RGObSkwpaWLYtRbMyl9RUoM84WwWlRPK2Xbtz6-EIBAcxUouMePxTkPZzfn8kez3NbrscGWc4b5oS2DPOvS3v3j-H1jDDcichZTS_vAHSDUjp51TFTIlVK9YxujrnOdZ4uT_v1rAzV3HYoVKj8/s1600/unnamed%20(1).jpg", 
+            q: "A existência de ar nos tubos de um sistema de travagem hidráulico:", 
+            options: {A: "Produz uma travagem desigual nas várias rodas.", B: "Não afeta a eficiência de travagem.", C: "Pode tornar a travagem nula ou ineficiente.", D: "Aumenta a força de travagem."}, 
+            ans: "C" 
         },
         { 
             id: 3, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisib0H1OJfebcE7XLZ8IMaMn8u4Mn9RF8xRHymCouz_YjGlplPM7t36PMe7YwgLSbLuaTRKFPSbQ2QWrCfmoRcfesq6NmSXDvZxwoz0-g4zD6QuudCEdMGz7qdDicXV-k5Lw0yr0-f_wDMWUKqgbkFJ6BMa8UpuQfhO82iVGCS8v5mYCtL1myByUl3Qwl7/s1600/unnamed%20%2817%29.jpg", 
-            q: "Deve-se deitar água no radiador quando o motor ainda estiver quente?", 
-            options: {A: "Não, nunca.", B: "Sim, desde que o motor esteja trabalhar.", C: "Sim, desde que o motor esteja parado."}, 
-            ans: "B" 
-        },
-        { 
-            id: 4, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_6jaIizNrV6y9lQEsAXYnaBx6O6rvt3t5-02zqkWqvuk1HZsQkguYzzkQCTFqWeq67ip-7HKI_Lum-SZxpLTpLz_sc9BNp1v9TrNo_So9MAEannjywN5MkKlL8BA-jsOfHvxDvPljazP9sTkYossoqPM1ExKZM8GyrnISwe-nXKTtmQ1NO1iWMzxUa5eV/s1600/unnamed%20%2816%29.jpg", 
-            q: "O que se nota na condução de um automóvel que não tenha as rodas da frente alinhadas?", 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhQWuZNG4W_OTOl4LQu0OzPxAuOdsJqYScHft3XuHjUJVU9YyRPth1w164HPp5FasxiJ-FSHDzpXHu2VGscEEvrX1kg0eoDFTzcgDHxjhkxG4WxCw7McSN80GT2jGhWFUlN4bFgym8CuXPBwHJ9ZtYdgda12aiWE_PYkPZuypklKdtVHMM6n1Z9EUnHbrbC/s1600/unnamed%20(2).jpg", 
+            q: "O que se nota na condução de um automóvel que não tenha a direção alinhada?", 
             options: {A: "O veículo trava mais numa das rodas.", B: "Não se nota nada de especial.", C: "Com o volante direito, o veículo desvia-se para um dos lados."}, 
             ans: "C" 
         },
         { 
+            id: 4, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3yiR4gPu9EKQx9vgrsenVDzLxUu7M1e2q2FFvrmRhY8bHihlrsIYsksP4DTlrSu5SlfrLhYrhoVf19u8XS0DKIifSAnQbPrExDTJoWslqdZI0Yc3JlE0J0RdKblPIkzsCfsCzB2xnljfJoMhGxMi7o1KMckmzpMyUMqi1mGfCJAGhcsqT8PtFxa8uByq2/s1600/unnamed%20(3).jpg", 
+            q: "Se conduzir um veículo equipado com travões pneumáticos, qual o instrumento que deve dar atenção?", 
+            options: {A: "Amperímetro.", B: "Manómetro de ar.", C: "Voltímetro.", D: "Termómetro."}, 
+            ans: "B" 
+        },
+        { 
             id: 5, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDTl00HUT8KMMfOVN4m28bHE_ZI96kdheasoKYgB3jWT4Zy8vcMGL-Z85xHBzJ-YFKGd-e3Qoq1X3phssHA9Vgvw1jOOQPj28l8go9WgLuqGccVgkI-ZKLQECgvsuLiAL5Pw4lgwp3JXMi2J8vp6HVlqFCzsusyWQsm5QpyK3rwPvQAZz5dyLDZSs_c6ap/s1600/unnamed%20%2815%29.jpg", 
-            q: "O diferencial serve para:", 
-            options: {A: "Ligar a embraiagem à caixa de velocidades.", B: "Transmitir o movimento do motor à caixa de velocidades.", C: "As rodas motoras rodarem com velocidades diferentes."}, 
-            ans: "C" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOO_LxoQj-dESL1Frv4uDcv_Lj9ww74M9juYsRiTgMkFHF0oy8rle-iAXsR7QopUTH83OusjOic7R99Te_pUMxkOiIuDVmrRZKJNm30DpLSPKE3-pyg9bQIv2zNihZ_siUgtFjwK2w-DVJxMfKbxZqdq6hrnM3wMqyhlrx8iDp8Rld4eb8jVzg5VRDKle6/s1600/unnamed%20(4).jpg", 
+            q: "O disco de embraiagem é empurrado contra o volante do motor:", 
+            options: {A: "Pelo rolamento ou carvão de encosto.", B: "Pelo prato de pressão.", C: "Pelo veio primário da caixa de velocidades.", D: "Pelo veio de transmissão."}, 
+            ans: "B" 
         },
         { 
             id: 6, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhAIFfzummpKDEyuPrNa4qCsCT9hdl9DPRotfLE6clOxxIwLvWnnbV5pZEzwd-gX-InOCEQCoRIPjsdd7ZAwf5Z_XF1zC0KrOlWSoLomoZpEuDe44OhK0UYOhmnZ2AzHCFkGUTaHnNyScC24P6l7wcgn2ikphGzMWr24ewA1plHThUyfeATRQK8yXVDB4Gt/s1600/unnamed%20%2814%29.jpg", 
-            q: "Se os amortecedores hidráulicos de um automóvel estiverem descarregados, o condutor nota:", 
-            options: {A: "Aumento do consumo de combustível.", B: "Aumento de desagaste dos pneus.", C: "Dificuldade de travagem.", D: "Oscililação demasiada das molas."}, 
-            ans: "D" 
-        },
-        { 
-            id: 7, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTvyeqtB4lGwS3vbS9iKIJy3gmvqa4J3wozZezBAK_cGI4aoBzTWjwVwM-PHc-1Qb7N2IXGuCAz1mIYUeqDu2mP9xPid6JlpmRqvOd6v3pj9AlxpFl31ESqAnAuzel2XPi669GSA_gbvi-lDbiQIzTLFfW1OHqJzzRD4HKgd9y9SRLf1fvt8RuIA3-6d3d/s1600/unnamed%20%2813%29.jpg", 
-            q: "Para evitar avarias no sistema de lubrificação do motor, periódicamente, deve-se substituir:", 
-            options: {A: "O filtro de gasóleo.", B: "O filtro de ar.", C: "A bomba de óleo.", D: "O filtro de óleo."}, 
-            ans: "D" 
-        },
-        { 
-            id: 8, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjiL4IKD3r7YLJZulFkM8MbdIjCa8H_CyY7PBUuzKvZCk1aTfKmEZ5zhPeP1v3_lLl_Z6uChUtmAzzv4c_OuDHQIfZCw3N9eYLjef8EUD8Si70DTjqhLpehIEghUrZvZ0zf5sQQcX0C2LbKnLgOFJZMYAy9BZio3JLClcBtnS3wYcAm4NnDNGlc4DtvrCOh/s1600/unnamed%20%2812%29.jpg", 
-            q: "Um pneu com pressão muito inferior à recomendada, apresenta maior desgaste:", 
-            options: {A: "Nos bordos laterais.", B: "No lado esquerdo.", C: "Na zona central.", D: "No lado direito."}, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvNpX6gTvOajfG8iY49GnbjrfQLDAViIvH0611VvgS_4IIH8fK3wWIG1QvxjPKvWfwUWfjXYXzv1TeiaEqekvaPzy5J5SKOiwek43YxJsHaNiYvhsqCAydH3O9nOspp6v2Yc83LyIu8HxKj7A5NN0cY5t9YljPnuOPrk2WVXYmWR2BijgD4j6QUI37wKNc/s1600/unnamed%20(5).jpg", 
+            q: "Os elementos que constituem a suspensão são:", 
+            options: {A: "Os pneumáticos, as molas e os amortecedores.", B: "Os pneumáticos, os amortecedores e as barras de direção.", C: "Os pneumáticos, as barras de torção e os planetários."}, 
             ans: "A" 
         },
         { 
+            id: 7, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhUK9sVkb4bztTjOdTpQM8hMZ7Wimv3XUgj7RUGnVy7E7tpjx0cbSQF-Nu85FaGMXub7EHIXYuH05mCTXXU_6e_Nmn_f0Vu3y9vNZBrklImo8Kj_9kG-P7UQgLsFmu0dvJCCLwMX9x0D9-4142ve0mAA3xHZdE_cyswTlfCvbwmO563oFy_m9CFLC5ZQ7X1/s1600/unnamed%20(6).jpg", 
+            q: "No sistema elétrico de um automóvel, qual o órgão que fornece corrente elétrica de alta tensão?", 
+            options: {A: "A bobine.", B: "O alternador.", C: "A bateria.", D: "O motor de arranque."}, 
+            ans: "A" 
+        },
+        { 
+            id: 8, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEinfMbMwGZGMYzVMeEWiSb8icBEqM_xz4_tAR2_Ir3T7yEFkTR4SFgDrB5o__U9Gt1GisFHu39AMBPIAj-FKfHq1_t2-7sR1w74WDmPLre5VB-jZXJRA_c-Iv5v939b7G3IgeA3-cy3smXuGCG0wKat34ulBz8etEh9CD75-Lf-XDFewWqCn_eacVjxI8iR/s1600/unnamed%20(7).jpg", 
+            q: "Quando em piso molhado e sem travar o veículo entra em derrapagem, a causa pode ser:", 
+            options: {A: "Ar no sistema de travagem hidráulico.", B: "Molas e amortecedores rijos.", C: "Pneus gastos."}, 
+            ans: "C" 
+        },
+        { 
             id: 9, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjEHDEMbVNo6i34kGXP3RINTaIiWT2zlKojVuuAdC1rNSqQz4ZfGHVAWBF5l4a25MssllfqvrrJumlNdtHWzyy8oVe0bVMqlv0JqtIArkSKc8MRLR1pQ3mWuaqcR_pg3AKRnATXD254CvDZEHr_QIlaMfjR3Bgf65m15xbC-TwjrBDGBFssNgR08IddImdg/s1600/unnamed%20%2811%29.jpg", 
-            q: "Durante o transporte de materiais pulverulentas em automóvel de mercadorias de caixa aberta, o condutor deve assegurar-se de que:", 
-            options: {A: "A mercadoria transportada não se espalhe pela caixa de carga.", B: "A mercadoria transportada não se espalhe pelo ar e pela faixa de rodagem.", C: "O peso da mercadoria não ultrapasse a tara do automóvel."}, 
-            ans: "B" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrQZV8sQqq9L7j6CCLWsG1vQ3fsLncJjLuLDNqOYWGX-sCbC1jDsoED1Na1qlj_uoyq_G6MfXTKQHBkoWtgjUfc5iuYmC3WcmAKckvmTrLM3eOj3D5_AhHTO8SJWObsJA86efL1S2CSquQqkk6XeBHZnCJH-uIuYsKUHmHE5SIA9yGHKSinvjw97eUlQI8/s1600/unnamed%20(8).jpg", 
+            q: "Uma carga muito pesada e pouco volumosa colocada muito à frente da caixa de carga:", 
+            options: {A: "Aumenta excessivamente o peso incidente sobre as rodas traseiras, sobrecarregando o diferencial.", B: "Pode provocar o arrebentamento das rodas de trás.", C: "Aumenta excessivamente o peso incidente sobre as rodas diretrizes, tornando difícil o manejo da direção."}, 
+            ans: "C" 
         },
         { 
             id: 10, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEie_8jBlnBKcqzhntkS8uB8JjEt09xMNapSPlGpPqdrjHHIG_eq4FaZGxJeXUxdbZDG6Ipf-RkZqhwR9GIxv6YKWVI7K4HVNNrYKQABI9Dlm_npxAuq98DCuUAmoDwxdQSF2vZJUeM25F492r1c1xwL7eRXB4vaGkfwaKtFEQyn0UaF2ji8jailgepOGRnF/s1600/unnamed%20%2810%29.jpg", 
-            q: "O nível do eletrólito da bateria deverá permanecer sempre:", 
-            options: {A: "Ao nível das placas.", B: "Abaixo das placas.", C: "Acima das placas.", D: "A meio das placas."}, 
-            ans: "C" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisP6AbMffHCnqs7cmiHso1QaNRimTzbYlwIsP8PoDUVzN6vv5jF5JfYbHSNS_5hdZDllk9yc4OScbELoUwFsXF6plDDl43qjoavXpVx48fk9DCSZjtpVmqGnXDguXtxLJKU7HN_mR9zz03n6nO61BJWTBGQHsAzSHmRnRWrc1CTcV-EZXWq7f24sFNsnsk/s1600/unnamed%20(9).jpg", 
+            q: "Nos motores diesel, o que provoca a combustão quando o gasóleo é injetado nos cilindros?", 
+            options: {A: "A alta pressão de injeção do gasóleo.", B: "A bobine.", C: "A faísca que salta das velas.", D: "A alta temperatura do ar na câmara de combustão."}, 
+            ans: "D" 
         },
+        // --- TESTE 4 ---
         { 
             id: 11, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjGPhkjPLUviG7Q2evRlQ5qH9aox8RFpw4a3qpE6kf3U5_sXMw-bTnm1_ucDIg5GzAHzIBN1Zx5htYbJczzZmoCw81rbpTqm9xZp4lEIry3fDVi_8qd54Gx9EPRoo25FGmQwtYcrpzzYtYuUJ_P35e5O_9SA27UXtI8yx944hWDnGzMkIoAtDtQQo8uCASp/s1600/unnamed%20%289%29.jpg", 
-            q: "Quando salta a faísca nos pólos das velas dum motor a gasolina a quatro tempos, qual a posição das válvulas de escape e de admissão?", 
-            options: {A: "A de escape começa a abrir e a de admissão está fechada.", B: "Ambas abertas.", C: "Ambas fechadas."}, 
-            ans: "C" 
-        },
-        { 
-            id: 12, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9K_c8ffsYd9wnCyCFoQuSdeG-HhGjqAGO5ACvMwT6wvJG_ffvGvL9T-DCf-i0mEHMBYwHL1FHxEORgvxsZDfijUGK1tTR2UybQfY-fIkPQYJBHB0Xd8FDAUTsdn_hwdHtzUunqOtt2QDuxNSJOqj_o83HsjEXn9sUq2KRbEEj5gBpGjOzuk2r_LBKlxrz/s1600/unnamed%20%288%29.jpg", 
-            q: "A função do injetor nos motores Diesel é:", 
-            options: {A: "Injetar a gasolina na câmara de explosão.", B: "Injetar o gasóleo na câmara de combustão.", C: "Injetar a mistura combustível na quantidade e momento certos."}, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_BAbxVeV8bBulIULee7wUyk5vqxrb1S9ZTv1aVnBzss8J9OeTuL-uqIfL63yVKZU2q_zkTGm4Uxv0yULN9liL0V5k8hEfFCCFUawvjl-J2xByJZOMGRftxME4wDE_0_lwQC70QqqGVfsckSwoMEmK8MKhyHJ4azwO7AvE2n9uGhF72Al849QCZqSeJAgO/s1600/unnamed%20(10).jpg", 
+            q: "O filtro de combustível tem como função:", 
+            options: {A: "Proteger o sistema de lubrificação do motor.", B: "Reter as partículas de pó e sujidade existentes no combustível.", C: "Filtrar o ar que passa para os cilindros.", D: "Facilitar a circulação do combustível."}, 
             ans: "B" 
         },
         { 
+            id: 12, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEix_I5PLf8Ar9cYIzuBTH25ZON6xTen8xiBLUKiZGatiDzJHh1uY4aqSSPuHJf6JZsyPAv_Pc0JV_3oSMHl8yHJANCVaf0WcRzBAURo8fFi59rnSvit_JTpRrkjSSJejIvVXJqq572651vI1CA56grstWdSdW9JpukMiBw5NvLjazZuzsTjCjBToPWaeMis/s1600/unnamed%20(11).jpg", 
+            q: "Periodicamente o nível do óleo no cárter do motor é verificado:", 
+            options: {A: "Por meio de uma vareta com dois traços, existente num dos flancos (lados) do motor.", B: "Por meio de um manómetro, existente na cabeça do motor.", C: "Por meio de uma vareta com dois traços, existente no depósito de expansão.", D: "Por meio de um termómetro, existente no radiador."}, 
+            ans: "A" 
+        },
+        { 
             id: 13, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhFrT2Wt3JCLCfpV3y1xEuEc3E_1uG5A29sMUmeTMPMQSRU2XgxRizC2_vMJ_ibnRgv_hfJWU2dZ5nQTovUkzARz9TRnLVEpjFKye5J3sRbZXcU9q57zffatRMtXAzBLXDFGByBtJsPdjXxiwbP9hXTk8KMpjV_CbmpM8n5aGmgPTsQrLoQHEgIjn_O9QVM/s1600/unnamed%20%287%29.jpg", 
-            q: "Quando se verifica excessiva dificuldade em engrenar uma mudança, a causa poderá ser:", 
-            options: {A: "Sincronizador avariado.", B: "Disco de embraiagem ligeiramente gasto.", C: "Caixa de velocidade com excesso de valvulina."}, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhP0PLxwnecs5ttV6YVC8-h0guU7a7yCgoo_Fn9w7T_PRcgrh3TfWdscuqrFxe-Dkf1naVhQQ5NdORZ_jI4pcm5LCCi3In1gxen12PHD9i49q_nJJo8DUS2m7zCH8GX2C_EZgBqyAZxZbpzJ670qCbgvhifr08qYKFBJvmFstGaKvWketFd99pmEufedjCN/s1600/unnamed%20(12).jpg", 
+            q: "O dispositivo catalisador intercalado no tubo de escape tem por finalidade:", 
+            options: {A: "Reduzir ao mínimo as emissões poluentes que o motor expulsa.", B: "Garantir o arrefecimento do sistema de escape.", C: "Reduzir ao mínimo a poluição sonora.", D: "Aumentar a velocidade de saída dos gases de escape."}, 
             ans: "A" 
         },
         { 
             id: 14, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgqRat7SizQrsIUUow_BJVZaFAji9Kceu8wVdch15vMCjaF3MvT-Zc1f5KPDlLx5jPuGa684e74rmoGF35tcLwfS9h4lVcoM1dMQtw9IQoegEStgEd-qH39xatN78BaQExQrofXpUuV6NkPKyEP2wBv161W_DkYW5iW0bfJkCfXjY1nwG9N0P4FCpnvl2oc/s1600/unnamed%20%286%29.jpg", 
-            q: "Num sistema de travagem do tipo hidráulico, purgar os travões consiste em:", 
-            options: {A: "Afinar as maxilas.", B: "Filtrar o líquido do circuito.", C: "Retirar o ar das tubagens."}, 
-            ans: "C" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhkHS3un09bALq6kChQ4tiHQ-YU12ASZjk5Zh44YVle5qfUB9TVtrfGINxAoLl_yxkf2MPXReinrFZMfP8GwhyuCkOHQj5yYyCPpweJlyoGpjioyHix6_70PbUIqEVgoPbd6xNjK-XVxPHT3PsvrFHqfUDhDJCa-3DEiIMIaN380b0wGOpThF-EAR1MhWtJ/s1600/unnamed%20(13).jpg", 
+            q: "O condutor não deve iniciar a marcha do veículo:", 
+            options: {A: "Se a pressão do ar dos travões for insuficiente.", B: "Sem accionar repetidas vezes o pedal de travão.", C: "Se a temperatura do motor não for suficiente.", D: "Sem accionar repetidas vezes o pedal do acelerador."}, 
+            ans: "A" 
         },
         { 
             id: 15, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhZWrdJ8PQnKDRQn6iSVu1oQyU5VIsC0gqqG421aO90YjnDL96AFt2TE1qycQO8Y_Bhpp0EGrPvA0-YYoX-ymytA1bxFsokrHVDHg54AzDlQA64EwqJtI-PqjAiMNJSmqcCkDDWSjHQbdYo73iMSZ00Rc_V9U3PxlfAErrXMwJ0YeWO68kWg83cXBiBCk0S/s1600/unnamed%20%285%29.jpg", 
-            q: "Num automóvel, para extinguir um incêndio provocado por um curto-circuito deve-se:", 
-            options: {A: "Desligar a ignição e utilizar apenas água com óleo.", B: "Desligar a ignição e utilizar um extintor.", C: "Desligar a ignição e utilizar apenas água."}, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjAtwv06RIr-IkJio5xn_kwjwyFOkXGx_YwmojZtHCf2bfhmaxzfjGx-W9SnwfRm3NnvIgLAJoqpu6zjwYVuX3pH2T-lw5uaU8ZlO5jwwAmymA17D7MN3xQW88wW_bjnUb8U5VBOHB53NcV7dz-aM4iPslDL-bM4gqYzZ-6WGkB7omNMHkV8Y1EUL9Szbv-/s1600/unnamed%20(14).jpg", 
+            q: "Quando existe dificuldade em pôr o motor a trabalhar, pode-se insistir com o motor de arranque?", 
+            options: {A: "Sim, desde que a bateria tenha líquido suficiente.", B: "A insistência excessiva causa danos na bateria.", C: "Sempre até que o motor comece a trabalhar.", D: "Sim, desde que o motor esteja quente."}, 
             ans: "B" 
         },
         { 
             id: 16, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjEhCtcme5PKXpULSCgOis5zPX4GrGHXncOPHLLmqdM_rSDjmeMpD82JlNqHrvYNKJj1bJkpnrdQ159KHB_oldIXhz2MT1rPGsmZxfKc2soKv5wbZXJ8Ob4MpiMZDSm5ZWlCbjkBckji-QBDRYDuqMCvCGESmT7OuT8QLgGggYEt9XGijEQhXFvU5ZfW-GF/s1600/unnamed%20%284%29.jpg", 
-            q: "Os pneus de um automóvel ligeiro podem danificar-se seriamente quando:", 
-            options: {A: "Passam por buracos e sobem passeios.", B: "Circulam com pressão ligeiramente superior ao normal.", C: "Circulam em estradas com areia."}, 
-            ans: "A" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7EUKPbjNmU8Ss3XAcHImshcjsKGHAti_EH8AVEHFeGb8Hj9tdGA4kkqswXZUpv3O6Z62dnVmAvwgbnuurRLAaG4y4UuCmUkywge5aHnM5Zvb2ghUUM4LmNQtR1deD8_yPPRYOL5XGreSa17tEesTjAsl240TSsfsMu5SfCxvq4ZUUGR8OZwRptns0oRyO/s1600/unnamed%20(15).jpg", 
+            q: "Que efeito produzem os amortecedores descarregados?", 
+            options: {A: "A suspensão torna-se muito dura.", B: "Torna-se difícil movimentar a direcção.", C: "As molas oscilam demasiadamente.", D: "O veículo ganha maior estabilidade."}, 
+            ans: "C" 
         },
         { 
             id: 17, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgFKhz3S0RI54iCNDubFx8iKuoV0hEAaDVZU84RDykipOFM5_5OYQDse_Npu_V-wm2wFop0IRncoJs71Oi8MgB0vBuPhBlXQbkQs8GBUSj78nea3tDi5e6JJghvOOtpZyLjlXF98WjVMEQQEf-U10qSwR-22O9zqM8Ayy_vpmKXwJ_aeDW8AnAFAIo9v1bZ/s1600/unnamed%20%283%29.jpg", 
-            q: "Alinhar a direção significa:", 
-            options: {A: "Afinar a convergência ou a divergência das rodas direcionais.", B: "Anular todas as folgas da direção.", C: "Regular as folgas da direção."}, 
-            ans: "A" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgEg4OgOkUYnbh2QXBGFE9aXmFzAJvjdbAYW429v3_fDkggVnq1CFGYk69bWDFtaEwnvxJNC66jq7-eIZQN1Lpky13C3DARyuVFPuT3NnfVtay_jC8IRBEcltS-nOcjWu_oQapLa0P4uIh0VE_N7dNkIa1_W3VrjhHy1uTj-ff34m8_4R-DjRJnuUrBd6D-/s1600/unnamed%20(16).jpg", 
+            q: "Para que serve o alternador?", 
+            options: {A: "Para alimentar o motor de arranque.", B: "Para fornecer corrente à bobine.", C: "Para evitar que a bateria se descarregue.", D: "Para carregar o dínamo."}, 
+            ans: "C" 
         },
         { 
             id: 18, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEip72Myk_Q4hOlOJoYrUYHhX6BgEbvRbsfJA6PGcEK0St2IITONqOwCD0dK1drrc4vG6W3klIPdXHpihQAhCrlEpxlPJ2j9sg9hI3GzBxOQimXRk-0-VsvSufRrvLClrVJguPpIBTjWqGUg33XHiYIZogxmw1zaJ72rsbtxToKIQIedYpBozkTaPnb0SfTm/s1600/unnamed%20%282%29.jpg", 
-            q: "O dispositivo de acoplamento que em conjunto com um motor de elétrico permite que o motor de combustão arranque, denomina-se:", 
-            options: {A: "Bobine.", B: "Bendix.", C: "Solenoide."}, 
-            ans: "B" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVmJOM3EGpVd2XycYitQVwufJhUIs-As1NzdiFS9D24D36w8O7BPuAyC02tgWNgaxn43JVXbaEWJgsdLYp6xWB0cXjNiyHWHCU3m2hURINGwQqs0veLLdz5vExAwqmguEQFPupkKYppyQdX1J5tvC31jhYfW6emyXBA_OfOkt_WWipqtzj43rnofpa_O7O/s1600/unnamed%20(17).jpg", 
+            q: "O sistema hidráulico da direcção assistida permite virar:", 
+            options: {A: "Com um ângulo maior.", B: "Com menos volta do volante.", C: "Com menos esforço do condutor.", D: "Com menos velocidade."}, 
+            ans: "C" 
         },
         { 
             id: 19, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgP9diB-BWB-elQzRLnBaFURUuDkqik8Zs9WOZlpQgyYXE2BC5WOOK6I7gOVw2vbp-7PILxmIq56LHSBIFMc3cagl7gSTOpNbt9b4ik2Y26X8_-NY5gsWM9b4G448-fkITM-ev6GRkV3u6_mBs3A_Wt7vb-vlie34DqxPEkYiQF20XQtZpyYdo0gRU4MyY2/s1600/unnamed%20%281%29.jpg", 
-            q: "A barra de torção ou barra estabilizadora pertence ao sistema de:", 
-            options: {A: "Direção.", B: "Travagem.", C: "Suspensão."}, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgDYcljDSWLR8apcy_GzhSxtz1v6EOZmWEL-jGb2T5ZdhJK5wvtAUvE6WePSNO8KFD4eOxz2zy5mDkXwC-dvPkasu1cSl2TKljkyl5-PG0Oz36xJhedYomvVEtRZ6zMdShHkyKw2UQsxfVhZm88ioEBbrv-MbovKEP2Yj87A9HAUfumf93CXg64EFSwURYt/s1600/unnamed%20(18).jpg", 
+            q: "Onde estão montados o manómetro do óleo, o indicador do nível de combustível e o termómetro?", 
+            options: {A: "Debaixo do pára-brisas.", B: "Na carroçaria do veículo.", C: "No painel de instrumentos do veículo.", D: "No compartimento do motor."}, 
             ans: "C" 
         },
         { 
             id: 20, 
-            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7c__iwhg-TysQeqawg8DjBcv20v_ZXLZ5WfcyiH9hQY-PIsDv46T6bAGwAUxKPudADWmtzVAkxDMz-Dc_HCODM76E-wGMl1-8-Y9bmh47h_vjaHYsNboJk440q0sB2EdTRu3jgF_7IlfAsm2X1QqZr9G4VBmFAAZd46OQXOtkBOC8bS353z0qXyhC1EXr/s1600/unnamed.jpg", 
-            q: "Durante o transporte de materiais pulverulentas em automóvel pesado, o condutor deve assegurar-se de que:", 
-            options: {A: "A mercadoria transportada não se espalhe pela caixa de carga.", B: "O peso da mercadoria não ultrapasse a tara do automóvel.", C: "A mercadoria transportada não se espalhe pelo ar e pela faixa de rodagem."}, 
-            ans: "C" 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibVA8BL76P3JPhUg8g2y2kN4tbJMJWP1_UznyMIc2hS7_63zW78pYrZv9SBWNrI_qHR3pbjk5VmTiYoY5NAwzVdKd71v4hmF_K0d8gPaPmHE4Is3GANwc2BnsIacLYLRv2G0YeKuh7Max3OJrJP8OloFjO5OkUjOH5Y9jVpScbFe0xw8PzIkz8IoYn_TT-/s1600/unnamed%20(19).jpg", 
+            q: "No transporte de animais vivos é muito perigoso:", 
+            options: {A: "Variar bruscamente a velocidade e a direção.", B: "Alterar a velocidade sem o auxílio da caixa de velocidades.", C: "Transitar com velocidade moderada.", D: "Fazer uso do travão com frequência."}, 
+            ans: "A" 
         }
     ];
 
