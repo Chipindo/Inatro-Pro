@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Supabase incluído para verificar e atualizar o desbloqueio em tempo real -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #CBD5E1; color: #1E293B; display: flex; justify-content: center; min-height: 100dvh; margin: 0; }
@@ -91,11 +94,44 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+
+    async function carregarDadosEVerificar() {
         const userDataJson = localStorage.getItem('usuarioLogado');
         if (!userDataJson) { window.location.href = 'index.html'; return; }
 
-        const userData = JSON.parse(userDataJson);
+        let userData = JSON.parse(userDataJson);
+
+        // Sincroniza em tempo real com a BD para refletir aprovações imediatas do Admin
+        try {
+            const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            const { data } = await sClient
+                .from('Utilizadores')
+                .select('assinatura_mecanica, mensagem_admin, banido')
+                .eq('id', userData.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html');
+                    return;
+                }
+                if (data.assinatura_mecanica) {
+                    userData.assinatura_mecanica = data.assinatura_mecanica;
+                    localStorage.setItem('usuarioLogado', JSON.stringify(userData));
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+
+        renderizarInterface(userData);
+    }
+
+    function renderizarInterface(userData) {
         let hasPremium = false;
         let diasRestantes = 0;
 
@@ -142,12 +178,11 @@
             }
         }
         grid.innerHTML = html;
-    });
-</script>
+    }
 
-<!-- Carrega o Supabase e o Cão de Guarda de uma só vez -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+    document.addEventListener("DOMContentLoaded", carregarDadosEVerificar);
+
+    // Cão de Guarda contínuo a cada 30 segundos
     async function caoDeGuarda() {
         const userDataJson = localStorage.getItem('usuarioLogado');
         if (!userDataJson) {
@@ -156,14 +191,9 @@
         }
 
         try {
-            // Inicializa o Supabase nesta página específica
-            const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
-            const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
             const sClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
             const user = JSON.parse(userDataJson);
             
-            // Verifica o estado atual na base de dados
             const { data } = await sClient
                 .from('Utilizadores')
                 .select('mensagem_admin, banido')
@@ -182,8 +212,6 @@
         }
     }
 
-    // Executa ao abrir e repete a cada 30 segundos
-    caoDeGuarda();
     setInterval(caoDeGuarda, 30000);
 </script>
 
