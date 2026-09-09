@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Carta Mestre - Exame de Mecânica 12</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* VARIAVEIS DE CORES */
+:root {
+    --primary: #04182B !important;
+    --primary-light: #112B47 !important;
+    --green: #00D37F !important;
+    --red: #EF4444 !important;
+    --orange: #F59E0B !important;
+    --bg: #F0F4F8 !important;
+    --card: #ffffff !important;
+    --text: #1F2937 !important;
+    --muted: #9CA3AF !important;
+    --blue-active: #3B82F6 !important;
+}
+
+/* SISTEMA ANTI-CÓPIA & RESET */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none; text-decoration: none;
+}
+
+html, body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex; 
+    flex-direction: column;
+}
+
+/* ================= TOPO FIXO (HEADER + NAV) ================= */
+.fixed-top-area {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+}
+
+header {
+    background: var(--primary);
+    width: 100%; 
+    padding: 15px 15px 45px 15px;
+    border-radius: 0 0 30px 30px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-container {
+    min-width: 0;
+    flex-shrink: 1;
+}
+
+.brand-title { 
+    font-size: 1.35rem; 
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 900; 
+    color: white;
+    letter-spacing: -0.5px; 
+    line-height: 1.1;
+    white-space: nowrap;
+}
+.brand-title span { color: var(--green); }
+.brand-subtitle { 
+    font-size: 0.7rem; 
+    font-weight: 600; 
+    color: white;
+    opacity: 0.8; 
+    margin-top: 3px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.header-right { 
+    display: flex; 
+    gap: 6px; 
+    align-items: center; 
+    flex-shrink: 0;
+}
+
+.timer-box {
+    background: var(--primary-light); 
+    color: white;
+    padding: 7px 10px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 5px; 
+    font-weight: 700; font-size: 0.85rem;
+    white-space: nowrap;
+}
+.timer-box i { font-size: 0.85rem; color: var(--orange); }
+
+.btn-terminar {
+    background: var(--red); color: white; border: none;
+    padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+    font-size: 0.75rem; text-transform: uppercase;
+    white-space: nowrap;
+}
+.btn-terminar:active { transform: scale(0.95); }
+
+/* ================= BARRA DE PAGINAÇÃO ================= */
+.nav-wrapper {
+    width: 100%; max-width: 600px; 
+    margin: -24px auto 0 auto;
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 15px;
+}
+.nav-container {
+    display: flex; align-items: center; gap: 10px; 
+    overflow-x: auto; scrollbar-width: none;
+    flex-grow: 1; padding: 10px 0;
+}
+.nav-container::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+    background: var(--card); color: var(--primary); border: none;
+    width: 48px; height: 48px; border-radius: 14px; font-size: 1.1rem;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; flex-shrink: 0; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+.nav-btn:active { background: #E5E7EB; }
+
+.page-num {
+    min-width: 48px; height: 48px; 
+    background: var(--card); color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px; font-weight: 700; cursor: pointer; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04); 
+    font-size: 1rem; flex-shrink: 0;
+}
+.page-num.active { 
+    background: var(--blue-active); 
+    color: white; 
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); 
+    transform: translateY(-2px);
+}
+.page-num.answered { border-bottom: 4px solid var(--green); color: var(--primary); font-weight: 800; }
+
+.page-num.rev-correct { background: var(--green) !important; color: white !important; border-bottom: none; }
+.page-num.rev-wrong { background: var(--red) !important; color: white !important; border-bottom: none; }
+
+/* ================= ÁREA DE CONTEÚDO ROLÁVEL ================= */
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 15px 40px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.container { width: 100%; max-width: 580px; }
+
+.question-wrapper { display: none; animation: fadeIn 0.3s ease; }
+.question-wrapper.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-inner {
+    background: var(--card); 
+    border-radius: 24px; 
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03); 
+}
+
+.q-img { 
+    width: 100%; height: auto; max-height: 250px; 
+    object-fit: contain; border-radius: 12px; 
+    margin-bottom: 25px; pointer-events: none; display: block; 
+}
+.q-text-area { 
+    font-weight: 800; font-size: 1.15rem; 
+    color: var(--primary); margin-bottom: 25px; 
+    line-height: 1.4; 
+}
+
+/* ================= OPÇÕES ================= */
+.options-container { display: flex; flex-direction: column; gap: 14px; }
+
+.option {
+    display: flex; align-items: center; background: var(--card);
+    border: 1.5px solid #E5E7EB; border-radius: 16px; padding: 12px 16px;
+    cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text);
+}
+.option:hover { border-color: #D1D5DB; }
+.option input { display: none; }
+
+.option-letter {
+    background: var(--primary); color: white; border-radius: 12px;
+    width: 42px; height: 42px; display: flex; align-items: center;
+    justify-content: center; font-weight: 800; margin-right: 16px; 
+    flex-shrink: 0; font-size: 1rem;
+}
+
+/* Estado Selecionado */
+.option:has(input:checked) { 
+    border-color: var(--blue-active); 
+    background: #F3F8FF; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08); 
+}
+.option:has(input:checked) .option-letter { background: var(--blue-active); }
+
+/* Correção Final */
+.correct-ans { background: #ECFDF5 !important; border-color: var(--green) !important; }
+.correct-ans .option-letter { background: var(--green) !important; }
+.wrong-ans { background: #FEF2F2 !important; border-color: var(--red) !important; }
+.wrong-ans .option-letter { background: var(--red) !important; }
+
+.label-certa {
+    background: var(--green); color: white; font-size: 0.7rem; padding: 5px 10px;
+    border-radius: 8px; margin-left: auto; font-weight: 800; display: none; text-transform: uppercase;
+}
+
+.exam-finished .option { pointer-events: none; }
+
+/* ================= MODAL DE RESULTADO ================= */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(4, 24, 43, 0.85); backdrop-filter: blur(8px);
+    z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+}
+.modal-content {
+    background: white; width: 100%; max-width: 380px; border-radius: 28px;
+    padding: 40px 30px; text-align: center; position: relative; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+#modalIcon i { font-size: 4.5rem; margin-bottom: 15px; }
+.modal-status { font-size: 2rem; font-family: 'Montserrat', sans-serif; font-weight: 900; margin-bottom: 25px; letter-spacing: -0.5px; }
+.status-reprovado { color: var(--red); }
+.status-aprovado { color: var(--green); }
+
+.modal-stats { 
+    display: flex; justify-content: space-between; background: #F9FAFB; 
+    padding: 20px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #E5E7EB; 
+}
+.modal-stats div { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; width: 33%; }
+.modal-stats .divider { width: 1px; background: #E5E7EB; height: 40px; align-self: center; }
+.stat-value { font-size: 1.6rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+
+.modal-footer { display: flex; flex-direction: column; gap: 12px; }
+.btn-ver {
+    background: var(--blue-active); color: white; padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+.btn-sair {
+    background: #F3F4F6; color: var(--primary); padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+<!-- AREA FIXA NO TOPO -->
+<div class="fixed-top-area">
+    <header>
+        <div class="brand-container">
+            <div class="brand-title">CARTA<span>MESTRE</span></div>
+            <div class="brand-subtitle">Exame de Mecânica 12</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-box"><i class="fas fa-clock"></i> <span id="timer">60:00</span></div>
+            <button class="btn-terminar" id="btnFinish" onclick="checkExam()">Finalizar</button>
+        </div>
+    </header>
+
+    <div class="nav-wrapper" id="navBar">
+        <button class="nav-btn" onclick="prevQ()"><i class="fas fa-chevron-left"></i></button>
+        <div class="nav-container"><div id="pagination_bar" style="display: flex; gap: 10px;"></div></div>
+        <button class="nav-btn" onclick="nextQ()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- AREA DE SCROLL PARA AS PERGUNTAS -->
+<div class="scrollable-content">
+    <div class="container">
+        <form id="exam" onsubmit="return false;"><div id="q_list"></div></form>
+    </div>
+</div>
+
+<!-- MODAL RESULTADO -->
+<div class="modal-overlay" id="modalRes">
+    <div class="modal-content">
+        <div id="modalIcon"></div>
+        <div class="modal-status" id="modalTitle">Reprovado</div>
+        
+        <div class="modal-stats">
+            <div><span id="resAcertos" class="stat-value text-green">0</span> Acertos</div>
+            <div class="divider"></div>
+            <div><span id="resErros" class="stat-value text-red">20</span> Erros</div>
+            <div class="divider"></div>
+            <div><span id="resMedia" class="stat-value">0</span> Pontos</div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn-ver" onclick="closeModal()"><i class="fas fa-search"></i> Ver Correção</button>
+            <button class="btn-sair" onclick="window.location.href='exames-mecanica.html'"><i class="fas fa-arrow-left"></i> Voltar à Lista</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // BLOQUEIO DE TECLADO E CLIQUE DIREITO
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'p' || e.key === 'a')) { e.preventDefault(); }
+    });
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const EXAME_ID_UNICO = "exame_mecanica_23_24"; 
+    const NOME_DO_EXAME = "Exame de Mecânica - Testes 23 e 24";
+
+    // PERGUNTAS COMBINADAS DOS TESTES 23 E 24 COM AS IMAGENS FORNECIDAS
+    const questions = [
+        // --- TESTE 23 ---
+        { 
+            id: 1, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgquQ18JXaTPQP814gnwnEqiteEm4tiIWGddXj8xPE00UF5mD1Svx0E7mVtRqBhyPRNMtvGtuAOFiYh5hkGdngfnyYWSfC1bnVlLCVAqF_aTZBCRsO2QvUFmf87fFLbX6wCpaIuHs-fh9MZTrdzLHlKY41PEExWNDyjbygr8NdhQCJCH4gt5ad8mv3J_mpl/s1600/unnamed%20(21).jpg", 
+            q: "O termóstato abre e fecha por ação:", 
+            options: {A: "Da temperatura da água.", B: "Da pressão da água nos tubos.", C: "Da correia da ventoinha.", D: "Da bomba da água."}, 
+            ans: "A" 
+        },
+        { 
+            id: 2, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhtqkk0F3Qy_Z-c61v0mBBPBlHmE0JaVZuDpQeM7U84G4UpSACR5aeB_gGdL_6S5yFPIPXu2oFoH6u3GtdcZU_Z-BmnzG4huNgP2hSJRhyzjLi1DCW_EnGg2ffoiY1RqHycom06-uI8jgazxnfYQ7A4Tck2ilpwnmWM2ddUzYFdoy0qm6udHsHKgxUQoSIS/s1600/unnamed%20(22).jpg", 
+            q: "Com o motor parado como se verifica se o motor tem óleo ao nível?", 
+            options: {A: "Por meio do respetivo manómetro.", B: "Por meio da vareta graduada que existe no flanco do motor.", C: "Por meio do respetivo termómetro.", D: "Por meio da vareta graduada que existe na cabeça do motor."}, 
+            ans: "B" 
+        },
+        { 
+            id: 3, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEij0BnXvd5bKpsUo3PvCNo3Kd3bynTsMNyIMji-hN0PPGCrT8nP-CXmS9FYMIlHZlpfKkHMNW-rsLTE9Lh_37Z-sJq-QBuDllherCc9-rrSpsd6RalZCje-x7W4TTuyS5bC9ru-MuN3iicrJRwfN6a0UzR1GdaEd-5aaIbkYajEnCtaC0K212UJppXeqLlg/s1600/unnamed%20(23).jpg", 
+            q: "Como se chama o órgão que impede a passagem de impurezas do óleo para os canais de lubrificação?", 
+            options: {A: "Filtro de ar.", B: "Manómetro de óleo.", C: "Filtro de óleo.", D: "Filtro hidráulico."}, 
+            ans: "C" 
+        },
+        { 
+            id: 4, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiO1NgEuCa9FHuA86MKZWJxLeeB5P5RnsbZNykSX5aO09lmnhB-7iZ0AYYCuwwXy-O6F3etBtQZPZ9vcgx4Qi4eDxsejPCEEbiNaLSRHPVrIeRvbms0iXKl8v8Vc0kDwZ63M1gwc5FK0d2AMDrmpbvuZfTjlUTetVb8xMTW0-b-2VZO2ArRYQcySUii8CVq/s1600/unnamed%20(24).jpg", 
+            q: "Com a direção desalinhada o que poderá acontecer?", 
+            options: {A: "As molas de suspensão oscilam demasiado.", B: "Desgaste anormal dos pneus.", C: "A embraiagem patina.", D: "O veículo fica sem direcção."}, 
+            ans: "B" 
+        },
+        { 
+            id: 5, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhmQQUIkfkpfxwMYcD8zVyQl993sMamOhtGOaCELdR4owEP8aZY-UmsTj6xThkgDiPCzSms6glA84JZDsO7N919ePO3kDR61Ek4dOWn6slU5552egeLblJceBaQ_c54XkXo7eLlkIBC7vh4DbU7bqE6fz6XdxAt_O9uU-_SOwqH6ivWbguoeFYV1UIV6Fwt/s1600/unnamed%20(25).jpg", 
+            q: "Um dos cuidados a ter com os veículos equipados com travões de ar comprimido é:", 
+            options: {A: "Nunca deixar esgotar o ar dos pneus.", B: "Nunca deixar esgotar o ar do cárter.", C: "Nunca parar o motor enquanto o ar não encher o compressor.", D: "Nunca parar o motor enquanto o veículo estiver em andamento."}, 
+            ans: "C" 
+        },
+        { 
+            id: 6, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiRiNcypmyvpnJsrbBC1T_UPDnxA8ZjaZExHkjqIfWwTg0IbKCsZbEpqliXFokQnqHJTsOOoUyb4mW3fkVC5yXXT7gRyX_RIt0Cq0QAromuS8fnK7ApWZscTRnnJFhSEUjzL0ErtVI4_YzCcPLtMwhjfqq3pS7fyBZc_TDzV20jAhnBckIe0gB7uOxpslFe/s1600/unnamed%20(26).jpg", 
+            q: "Os órgãos de suspensão dos veículos automóveis são os que se destinam:", 
+            options: {A: "A amortecer ou anular as oscilações bruscas provenientes das irregularidades do terreno.", B: "Ao fornecimento da energia necessária ao movimento do veículo.", C: "A ligar e desligar o motor à caixa de velocidades.", D: "A suspender o veículo quando os pneus furam."}, 
+            ans: "A" 
+        },
+        { 
+            id: 7, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg1Qn5jyyBJcpT9jrooH9fsRT9G2u9a5EEEctnIDXHbiDOl-DXcaWG-4zh9A4fpdWzeOqmuNvlU2cp0l_QgcqGvL9aC_5GiPcOCWeL38N71JHQmDcxfJLLMx3Xd3-02v8BEuv5JuXhBbDLKUXzFfUdk71Ac7hv-FCHRJRRyNdaWW26jo83AsKB6xkNqRnyc/s1600/unnamed%20(27).jpg", 
+            q: "O manómetro de óleo serve para indicar:", 
+            options: {A: "A temperatura do óleo de lubrificação do motor.", B: "O bom ou mau funcionamento do sistema de lubrificação.", C: "O bom ou mau funcionamento do sistema de refrigeração.", D: "O bom ou mau funcionamento do sistema de alimentação."}, 
+            ans: "B" 
+        },
+        { 
+            id: 8, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhaPr1O2LN3j0xuNKsvwT6s3Xk3sgPubuzzZirmWLSHEdyuBnedkcTO8ALO_dn_242tnzjuMv1A3ShHCHoxr06c0ZjceNU74ERTKUshZHi8MHdME1BuFS3Qm8p0K1hrD_bQHf2mcy-A3Ok7sRsBGu5p7pQqRXzFJk9NqtW2_DiLJw_Q69xTm6Ozl3lcqMS3/s1600/unnamed%20(28).jpg", 
+            q: "Uma carga muito pesada e pouco volumosa colocada muito à frente na caixa de carga:", 
+            options: {A: "Aumenta excessivamente o peso incidente sobre as rodas traseiras, sobrecarregando o diferencial.", B: "Pode provocar o arrebentamento das rodas de trás.", C: "Pode provocar o amolgamento da cabine.", D: "Aumenta excessivamente o peso incidente sobre as rodas diretrizes, tornado difícil o manejo da direção."}, 
+            ans: "D" 
+        },
+        { 
+            id: 9, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvf7Ox8IjESualpGz-IuQ_lA_WPtJ2__R01K8bLxK_GlRN6XnftpwZjCesj2OWcGXjjT4PQuD1_8w5qjTfdqIeHn-mbEyUUm0pE-3e-2N4cO9arF0iz2huRMJ2WY9QsL0eS9vvaze4TDxWjSybwvgNF1mh2yqsvzuyci5iR7kPsi6szCnJGi524ES5Bifk/s1600/unnamed%20(29).jpg", 
+            q: "O alternador tem a seguinte finalidade:", 
+            options: {A: "Transformar a corrente da baixa em alta tensão.", B: "Alimentar o motor de arranque.", C: "Dar a primeira rotação ao motor.", D: "Alimentar a bateria."}, 
+            ans: "D" 
+        },
+        { 
+            id: 10, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhgRI-oplgL1XUCSenbkkuw0nMEfycHQlmj5A78Ok8sdLy72FWyJtxv6L-fxaagA8rB8moRF49et0eyFeDZcI1rsqiR9lFaj54vblYeyLD9s0tlfPe1wgTQdU2pcgQXv881S2WHhWA5xPU12z7cnfBANlJYlo_YgfZ9xbMiTWyxzMAAtdH1exwo1gyvshy4/s1600/unnamed%20(30).jpg", 
+            q: "As velas de incandescência servem para:", 
+            options: {A: "Aquecer as câmaras de combustão, facilitando o arranque a frio do motor à gasolina.", B: "Que nelas se produzem as faíscas elétricas que provocam a explosão da mistura (gasolina+ar).", C: "Alimentar as lâmpadas de incandescências dos faróis de iluminação do veículo.", D: "Aquecer as câmaras de combustão, facilitando o arranque a frio do motor Diesel."}, 
+            ans: "D" 
+        },
+        // --- TESTE 24 ---
+        { 
+            id: 11, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjXkjHyq-ni3mWyGBzouzdoZlXPwB_4Tzfq8IsHCPEkLZVfrRavnuckr94NmU1DePTeXJx9bZtnv9U0PcVRMxD2R8E8aVfEWs8dq0EFTZPwt4qffufI38bXEku6rrauy1gw5ppRi5KbPTvkY_Kt3MNQY3kFnRvVa25EnhqwgioSOSKMunz1St4CdB8CIeiT/s1600/unnamed%20(31).jpg", 
+            q: "O que é que provoca o arrefecimento do motor?", 
+            options: {A: "É a água que circula pelas camisas de água no motor.", B: "É o ar que circula pelo cárter de óleo no motor.", C: "É a água que circula pelo cárter de água no motor.", D: "É o ar que circula pelas camisas de ar no motor."}, 
+            ans: "A" 
+        },
+        { 
+            id: 12, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjD7McTCVcj3aQXPd8FlS_stUdMfWamqTicrNaiCbdMDUC6zE1k50SC9dxx5PVf2nsxCDUdiPltCfbc6TFVSqbAqDEotgo8TIQWQW0B4MZCATUDFGcN7SPBrBaxsKF8Cd0vYjCCfoHiN3_ygFP7ga_Dcya_QvfGy6orcoqWytIppNHZCzcuDMtzcwhbAHtg/s1600/unnamed%20(32).jpg", 
+            q: "Para evitar avarias no sistema de lubrificação do motor deve-se:", 
+            options: {A: "Substituir, periodicamente, o filtro de ar .", B: "Substituir, periodicamente, o filtro de gasóleo.", C: "Substituir, periodicamente, o filtro de óleo.", D: "Substituir, periodicamente, o filtro de gasolina."}, 
+            ans: "C" 
+        },
+        { 
+            id: 13, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiz47Af_pBF0DlJQhWSmN9g1T2h6BfHkhqiYSsAfvSGyEQPpHbU-uR1jLIUpbqNa-RNWq0R1jv5OyTism3Kf5X8fYQ3z20YM4iXn3FH1jGn99ZWclOfwdsmGuJisqJHeNl73cjgdcHBvp0Elc6zGHVEgdoLUPIhZgf3g6JkK6CVSZudgY63_eW_AVsZAmu_/s1600/unnamed%20(33).jpg", 
+            q: "Qual o combustível utilizado nos motores Diesel?", 
+            options: {A: "Gasolina e ar.", B: "Gasóleo ou gasolina.", C: "Gasóleo.", D: "Gasolina sem chumbo."}, 
+            ans: "C" 
+        },
+        { 
+            id: 14, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHYm1-QAE4fv9qWqO6W1iGuL66K8xVEz2IWY2ifcLwxu4Zg1A3tZyXMJpVI8RNtXqpW2O4kyn4lQn6Ah7m4P7Yvc5w5wzKiywyGcv_kv5vLxTEprNI7-HagfnqhdYifIBjErguRKmupzr4SDTbcxN1GQHiF_zx3VRkRdGHvQX8CSwKQgfU_Hayvcecxx11/s1600/unnamed%20(34).jpg", 
+            q: "A valvulina é utilizada:", 
+            options: {A: "No motor diesel.", B: "Na caixa de velocidades.", C: "No motor à gasolina.", D: "Nos travões."}, 
+            ans: "B" 
+        },
+        { 
+            id: 15, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMFllJ8NboAwHpndlV9_6YACmNm7iItYb4UgndEL-ZdWAuweCjUrAt5KI3m7w5061KTfzCJZmkda_WJUEhgh5qxeRTxdOXDJncLRxwYhVZA1E0-5XjIt7b_GKywPyb_himBYA9FWYlG9Kkj7q2x1YtskWmEWH2e75dwqez-lbxmZLQfBQVmHlE6lR7KTLX/s1600/unnamed%20(35).jpg", 
+            q: "Um dos cuidados que requer a bateria é:", 
+            options: {A: "Conservar os bornes limpos e untados com massa consistente ou àgua destilada .", B: "Conservar os bornes limpos e untados com vazelina ou electrólito.", C: "Conservar os bornes limpos e untados com massa consistente ou vazelina.", D: "Conservar os bornes limpos e untados com vazelina ou àcido sulfúrico."}, 
+            ans: "C" 
+        },
+        { 
+            id: 16, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj8ie6Fo0hfibxwUrEZ4ZcbvSYfxg7q1-spYSrrHiqi2MsZ1ms2AL-352MghakE4ka8VbUuUaM8kcu1gnGhVGdcD8-FZ5p8HIZQa9fmk1QJ7xYgQBDSKcZ1OtgVtDygG2h_ZT7q0zr_paSu8gJ3vlW8FKpeuRWhutpJslgAdbq_uaUTCLF1nClTme4ABEl1/s1600/unnamed%20(36).jpg", 
+            q: "Qual o instrumento que serve para indicar se a lubrificação do motor se está a fazer em boas ou más condições?", 
+            options: {A: "O dinamómetro.", B: "O manómetro.", C: "O termómetro.", D: "O amperímetro."}, 
+            ans: "B" 
+        },
+        { 
+            id: 17, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEha0OlJ75F6E1isyTOtyc1THWtOgoHf9gg1KrCzsUZOarji32FTyBuzmU2GL48kxy1w8ii4ERfGUPMwiPxMNYbcy-QFrDYoKOGW9djzjq9X8njxoRvF4ji992OdjrCg9upT5zho5yAecbubBr2NzlE0X08-EhQFVe4klrxLZ0oeYAE1_Ga6jVvExQkjcegi/s1600/unnamed%20(37).jpg", 
+            q: "O óleo da lubrificação dos motores poderá servir nos travões hidráulicos?", 
+            options: {A: "Sim, nos travões de veículos ligeiros.", B: "Não, porque estraga as borrachas no sistema de travões.", C: "Sim, desde que seja óleo 15W40.", D: "Não, porque pode danificar os cilindros de travões."}, 
+            ans: "B" 
+        },
+        { 
+            id: 18, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhs0ocre6twKa1cOh5YxL7jshPqIw7LZMC0-5uow1YS1JxVo4BPGUqeIkSGlBsdLJgV9CI-d1IpZLgzI0tN9uRjyYfofx-Pe28e_EEUxeyp1EzuAhniwVOjb-NEX3OdD7k5a4ft6jzCoNtRt_JDjuBuFefd8IMWqeIBKYtSnzvMBIk79Y67u1Vza2Z5wo3Q/s1600/unnamed%20(38).jpg", 
+            q: "Um pneu com a medida 195R15 deverá ser utilizado numa roda com jante:", 
+            options: {A: "De diâmetro igual a 19,5 polegadas.", B: "De diâmetro igual a 15 polegadas.", C: "De diâmetro igual a 19,5 cm.", D: "De diâmetro igual a 15 cm."}, 
+            ans: "B" 
+        },
+        { 
+            id: 19, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhvLrLLDlKGmRKi5eh1L3gIWTdRRZVQ9EzUUaagQ6iaD8dEba1ctbc0m-Icg7ZvO80U_BtuBQTxWacEH5nKLA26MEHwMkoprgNl-pP7U9iwbn02CmzEqO732b-8LROBvVx3KtEe-PlK6_uJBfK38ussdgFzEoUssbc4Ea5dI37IucqPi5gGNSs4UzDeQwgM/s1600/unnamed%20(39).jpg", 
+            q: "Um dos cuidados que um condutor de um veículo equipado com travões de ar comprimido deve ter, é:", 
+            options: {A: "Verificar o nível de ar na bomba central de travões antes de pôr o veículo em andamento.", B: "Verificar a pressão de ar no respectivo manómetro antes de pôr o veículo em andamento.", C: "Verificar o nível de ar no compressor de ar antes de pôr o veículo em andamento.", D: "Verificar a pressão de ar pelo respectivo amperímetro antes de pôr o veículo em andamento."}, 
+            ans: "B" 
+        },
+        { 
+            id: 20, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUYpY-uooNp0A9AguKSZTMFIzRCKjdDtUpBiLEWxlVr7VuhK2ba1e7DVSNYi8UTYbPy8MpisSvOvTYeaXc8-IEJy1T_PutyYWnEcJrRphKcDcR4qrfadLC_fRlFjxAjzysQcFa15eFi4ePZo7Q0vguf2sD5FlDeFtlrcemHs31Vy5_BEnRF-gPuCRjbLse/s1600/unnamed%20(40).jpg", 
+            q: "Uma carga pequena e muito pesada, colocada muito atrás na caixa de carga, pode dar origem à:", 
+            options: {A: "Que a direção fica extremamente pesada.", B: "Resvalamento das rodas da frente.", C: "Que a direção fique desalinhada.", D: "Resvalamento das rodas traseira."}, 
+            ans: "B" 
+        }
+    ];
+
+    let currentIdx = 0;
+    let time = 3600;
+    let countdown;
+    let isExamFinished = false;
+    let userAnswers = {};
+
+    function init() {
+        renderQuestions();
+        startTimer();
+    }
+
+    function renderQuestions() {
+        document.getElementById('q_list').innerHTML = '';
+        document.getElementById('pagination_bar').innerHTML = '';
+        questions.forEach((item, index) => {
+            document.getElementById('pagination_bar').innerHTML += `<div class="page-num ${index === 0 ? 'active' : ''}" id="page_${index}" onclick="goToQuestion(${index})">${index + 1}</div>`;
+
+            let optionsHtml = '';
+            for(let key in item.options) {
+                optionsHtml += `
+                    <label class="option" id="label-${item.id}-${key}">
+                        <div class="option-letter">${key}</div>
+                        <input type="radio" name="q${item.id}" value="${key}" onchange="saveProgress(${index}, '${item.id}', '${key}')">
+                        <span>${item.options[key]}</span>
+                        <span class="label-certa" id="certa-${item.id}-${key}">CORRETA</span>
+                    </label>`;
+            }
+
+            const imgHtml = item.img ? `<img src="${item.img}" class="q-img" loading="lazy">` : '';
+
+            document.getElementById('q_list').innerHTML += `
+                <div class="question-wrapper ${index === 0 ? 'active' : ''}" id="q_wrap_${index}">
+                    <div class="card-inner">
+                        ${imgHtml}
+                        <div class="q-text-area">${item.q}</div>
+                        <div class="options-container">${optionsHtml}</div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function saveProgress(index, qId, val) {
+        if (isExamFinished) return;
+        userAnswers[`q${qId}`] = val;
+        document.getElementById(`page_${index}`).classList.add('answered');
+        setTimeout(() => nextQ(), 400);
+    }
+
+    function startTimer() {
+        clearInterval(countdown);
+        countdown = setInterval(() => {
+            if (time <= 0) { checkExam(); } else { time--; updateTimerDisplay(); }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(time / 60), s = time % 60;
+        document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function goToQuestion(index) {
+        if (index < 0 || index >= questions.length) return;
+        currentIdx = index;
+        document.querySelectorAll('.question-wrapper').forEach(w => w.classList.remove('active'));
+        document.querySelectorAll('.page-num').forEach(p => p.classList.remove('active'));
+        document.getElementById(`q_wrap_${index}`).classList.add('active');
+        document.getElementById(`page_${index}`).classList.add('active');
+        
+        document.getElementById(`page_${index}`).scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        document.querySelector('.scrollable-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextQ() { goToQuestion(currentIdx + 1); }
+    function prevQ() { goToQuestion(currentIdx - 1); }
+
+    async function checkExam() {
+        if (isExamFinished) return;
+        clearInterval(countdown);
+        isExamFinished = true;
+        
+        document.getElementById('exam').classList.add('exam-finished');
+        
+        let score = 0;
+        questions.forEach((item, index) => {
+            const userAns = userAnswers[`q${item.id}`];
+            const isCorrect = userAns === item.ans;
+            
+            document.getElementById(`label-${item.id}-${item.ans}`).classList.add('correct-ans');
+            document.getElementById(`certa-${item.id}-${item.ans}`).style.display = 'block';
+            
+            if (userAns && !isCorrect) {
+                document.getElementById(`label-${item.id}-${userAns}`).classList.add('wrong-ans');
+            }
+
+            const pageBtn = document.getElementById(`page_${index}`);
+            if (isCorrect) {
+                score++;
+                pageBtn.classList.add('rev-correct');
+            } else {
+                pageBtn.classList.add('rev-wrong');
+            }
+        });
+
+        showModal(score);
+
+        const totalErros = questions.length - score;
+        const percentagem = Math.round((score / questions.length) * 100);
+
+        try {
+            const userDataJson = localStorage.getItem('usuarioLogado');
+            if (userDataJson) {
+                const userData = JSON.parse(userDataJson);
+                
+                await _supabase.from('Historico_Exames').insert([{ 
+                    user_id: userData.id, 
+                    modulo: 'mecanica', 
+                    percentagem: percentagem, 
+                    acertos: score, 
+                    erros: totalErros 
+                }]);
+            }
+        } catch(e) {
+            console.error('Erro ao guardar histórico:', e);
+        }
+
+        const dadosParaSalvar = {
+            nome: NOME_DO_EXAME,
+            acertos: score,
+            total: questions.length,
+            data: new Date().toLocaleDateString('pt-MZ')
+        };
+        localStorage.setItem(EXAME_ID_UNICO, JSON.stringify(dadosParaSalvar));
+    }
+
+    function showModal(score) {
+        const aprovado = score >= 14;
+        const modal = document.getElementById('modalRes');
+        const title = document.getElementById('modalTitle');
+        const iconDiv = document.getElementById('modalIcon');
+        
+        title.innerText = aprovado ? "Aprovado" : "Reprovado";
+        title.className = "modal-status " + (aprovado ? "status-aprovado" : "status-reprovado");
+        
+        iconDiv.innerHTML = aprovado 
+            ? '<i class="fas fa-check-circle" style="color: var(--green);"></i>' 
+            : '<i class="fas fa-times" style="color: var(--red);"></i>';
+        
+        document.getElementById('resAcertos').innerText = score;
+        document.getElementById('resErros').innerText = questions.length - score;
+        document.getElementById('resMedia').innerText = score;
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modalRes').style.display = 'none';
+        document.getElementById('btnFinish').style.display = 'none';
+        goToQuestion(0);
+    }
+
+    init();
+</script>
+
+<!-- Cão de Guarda -->
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            const user = JSON.parse(userDataJson);
+            
+            const { data } = await _supabase
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>
