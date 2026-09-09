@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Carta Mestre - Exame de Mecânica 7</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* VARIAVEIS DE CORES */
+:root {
+    --primary: #04182B !important;
+    --primary-light: #112B47 !important;
+    --green: #00D37F !important;
+    --red: #EF4444 !important;
+    --orange: #F59E0B !important;
+    --bg: #F0F4F8 !important;
+    --card: #ffffff !important;
+    --text: #1F2937 !important;
+    --muted: #9CA3AF !important;
+    --blue-active: #3B82F6 !important;
+}
+
+/* SISTEMA ANTI-CÓPIA & RESET */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none; text-decoration: none;
+}
+
+html, body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex; 
+    flex-direction: column;
+}
+
+/* ================= TOPO FIXO (HEADER + NAV) ================= */
+.fixed-top-area {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+}
+
+header {
+    background: var(--primary);
+    width: 100%; 
+    padding: 15px 15px 45px 15px;
+    border-radius: 0 0 30px 30px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-container {
+    min-width: 0;
+    flex-shrink: 1;
+}
+
+.brand-title { 
+    font-size: 1.35rem; 
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 900; 
+    color: white;
+    letter-spacing: -0.5px; 
+    line-height: 1.1;
+    white-space: nowrap;
+}
+.brand-title span { color: var(--green); }
+.brand-subtitle { 
+    font-size: 0.7rem; 
+    font-weight: 600; 
+    color: white;
+    opacity: 0.8; 
+    margin-top: 3px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.header-right { 
+    display: flex; 
+    gap: 6px; 
+    align-items: center; 
+    flex-shrink: 0;
+}
+
+.timer-box {
+    background: var(--primary-light); 
+    color: white;
+    padding: 7px 10px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 5px; 
+    font-weight: 700; font-size: 0.85rem;
+    white-space: nowrap;
+}
+.timer-box i { font-size: 0.85rem; color: var(--orange); }
+
+.btn-terminar {
+    background: var(--red); color: white; border: none;
+    padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+    font-size: 0.75rem; text-transform: uppercase;
+    white-space: nowrap;
+}
+.btn-terminar:active { transform: scale(0.95); }
+
+/* ================= BARRA DE PAGINAÇÃO ================= */
+.nav-wrapper {
+    width: 100%; max-width: 600px; 
+    margin: -24px auto 0 auto;
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 15px;
+}
+.nav-container {
+    display: flex; align-items: center; gap: 10px; 
+    overflow-x: auto; scrollbar-width: none;
+    flex-grow: 1; padding: 10px 0;
+}
+.nav-container::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+    background: var(--card); color: var(--primary); border: none;
+    width: 48px; height: 48px; border-radius: 14px; font-size: 1.1rem;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; flex-shrink: 0; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+.nav-btn:active { background: #E5E7EB; }
+
+.page-num {
+    min-width: 48px; height: 48px; 
+    background: var(--card); color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px; font-weight: 700; cursor: pointer; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04); 
+    font-size: 1rem; flex-shrink: 0;
+}
+.page-num.active { 
+    background: var(--blue-active); 
+    color: white; 
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); 
+    transform: translateY(-2px);
+}
+.page-num.answered { border-bottom: 4px solid var(--green); color: var(--primary); font-weight: 800; }
+
+.page-num.rev-correct { background: var(--green) !important; color: white !important; border-bottom: none; }
+.page-num.rev-wrong { background: var(--red) !important; color: white !important; border-bottom: none; }
+
+/* ================= ÁREA DE CONTEÚDO ROLÁVEL ================= */
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 15px 40px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.container { width: 100%; max-width: 580px; }
+
+.question-wrapper { display: none; animation: fadeIn 0.3s ease; }
+.question-wrapper.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-inner {
+    background: var(--card); 
+    border-radius: 24px; 
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03); 
+}
+
+.q-img { 
+    width: 100%; height: auto; max-height: 250px; 
+    object-fit: contain; border-radius: 12px; 
+    margin-bottom: 25px; pointer-events: none; display: block; 
+}
+.q-text-area { 
+    font-weight: 800; font-size: 1.15rem; 
+    color: var(--primary); margin-bottom: 25px; 
+    line-height: 1.4; 
+}
+
+/* ================= OPÇÕES ================= */
+.options-container { display: flex; flex-direction: column; gap: 14px; }
+
+.option {
+    display: flex; align-items: center; background: var(--card);
+    border: 1.5px solid #E5E7EB; border-radius: 16px; padding: 12px 16px;
+    cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text);
+}
+.option:hover { border-color: #D1D5DB; }
+.option input { display: none; }
+
+.option-letter {
+    background: var(--primary); color: white; border-radius: 12px;
+    width: 42px; height: 42px; display: flex; align-items: center;
+    justify-content: center; font-weight: 800; margin-right: 16px; 
+    flex-shrink: 0; font-size: 1rem;
+}
+
+/* Estado Selecionado */
+.option:has(input:checked) { 
+    border-color: var(--blue-active); 
+    background: #F3F8FF; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08); 
+}
+.option:has(input:checked) .option-letter { background: var(--blue-active); }
+
+/* Correção Final */
+.correct-ans { background: #ECFDF5 !important; border-color: var(--green) !important; }
+.correct-ans .option-letter { background: var(--green) !important; }
+.wrong-ans { background: #FEF2F2 !important; border-color: var(--red) !important; }
+.wrong-ans .option-letter { background: var(--red) !important; }
+
+.label-certa {
+    background: var(--green); color: white; font-size: 0.7rem; padding: 5px 10px;
+    border-radius: 8px; margin-left: auto; font-weight: 800; display: none; text-transform: uppercase;
+}
+
+.exam-finished .option { pointer-events: none; }
+
+/* ================= MODAL DE RESULTADO ================= */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(4, 24, 43, 0.85); backdrop-filter: blur(8px);
+    z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+}
+.modal-content {
+    background: white; width: 100%; max-width: 380px; border-radius: 28px;
+    padding: 40px 30px; text-align: center; position: relative; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+#modalIcon i { font-size: 4.5rem; margin-bottom: 15px; }
+.modal-status { font-size: 2rem; font-family: 'Montserrat', sans-serif; font-weight: 900; margin-bottom: 25px; letter-spacing: -0.5px; }
+.status-reprovado { color: var(--red); }
+.status-aprovado { color: var(--green); }
+
+.modal-stats { 
+    display: flex; justify-content: space-between; background: #F9FAFB; 
+    padding: 20px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #E5E7EB; 
+}
+.modal-stats div { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; width: 33%; }
+.modal-stats .divider { width: 1px; background: #E5E7EB; height: 40px; align-self: center; }
+.stat-value { font-size: 1.6rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+
+.modal-footer { display: flex; flex-direction: column; gap: 12px; }
+.btn-ver {
+    background: var(--blue-active); color: white; padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+.btn-sair {
+    background: #F3F4F6; color: var(--primary); padding: 16px; border-radius: 16px;
+    font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: none; width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+<!-- AREA FIXA NO TOPO -->
+<div class="fixed-top-area">
+    <header>
+        <div class="brand-container">
+            <div class="brand-title">CARTA<span>MESTRE</span></div>
+            <div class="brand-subtitle">Exame de Mecânica 7</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-box"><i class="fas fa-clock"></i> <span id="timer">60:00</span></div>
+            <button class="btn-terminar" id="btnFinish" onclick="checkExam()">Finalizar</button>
+        </div>
+    </header>
+
+    <div class="nav-wrapper" id="navBar">
+        <button class="nav-btn" onclick="prevQ()"><i class="fas fa-chevron-left"></i></button>
+        <div class="nav-container"><div id="pagination_bar" style="display: flex; gap: 10px;"></div></div>
+        <button class="nav-btn" onclick="nextQ()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- AREA DE SCROLL PARA AS PERGUNTAS -->
+<div class="scrollable-content">
+    <div class="container">
+        <form id="exam" onsubmit="return false;"><div id="q_list"></div></form>
+    </div>
+</div>
+
+<!-- MODAL RESULTADO -->
+<div class="modal-overlay" id="modalRes">
+    <div class="modal-content">
+        <div id="modalIcon"></div>
+        <div class="modal-status" id="modalTitle">Reprovado</div>
+        
+        <div class="modal-stats">
+            <div><span id="resAcertos" class="stat-value text-green">0</span> Acertos</div>
+            <div class="divider"></div>
+            <div><span id="resErros" class="stat-value text-red">20</span> Erros</div>
+            <div class="divider"></div>
+            <div><span id="resMedia" class="stat-value">0</span> Pontos</div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn-ver" onclick="closeModal()"><i class="fas fa-search"></i> Ver Correção</button>
+            <button class="btn-sair" onclick="window.location.href='exames-mecanica.html'"><i class="fas fa-arrow-left"></i> Voltar à Lista</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // BLOQUEIO DE TECLADO E CLIQUE DIREITO
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'p' || e.key === 'a')) { e.preventDefault(); }
+    });
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const EXAME_ID_UNICO = "exame_mecanica_13_14"; 
+    const NOME_DO_EXAME = "Exame de Mecânica - Testes 13 e 14";
+
+    // PERGUNTAS COMBINADAS DOS TESTES 13 E 14 COM AS NOVAS IMAGENS (21 a 40)
+    const questions = [
+        // --- TESTE 13 ---
+        { 
+            id: 1, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEixBQPOEjsHTrzVWg22dFGWZEBV4Fz6BkgU7IZN8wQJpG8l6bZ5iHh-yOJTq8uDBFyErGJpmUG3_cRbz1zvFRUQsaJR9RBnH1iGgcVwdWnsHGyH-4ZtAZ_Vl78G0m51salb20ftfgIv1X6DsM9-F6GTgOYhHLbNykAOcI_p46GESGC5jxy63rnveZ_iXHig/s1600/unnamed%20(21).jpg", 
+            q: "Se o motor roda normalmente mas não pega, a causa pode ser:", 
+            options: {A: "Avaria no sistema de alimentação.", B: "Coreia da ventoinha partida ou frouxa.", C: "Falta de óleo no motor."}, 
+            ans: "A" 
+        },
+        { 
+            id: 2, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi97pTs11iVRMSLtSEM2wqIjFNA4rGqxkOd69gBQUScx7M19rkNLmAiEuKgUobvJaQL1xJlnfracVmvBHz8_Kao7Kwsrzy6GTq4vPqI31Vqib0ofSx52e7s-x_LYj6VFR2VNsX2zS4w1GfumB8yXuCtetmOXseLf7FCV-a6C5znr_7T29fiY4BGs2e4IAn-/s1600/unnamed%20(22).jpg", 
+            q: "Para se obter um correto funcionamento da direção assistida é necessário que:", 
+            options: {A: "O sistema de suspenção pneumática esteja à pressão adequada.", B: "O veículo esteja em movimento.", C: "O motor esteja em funcionamento."}, 
+            ans: "C" 
+        },
+        { 
+            id: 3, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdrU-NxVLFgjtP-49x2oI8Lvb8IjKPnAHDRjXcb0R9OeiNo0fy085eyacGHqsCQQN6AVdPCoUvrdCNd7y5TAqiTNfDqQ0B8pA4lQdjv_AqyxLxWagXQlKAStf8tG6AZNVxiP45MUhTPjnsmSWTX07AVB2HWX6DZcM48bfVeQEyN8DL7JcvMeEcMH5wiVj3/s1600/unnamed%20(23).jpg", 
+            q: "Qual o nome do conjunto de elementos que permite a ligação mecânica entre o veio de transmissão e as rodas motoras?", 
+            options: {A: "Caixa de velocidades.", B: "Embraiagem.", C: "Diferencial."}, 
+            ans: "C" 
+        },
+        { 
+            id: 4, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mbD8iLtcLO0LqE-eyW6e2hJN48smBlIIJlSgFsFPURlK5br3u0hv0v4tisESTdX0IhOTI3PaZasxQfRWibLgX_Nx13dZqXTkXjc5oXLchvjrz0ZKbFYkSarRTEE0i_gx9B6ElC2i2Q6MwjQIXBF3y2jAHMXrAc8IjKkIsLVeJF_wvfT_jQTRkbX7x23p/s1600/unnamed%20(24).jpg", 
+            q: "Qual poderá ser a causa do alternador não gerar corrente elétrica?", 
+            options: {A: "Bateria com bornes sujos.", B: "Correia da ventoinha desapertada.", C: "Correia da ventoinha muito apertada."}, 
+            ans: "B" 
+        },
+        { 
+            id: 5, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHJhk9U9-UuH2N-URTZF51_xFvrsJ-MaHdCMTEAzBy7bdLi5ZmZh1jsTRsx8trkoKbY6YUiMaYZPPiEvA0aeK-CPpROY3nf06sWs-Q4FFBT2RuGpTPNbcPUu8hvyADrH8nyZK-kmFw_6rC312p0Y9QhXmGOqWxAOIqlXOG7DtacX_DHjWyZ-gcln7vg_Ck/s1600/unnamed%20(25).jpg", 
+            q: "A mola existente nas maxilas dos travões tem a função de:", 
+            options: {A: "Afastar do tambor as maxilas e os respetivos calços.", B: "Aumentar a força de travagem.", C: "Pressionar as maxilas e os respetivos calços contra o tambor."}, 
+            ans: "A" 
+        },
+        { 
+            id: 6, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhLleskvQfUEKDSj3B9gvd2jvErrJV_prvWw3dHl48YQdO0cfkekmNGZxhjs6dJdlBfMg0x8alnHd7INKwTWctcWlgbFnV-ILpdwnlZxA5jOnRSzz06iB8_5aZfDHIHeFl7sGJeDYr9SU6E-e86EeBAy5Wuh6FauZQKR2n8cFZD31YdLFD5iF_wkKqBL8Se/s1600/unnamed%20(26).jpg", 
+            q: "Qual dos seguintes órgãos pertence ao sistema de suspensão?", 
+            options: {A: "Prato de pressão.", B: "Rolamento de encosto.", C: "Barra de torção.", D: "Pinhão e cremalheira."}, 
+            ans: "C" 
+        },
+        { 
+            id: 7, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg6sqREgCHq6xvdR15HShAk_eiKBWOCnXkcVDeluV0Ba9fhpJ3AcWPIFCsWHqEDlU3YV6GaBv1qjKxZ7Ge19yYAu13qB6ykRqn38SrXKQztjMfIUPMVxkhv3e82DNIDN4xmwmKeABfsIUceR6kQz2nOsFbKtifN5YTXxb2w7WUfqwdjJlvmfRxkMN94t0vM/s1600/unnamed%20(27).jpg", 
+            q: "Qual o orgão do motor que transmite o movimento da cambota ao veio de excêntricos?", 
+            options: {A: "Correia da ventoinha.", B: "Impulsores.", C: "Biela.", D: "Correia de distribuição."}, 
+            ans: "D" 
+        },
+        { 
+            id: 8, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgk-AN626LcCl9oi2bEzD6OgdqL5fz57y_TPn5Zgn9m7uD1ObVRoHME64oG-dqOPtcyCSNMGEf3BI_ithRo1HziuYlCJfYUw3b7J_gJYTwmGfuZaqyqwqbo8zvOpWtSSRK-_HXHxwP2Dinev7yCISM3AKQaRVyLQZpebU1_p_-OfgbDhRdof-n-654QLQGu/s1600/unnamed%20(28).jpg", 
+            q: "Um pneu com pressão muito inferior à recomendada, apresenta maior desgaste:", 
+            options: {A: "Na zona central.", B: "No lado esquerdo.", C: "Nos bordos laterais.", D: "No lado direito."}, 
+            ans: "C" 
+        },
+        { 
+            id: 9, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPJfKe3lcKkP54rW7hSobIWg5l1dCX1s2JFHmtffPyvTsarR8ObIvpGdwTILTz-4P6HOzarU9EiQh42BqdMOuMHHcUKhyphenhyphenroO97srlKh8Td3FqjviRshAbesyS4unBa4DGsIvznES8zVMK9lCioU7l5XSAsMZLWAwPvsO1aCwzlfjn7llmVKAMfuMkH1eWl/s1600/unnamed%20(29).jpg", 
+            q: "A carga transportada num automóvel pesado de mercadorias:", 
+            options: {A: "Não deve arrastar pelo pavimento.", B: "Não deve exceder  3 metros de altura a contar do solo.", C: "Pode ser colocada na caixa de carga sem qualquer cuidado em especial."}, 
+            ans: "A" 
+        },
+        { 
+            id: 10, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIDKNrCZ2OZ9u64g8HdtY53khD9Pffi1IN5fWSzGoVTJKGURWhbqsQ8dB3gR6q8ov8hegtRM-FITIHIG9KA6ygTSPmsmGJd6EonFbv9M_GAV1MR-NFO9AncolULXzY9tOMy5fGaWSRikbd6ne-gaR3h8-noSSGd5_wGy82fS60IFIsEHtdnDE_8snWKMLT/s1600/unnamed%20(30).jpg", 
+            q: "Um dos cuidados a ter com a bateria, é:", 
+            options: {A: "Adicionar, se necessário, água destilida até cobrir as placas.", B: "Periodicamente, substituir o eletrólito.", C: "Periodicamento, adicionar ácido sufúrico e água até cobrir as placas."}, 
+            ans: "A" 
+        },
+        // --- TESTE 14 ---
+        { 
+            id: 11, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhplrbNrsFxWqxlyVCEXFqJ5DjwV4z4IvPEp92u0T86a2D8rLTbAi1wWSJSz1hsd7DnroQnj3nF7braot1dNjRWGO_J-oKFQzauaYG8JOubV9gLauTu885BdN9ihMszCUd1dN7Y8CI7cZO4u_WI7NEsVN-UYtoDyLsFVap1iOcCWsfipnKktZLEj0P6nWKE/s1600/unnamed%20(31).jpg", 
+            q: "O motor apresenta um consumo excessivo de óleo e liberta gases de escape de cor azulada. Qual poderá ser a causa?", 
+            options: {A: "O óleo utilizado é muito viscoso.", B: "Os segmentos ou as paredes dos cilindros estão bastantes desgastados.", C: "A junta do cárter está a vedar mal."}, 
+            ans: "B" 
+        },
+        { 
+            id: 12, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxIkgvqSgldHb4Ftfl6fcDVQgXC0s6o-IoY7KQDdAeFWoT7H600l2PsJQV2iGdKfxcvD7eFCRLUvJzZvwRSeVH99eTXktERJ_YwUtMDNDPSPHfHtDpdczG91wdeO4ME6T1pouwV8qJyTarwszGQyKff7hKf9K_O4PhKVQ65TTc83C1gr_TSvSPMUtg_xkv/s1600/unnamed%20(32).jpg", 
+            q: "Em qual dos seguintes casos se torna mais fácil movimentar o volante da direção:", 
+            options: {A: "Se o veículo estiver equipado com servo-freio.", B: "Se existir uma bomba hidráulica na direcção.", C: "Quando se roda o volante com o veículo parado.", D: "Com os pneus da frente com baixa pressão."}, 
+            ans: "B" 
+        },
+        { 
+            id: 13, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9erCoIZLf06JBF1dQ9m5WiRXUFa7lu-ILiGgPIzrp6aCoh9edhbYVV_ps5ehfje8cTsQ6MhqFe_tsuhfXFz1TRtrJNhwJpk59TdOVuV58Kv1kRlFTLiY6VvZkQ2UhHYTN8DmZerA38vXpO15ArTngRGS33HY5Frvl6KwUVQxrUcvVbT6DV_4Q6uuzGfU2/s1600/unnamed%20(33).jpg", 
+            q: "A embraiagem serve para:", 
+            options: {A: "Ligar a caixa de velocidade ao diferencial.", B: "Ligar o motor ao diferencial.", C: "Ligar e desligar o motor dos restantes órgãos da transmissão e permitir arranques suaves."}, 
+            ans: "C" 
+        },
+        { 
+            id: 14, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEggXiHkJ9wuCn7vQTtqp_PQCkr_OkwjocAbJqc6RHsR8ETAEcEWKTZQ3ChasygzoO3ZjBUTVJvlA_ywzysNJOr4P8CDGH-dP1_lJFZorRZFRTDd3hjwIPfyIVZb-7O9Y8hHLpKvg7c_9Oai85wkkqzOi-4JdmBo1SrhsnYfBPGT1v1Kea_8eLzUMM3ItO7w/s1600/unnamed%20(34).jpg", 
+            q: "Nos motores de explosão, qual o tipo de corrente que percorre as velas de ignição?", 
+            options: {A: "Alta tensão.", B: "Contínua intermitente.", C: "Baixa tensão.", D: "Alternada trifásica."}, 
+            ans: "A" 
+        },
+        { 
+            id: 15, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhJyD4ja7762qLsCI0PssvQ57Vn-bf4pOwpARG4m8GfuKlcuQ5l-Lysu9qykNElv7_dDdMgTPLDUPcJiCkz2U6T4Ar5eIvTzLINJMmYXLJwsy-B-qlOkOaKalTdgzT2JYU1SA6a0IqTahj1roXT5d6_sLZTmSz-nPnkHBVUZWyuS_Res1JzQvEEoFXxR4WY/s1600/unnamed%20(35).jpg", 
+            q: "Quando pisa o pedal do travão hidráulico, este vai atuar em primeiro lugar:", 
+            options: {A: "Nos êmbolos dos cilindros.", B: "Nas molas.", C: "No êmbolo da bomba central.", D: "No disco."}, 
+            ans: "C" 
+        },
+        { 
+            id: 16, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjfmPtU9VlZxUCvAwGhULTkAXNSBGf76jUOJjVnDHop-bUTtooDVN3BtaB-jw9l_fKsBlSP2rWz1uJnixM_3_gjY-gtm8KbVW1jPcqs7YYdxxV0uavS-nhcgNCKrj_-iQ7ghOm1504zr9FKMFFeulpRf1Bt3E5o2VAqWXUOKWW_6mACLHz3clE5P2Rkh_SC/s1600/unnamed%20(36).jpg", 
+            q: "A barra de torção tem a função de:", 
+            options: {A: "Aumentar a amplitude da oscilação das molas.", B: "Absorver as oscilações das molas.", C: "Movimentar as rodas e pneus possibilitando a direção.", D: "Absorver os choques provocados pelas irregularidades da via."}, 
+            ans: "D" 
+        },
+        { 
+            id: 17, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwqpyAIFgNrxQVkuXAO3eLobKHtms8_4RY-pqZSHJdHlpCDIYsulrXCGtsGL4rbg1XKGTg28TZtcIPWORQCGOZ93e27LnD9InvUIyy6ZAw-6wPbxVTM9FV1E97wQLsiqIPdB4kgCxS9T_bN16cYs32Y-EpKAlEYtIb8s5Iy6K-IakA9Xti39r9pGsVW4Sk/s1600/unnamed%20(37).jpg", 
+            q: "Nos motores de explosão a quatro tempo, qual a função do veio de excêntricos?", 
+            options: {A: "Acionar a bomba de água.", B: "Transmitir o movimento da cambota às bielas.", C: "Comandar o funcionamento das válvulas.", D: "Regular as voltas do motor."}, 
+            ans: "C" 
+        },
+        { 
+            id: 18, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBrbv_uk1KcyGl86PdY78oQgFTvuD8EOECc3AwvJHYl0b-jF0ESbHSx4GCaGSGVHmha5lRlQQ5zihB2_OE8kZ2dfysdnoNkpj6oQJsajse2H33-b7mtQ7lreoGxH3lc8EWZ7f_2J2qXpnrxyW2xLnV7iGGmpWUnEznOStp-0Y4gIz3tFiI6L2zk3kjD15H/s1600/unnamed%20(38).jpg", 
+            q: "Num automóvel para extinguir um incêndio provocado por um curto-circuito, o condutor deve:", 
+            options: {A: "Desligar a ignição e utilizar água com óleo.", B: "Desligar a ignição e utilizar água, únicamente.", C: "Desligar a ignição e utilizar um extintor de incêndio."}, 
+            ans: "C" 
+        },
+        { 
+            id: 19, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgMzS8qVLnIlG13BpTM7YxtAY9oPu6j17Hiv8Af_B2iGnnLaJymrGUC40qEO7zFCuCg48pxDPmw59qSJdmcDfGHN38C3g5jVszwkwntkosgVsqfyhS1Ij3YiT8gAxS50E6pVb1V1aJDbaGmFOcOtQaGObstQifqY2lDVdytY8S6GUTdZXDRQmZmiZ19P9FM/s1600/unnamed%20(39).jpg", 
+            q: "Ao distribuir carga num automóvel pesado de mercadorias deve-se ter o cuidado de:", 
+            options: {A: "Colocar as mais leve por baixo e o mais perto possível do centro da caixa de carga.", B: "Colocar as mais pesadas por baixo e o mais perto possível do centro da caixa de carga.", C: "Não exceder a altura máxima de 3 metros."}, 
+            ans: "B" 
+        },
+        { 
+            id: 20, 
+            img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpt9APKAjHIj7gJDBMcpmfM2PGfom7fL2xKGdRsbXoYznKQeVfIKoI779fCL8Xmu0rZRjHlwt8JZwAze4dnC9Mx9NIz9MPQrSUL8ZW366qySghXWaU08hTlijaabemjt7bPOIgifSiFtEFi_8DA-OPnzyg-1tPphGfTp3z_hfcT0vZ3-X_xYVZMPD5kH1Q/s1600/unnamed%20(40).jpg", 
+            q: "O que pode acontecer se o terminal de um dos cabos ligados  à bateria estiver mal apertado?", 
+            options: {A: "Pode dar origem a um curto-circuito.", B: "O motor de arranque não funciona.", C: "Pode ocorrer um incêndio na bateria.", D: "Pode ocorrer uma explosão da bateria."}, 
+            ans: "B" 
+        }
+    ];
+
+    let currentIdx = 0;
+    let time = 3600;
+    let countdown;
+    let isExamFinished = false;
+    let userAnswers = {};
+
+    function init() {
+        renderQuestions();
+        startTimer();
+    }
+
+    function renderQuestions() {
+        document.getElementById('q_list').innerHTML = '';
+        document.getElementById('pagination_bar').innerHTML = '';
+        questions.forEach((item, index) => {
+            document.getElementById('pagination_bar').innerHTML += `<div class="page-num ${index === 0 ? 'active' : ''}" id="page_${index}" onclick="goToQuestion(${index})">${index + 1}</div>`;
+
+            let optionsHtml = '';
+            for(let key in item.options) {
+                optionsHtml += `
+                    <label class="option" id="label-${item.id}-${key}">
+                        <div class="option-letter">${key}</div>
+                        <input type="radio" name="q${item.id}" value="${key}" onchange="saveProgress(${index}, '${item.id}', '${key}')">
+                        <span>${item.options[key]}</span>
+                        <span class="label-certa" id="certa-${item.id}-${key}">CORRETA</span>
+                    </label>`;
+            }
+
+            document.getElementById('q_list').innerHTML += `
+                <div class="question-wrapper ${index === 0 ? 'active' : ''}" id="q_wrap_${index}">
+                    <div class="card-inner">
+                        <img src="${item.img}" class="q-img" loading="lazy">
+                        <div class="q-text-area">${item.q}</div>
+                        <div class="options-container">${optionsHtml}</div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function saveProgress(index, qId, val) {
+        if (isExamFinished) return;
+        userAnswers[`q${qId}`] = val;
+        document.getElementById(`page_${index}`).classList.add('answered');
+        setTimeout(() => nextQ(), 400);
+    }
+
+    function startTimer() {
+        clearInterval(countdown);
+        countdown = setInterval(() => {
+            if (time <= 0) { checkExam(); } else { time--; updateTimerDisplay(); }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(time / 60), s = time % 60;
+        document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function goToQuestion(index) {
+        if (index < 0 || index >= questions.length) return;
+        currentIdx = index;
+        document.querySelectorAll('.question-wrapper').forEach(w => w.classList.remove('active'));
+        document.querySelectorAll('.page-num').forEach(p => p.classList.remove('active'));
+        document.getElementById(`q_wrap_${index}`).classList.add('active');
+        document.getElementById(`page_${index}`).classList.add('active');
+        
+        document.getElementById(`page_${index}`).scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        document.querySelector('.scrollable-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextQ() { goToQuestion(currentIdx + 1); }
+    function prevQ() { goToQuestion(currentIdx - 1); }
+
+    async function checkExam() {
+        if (isExamFinished) return;
+        clearInterval(countdown);
+        isExamFinished = true;
+        
+        document.getElementById('exam').classList.add('exam-finished');
+        
+        let score = 0;
+        questions.forEach((item, index) => {
+            const userAns = userAnswers[`q${item.id}`];
+            const isCorrect = userAns === item.ans;
+            
+            document.getElementById(`label-${item.id}-${item.ans}`).classList.add('correct-ans');
+            document.getElementById(`certa-${item.id}-${item.ans}`).style.display = 'block';
+            
+            if (userAns && !isCorrect) {
+                document.getElementById(`label-${item.id}-${userAns}`).classList.add('wrong-ans');
+            }
+
+            const pageBtn = document.getElementById(`page_${index}`);
+            if (isCorrect) {
+                score++;
+                pageBtn.classList.add('rev-correct');
+            } else {
+                pageBtn.classList.add('rev-wrong');
+            }
+        });
+
+        showModal(score);
+
+        const totalErros = questions.length - score;
+        const percentagem = Math.round((score / questions.length) * 100);
+
+        try {
+            const userDataJson = localStorage.getItem('usuarioLogado');
+            if (userDataJson) {
+                const userData = JSON.parse(userDataJson);
+                
+                await _supabase.from('Historico_Exames').insert([{ 
+                    user_id: userData.id, 
+                    modulo: 'mecanica', 
+                    percentagem: percentagem, 
+                    acertos: score, 
+                    erros: totalErros 
+                }]);
+            }
+        } catch(e) {
+            console.error('Erro ao guardar histórico:', e);
+        }
+
+        const dadosParaSalvar = {
+            nome: NOME_DO_EXAME,
+            acertos: score,
+            total: questions.length,
+            data: new Date().toLocaleDateString('pt-MZ')
+        };
+        localStorage.setItem(EXAME_ID_UNICO, JSON.stringify(dadosParaSalvar));
+    }
+
+    function showModal(score) {
+        const aprovado = score >= 14;
+        const modal = document.getElementById('modalRes');
+        const title = document.getElementById('modalTitle');
+        const iconDiv = document.getElementById('modalIcon');
+        
+        title.innerText = aprovado ? "Aprovado" : "Reprovado";
+        title.className = "modal-status " + (aprovado ? "status-aprovado" : "status-reprovado");
+        
+        iconDiv.innerHTML = aprovado 
+            ? '<i class="fas fa-check-circle" style="color: var(--green);"></i>' 
+            : '<i class="fas fa-times" style="color: var(--red);"></i>';
+        
+        document.getElementById('resAcertos').innerText = score;
+        document.getElementById('resErros').innerText = questions.length - score;
+        document.getElementById('resMedia').innerText = score;
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modalRes').style.display = 'none';
+        document.getElementById('btnFinish').style.display = 'none';
+        goToQuestion(0);
+    }
+
+    init();
+</script>
+
+<!-- Cão de Guarda -->
+<script>
+    async function caoDeGuarda() {
+        const userDataJson = localStorage.getItem('usuarioLogado');
+        if (!userDataJson) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            const user = JSON.parse(userDataJson);
+            
+            const { data } = await _supabase
+                .from('Utilizadores')
+                .select('mensagem_admin, banido')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                const isBanido = data.banido === true || (data.mensagem_admin && data.mensagem_admin.includes('[BANIDO]'));
+                if (isBanido) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.replace('index.html'); 
+                }
+            }
+        } catch (e) {
+            console.log("Modo offline ativo ou sem internet.");
+        }
+    }
+
+    caoDeGuarda();
+    setInterval(caoDeGuarda, 30000);
+</script>
+
+</body>
+</html>
